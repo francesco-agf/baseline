@@ -948,7 +948,9 @@
     paintHud();
   }
 
-  function finishClear(){
+  // separata da finishClear: serve anche quando la partita finisce mentre una
+  // riga è ancora in stampa, altrimenti quelle righe non verrebbero contate
+  function applyClear(){
     const rows = clearing.rows.slice().sort((a, b) => a - b);
     for (const y of rows){
       grid.splice(y, 1);
@@ -965,6 +967,10 @@
       if (st.label !== elCar.textContent) setTimeout(function(){ showToast(st.label.toUpperCase(), false); }, 950);
     }
     clearing = null;
+  }
+
+  function finishClear(){
+    applyClear();
     paintHud();
     nextPiece();
   }
@@ -1041,6 +1047,8 @@
   function saveBest(v){ try { localStorage.setItem(bestKey(), String(v)); } catch(e){} }
 
   function gameOver(){
+    // se una riga era ancora in stampa, va contata prima di chiudere
+    if (clearing) applyClear();
     phase = "over";
     cur = null;
     beep(70, .5, .06);
