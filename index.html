@@ -703,6 +703,14 @@
       rosa acceso, un misto di tutto dà un grigio di quadricromia. Due partite non producono
       mai gli stessi campioni.</p>
 
+      <h3>Gli attrezzi</h3>
+      <p>Ogni tanto sul foglio non cade tipografia: cade un <b>crocino di registro</b>, un
+      <b>conta-fili</b> o una <b>rulla d'inchiostro</b>. Sono pezzi da cinque celle e nessuno dei
+      tre si incastra pulito — lasciano buchi per come sono fatti, e non c'è modo di girarli
+      per rimediare. Si stampano come tutto il resto, ma non sono inchiostro: quando finiscono
+      in una quadricromia non entrano nel calcolo del campione.</p>
+      <p>Non si possono mettere da parte in tenuta: quello che cade sul foglio va tolto subito.</p>
+
       <h3>Il Comic Sans maledetto</h3>
       <p>Ogni tanto arriva un pezzo composto in Comic Sans: traballa, ha il contorno rosso
       tratteggiato e finché resta sul campo <b>ti mangia due punti al secondo per ogni cella</b>.
@@ -831,6 +839,34 @@
   ];
   const GUIDE_ROWS = GUIDES.map(g => g.y);
 
+  /* Gli attrezzi. Ogni tanto sul foglio cade qualcosa che non è tipografia:
+     un crocino, un conta-fili, una rulla d'inchiostro. Sono pentamini —
+     cinque celle — e nessuno dei tre piastrella: lasciano buchi per come
+     sono fatti. Si stampano come tutto il resto, ma non sono inchiostro:
+     non entrano nel calcolo del campione. */
+  const ATTREZZI = {
+    X: { name:"Crocino di registro", glyph:"✛", cells:[[0,1,0],[1,1,1],[0,1,0]] },
+    Y: { name:"Conta-fili",          glyph:"◎", cells:[[1,0,1],[1,1,1],[0,0,0]] },
+    W: { name:"Rulla d'inchiostro",  glyph:"▬", cells:[[1,1,1],[0,1,0],[0,1,0]] }
+  };
+  const ATTREZZO_KEYS = ["X", "Y", "W"];
+  for (const k of ATTREZZO_KEYS){
+    const a = ATTREZZI[k];
+    PIECES[k] = {
+      name: a.name, glyph: a.glyph, cells: a.cells,
+      cmyk: [0, 0, 0, 0], ink: "#6B6B6E", mix: "attrezzo",
+      pantone: "metallo", attrezzo: true
+    };
+  }
+
+  /* Curiosità e attrezzi non pescano dal sacchetto: il loro caso dipende solo
+     dal numero d'ordine del pezzo, così nella composizione del giorno capitano
+     allo stesso punto per tutti, qualunque partita si stia facendo. */
+  let semeEventi = 1;
+  function eventoCaso(indice, sale){
+    return mulberry32((semeEventi * 2654435761 + indice * 7919 + sale * 104729) >>> 0)();
+  }
+
   // nomi delle giocate
   const PLAY_NAMES = ["", "RIGA", "CAPOVERSO", "COLONNA", "C+M+Y+K"];
 
@@ -849,7 +885,7 @@
       for (let x = 0; x < COLS; x++){
         const k = keyOf(grid[y][x]);
         const p = k && PIECES[k];
-        if (!p) continue;
+        if (!p || p.attrezzo) continue;
         for (let i = 0; i < 4; i++) somma[i] += p.cmyk[i];
         n++;
       }
@@ -996,14 +1032,14 @@
   // una estrazione per pezzo: la composizione del giorno resta identica per tutti
   function spawn(key, roll){
     const shape = PIECES[key].cells.map(r => r.slice());
-    const r = (typeof roll === "number") ? roll : rng();
     piecesSpawned++;
+    const r = (typeof roll === "number") ? roll : eventoCaso(piecesSpawned, 1);
     return {
       key: key,
       shape: shape,
       x: Math.floor((COLS - shape.length) / 2),
       y: (key === "I" ? -1 : 0),
-      cursed: (piecesSpawned > 8 && r < 0.08)
+      cursed: (piecesSpawned > 8 && r < 0.08 && !PIECES[key].attrezzo)
     };
   }
   function collide(shape, px, py){
@@ -1052,7 +1088,7 @@
   }
   function doHold(){
     if (busy() || !canHold) return;
-    if (PIECES[cur.key].campione) return;   // il campione va usato subito
+    if (PIECES[cur.key].campione || PIECES[cur.key].attrezzo) return;   // campione e attrezzi si usano subito
     const prev = holdKey;
     holdKey = cur.key;
     cur = prev ? spawn(prev, 1) : spawn(shiftQueue(), 1);
@@ -1165,6 +1201,13 @@
       cur = spawn(key, 1);
       showToast("CAMPIONE " + PIECES[key].mix, false);
       beep(760, .12, .04);
+    } else if (piecesSpawned >= 12 && eventoCaso(piecesSpawned + 1, 2) < 0.07){
+      // cade un attrezzo: il pezzo del sacchetto resta in coda, non si perde
+      const q = ATTREZZO_KEYS[Math.floor(eventoCaso(piecesSpawned + 1, 3) * ATTREZZO_KEYS.length) % ATTREZZO_KEYS.length];
+      cur = spawn(q, 1);
+      showToast(PIECES[q].name.toUpperCase(), false);
+      beep(120, .1, .05);
+      setTimeout(function(){ beep(90, .14, .04); }, 70);
     } else {
       cur = spawn(shiftQueue());
     }
@@ -1202,6 +1245,7 @@
   function begin(m){
     mode = m;
     rng = (mode === "daily") ? mulberry32(dateKey()) : Math.random;
+    semeEventi = (mode === "daily") ? dateKey() : Math.floor(Math.random() * 1e9);
     grid = newGrid();
     bag = []; refillBag();
     queue = [nextKey(), nextKey(), nextKey()];
@@ -1448,13 +1492,18 @@
   const EMOJI = { I:"⬛", O:"🟦", T:"🟥", L:"🟨", J:"🟧", S:"🟩", Z:"🟪" };
   // i campioni mescolati non hanno un quadretto proprio: vanno in bianco
   const EMOJI_CAMPIONE = "⬜";
+  const EMOJI_ATTREZZO = "🟫";
 
   function shareText(){
     const g = gradeFor(score).name.toUpperCase();
     const head = "BASELINE" + (mode === "daily" ? " · composizione del " + dateLabel() : " · partita libera");
     const line2 = g + " — " + fmt(score) + " punti";
     const rows = printed.slice(-6).map(function(r){
-      return r.map(function(c){ return EMOJI[keyOf(c)] || EMOJI_CAMPIONE; }).join("");
+      return r.map(function(c){
+        const k = keyOf(c);
+        if (EMOJI[k]) return EMOJI[k];
+        return (PIECES[k] && PIECES[k].attrezzo) ? EMOJI_ATTREZZO : EMOJI_CAMPIONE;
+      }).join("");
     });
     let out = head + "\n" + line2 + "\n" + (rows.length ? rows.join("\n") + "\n" : "") + tally();
     if (SHARE_URL) out += "\n" + SHARE_URL;
