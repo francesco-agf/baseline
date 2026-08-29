@@ -151,7 +151,7 @@
   /* ---------- playfield ---------- */
   .chase-wrap{display:flex;flex-direction:column;align-items:center;width:100%}
   .board{position:relative;padding:14px}
-  .chase{position:relative;border:1px solid var(--foglio);background:var(--foglio);line-height:0;
+  .chase{position:relative;border:1px solid var(--foglio);background:transparent;line-height:0;
     box-shadow:0 2px 0 rgba(0,0,0,.55), 0 12px 36px rgba(0,0,0,.5)}
   #field{display:block;touch-action:none}
 
@@ -832,6 +832,8 @@
     const p = PIECES[k];
     p.ink = cmykToHex(p.cmyk[0], p.cmyk[1], p.cmyk[2], p.cmyk[3]);
     p.mix = siglaCmyk(p.cmyk);
+    // la sigla della lastra, quella che si segna a margine di una prova
+    p.tag = ["C", "M", "Y", "K"].filter(function(_, i){ return p.cmyk[i] > 0; }).join("");
   }
 
   const GUIDES = [
@@ -895,6 +897,30 @@
     }
     if (!n) return null;
     return somma.map(function(v){ return Math.round(v / n); });
+  }
+
+  /* Gli inchiostri delle righe chiuse partono dalle loro celle e corrono al
+     centro: quando si toccano, il colore che ne esce e' il campione. */
+  function preparaMescolanza(rows, media){
+    const punti = [];
+    for (const y of rows){
+      for (let x = 0; x < COLS; x++){
+        const k = keyOf(grid[y][x]);
+        const p = k && PIECES[k];
+        if (!p || p.attrezzo) continue;
+        punti.push({ x: x, y: y, ink: p.ink });
+      }
+    }
+    // al massimo una ventina, se no diventa una nuvola
+    const passo = Math.max(1, Math.floor(punti.length / 20));
+    const scelti = punti.filter(function(_, i){ return i % passo === 0; }).slice(0, 20);
+    return {
+      t: 0,
+      punti: scelti,
+      cy: rows.reduce(function(a, b){ return a + b; }, 0) / rows.length,
+      colore: cmykToHex(media[0], media[1], media[2], media[3]),
+      sigla: siglaCmyk(media, " ")
+    };
   }
 
   function creaCampione(cmyk){
@@ -1007,9 +1033,48 @@
   let cell = 30, last = 0, raf = null;
   let toast = null, shake = 0, quadFlash = 0, particles = [], piecesSpawned = 0;
   let pendingSwatchKey = null;   // campione gia' preparato, scende al prossimo pezzo
+  let sheetIn = 0;        // il foglio entra in macchina
+  let landed = null;      // assestamento del pezzo appena posato
+  let mixFx = null;       // gli inchiostri che si mescolano nel campione
+  let punteggioMostrato = 0;
   let stamp = 0;          // timbro VISTO SI STAMPI
   let misreg = 0;         // fuori registro: le lastre si scollano per un istante
-  let regMarks = null;    // crocini di registro che rientrano sulle righe stampate
+
+    // fuori registro: le lastre si scollano per un istante
+  let regMarks = null;    // gli inchiostri corrono al centro e diventano un colore solo
+    if (mixFx){
+      const t = Math.min(1, mixFx.t / 900);
+      const corsa = Math.min(1, t / .62);
+      const e = 1 - Math.pow(1 - corsa, 3);
+      const cx = W / 2, cy = (mixFx.cy + .5) * cell;
+      ctx.save();
+      for (const p of mixFx.punti){
+        const px = (p.x + .5) * cell + (cx - (p.x + .5) * cell) * e;
+        const py = (p.y + .5) * cell + (cy - (p.y + .5) * cell) * e;
+        const r = cell * (.4 - .18 * e);
+        ctx.globalAlpha = corsa < 1 ? 1 : Math.max(0, 1 - (t - .62) / .18);
+        ctx.fillStyle = p.ink;
+        ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "rgba(23,25,29,.18)"; ctx.lineWidth = 1; ctx.stroke();
+      }
+      if (t > .55){
+        const nascita = Math.min(1, (t - .55) / .3);
+        const r = cell * .62 * (0.4 + 0.6 * nascita);
+        ctx.globalAlpha = nascita * (t > .88 ? Math.max(0, 1 - (t - .88) / .12) : 1);
+        ctx.fillStyle = mixFx.colore;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "rgba(23,25,29,.35)"; ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.font = '600 ' + Math.max(9, Math.round(cell * .34)) + 'px "IBM Plex Mono", monospace';
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillStyle = "rgba(23,25,29,.9)";
+        ctx.fillText(mixFx.sigla, cx, cy + r + cell * .42);
+      }
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+
+    // crocini di registro che rientrano sulle righe stampate
   let markPath = null;    // filigrana del monogramma
 
   function newGrid(){ return Array.from({length:ROWS}, () => new Array(COLS).fill(null)); }
@@ -1111,6 +1176,13 @@
 
   function lock(){
     const mark = cur.cursed ? "!" : "";
+    if (!reduceMotion){
+      const celle = [];
+      for (let y = 0; y < cur.shape.length; y++)
+        for (let x = 0; x < cur.shape.length; x++)
+          if (cur.shape[y][x] && cur.y + y >= 0) celle.push([cur.x + x, cur.y + y]);
+      landed = { celle: celle, t: 0 };
+    }
     for (let y = 0; y < cur.shape.length; y++){
       for (let x = 0; x < cur.shape.length; x++){
         if (!cur.shape[y][x]) continue;
@@ -1151,7 +1223,10 @@
         if (!reduceMotion){ shake = 7; stamp = 1; misreg = 1; }
         // quattro lastre in macchina: dalla riga nasce il colore mescolato
         const media = mediaInchiostri(full);
-        if (media) pendingSwatchKey = creaCampione(media);
+        if (media){
+          pendingSwatchKey = creaCampione(media);
+          if (!reduceMotion) mixFx = preparaMescolanza(full, media);
+        }
       } else if (aligned){
         word = word + " ALLINEATA";
       }
@@ -1258,6 +1333,8 @@
     clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
     toast = null; particles = []; shake = 0; quadFlash = 0;
     stamp = 0; misreg = 0; regMarks = null; pendingSwatchKey = null; swatchNext = 0;
+    landed = null; mixFx = null; punteggioMostrato = 0;
+    sheetIn = reduceMotion ? 0 : 1;
     best = loadBest();
     phase = "play";
     setCurseUi(0);
@@ -1328,7 +1405,7 @@
     if (phase === "play"){
       if (clearing){
         clearing.t += dt;
-        if (clearing.t >= (reduceMotion ? 60 : 190)) finishClear();
+        if (clearing.t >= (reduceMotion ? 60 : (clearing.rows.length === 4 ? 760 : 190))) finishClear();
       } else if (cur){
         handleAutoRepeat(dt);
         const soft = held["ArrowDown"];
@@ -1359,6 +1436,17 @@
     if (shake > 0) shake = Math.max(0, shake - dt * .022);
     if (quadFlash > 0) quadFlash = Math.max(0, quadFlash - dt / 420);
     if (stamp > 0) stamp = Math.max(0, stamp - dt / 1150);
+    if (sheetIn > 0) sheetIn = Math.max(0, sheetIn - dt / 480);
+    if (landed){ landed.t += dt; if (landed.t > 190) landed = null; }
+    if (mixFx){ mixFx.t += dt; if (mixFx.t > 900) mixFx = null; }
+    // il punteggio si mette in pari, non salta
+    if (punteggioMostrato !== score){
+      const d = score - punteggioMostrato;
+      const passo = Math.max(1, Math.abs(d) * .18);
+      punteggioMostrato += Math.sign(d) * Math.min(Math.abs(d), passo);
+      if (Math.abs(score - punteggioMostrato) < 1) punteggioMostrato = score;
+      paintHud();
+    }
     if (misreg > 0) misreg = Math.max(0, misreg - dt / 620);
     if (regMarks){ regMarks.t += dt; if (regMarks.t > 620) regMarks = null; }
     if (particles.length){
@@ -2077,7 +2165,7 @@
   const msCurse = document.getElementById("msCurse");
 
   function paintHud(){
-    const punti = fmt(score), grado = gradeFor(score).name;
+    const punti = fmt(phase === "play" ? punteggioMostrato : score), grado = gradeFor(score).name;
     elScore.textContent = punti;
     elBest.textContent = fmt(Math.max(best, score));
     elLines.textContent = fmt(lines);
@@ -2171,6 +2259,15 @@
       c.strokeRect(px + 1.5, py + 1.5, size - 3, size - 3);
       c.setLineDash([]);
     }
+    // sigla della lastra nell'angolo: C, M, Y, K secondo l'inchiostro
+    if (p.tag && size > 17){
+      c.font = '600 ' + Math.max(7, Math.round(size * .26)) + 'px "IBM Plex Mono", monospace';
+      c.textAlign = "left"; c.textBaseline = "top";
+      c.globalAlpha = .55;
+      c.fillStyle = sopraInchiostro(p.ink);
+      c.fillText(p.tag, px + size * .13, py + size * .1);
+      c.globalAlpha = 1;
+    }
     if (size > 14){
       const px6 = Math.floor(size * .62);
       c.fillStyle = cursed ? "rgba(198,47,22,.85)" : sopraInchiostro(p.ink);
@@ -2234,8 +2331,18 @@
     }
 
     ctx.clearRect(-10, -10, W + 20, H + 20);
+    // il foglio entra dall'alto, come la carta che imbocca la macchina
+    const entrata = sheetIn > 0 ? (1 - Math.pow(sheetIn, 2)) : 1;
+    const hFoglio = H * entrata;
     ctx.fillStyle = "#FBFAF7";
-    ctx.fillRect(-10, -10, W + 20, H + 20);
+    ctx.fillRect(-10, -10, W + 20, hFoglio + 10);
+    if (sheetIn > 0){
+      // il filo scuro del bordo di presa
+      ctx.fillStyle = "rgba(23,25,29,.18)";
+      ctx.fillRect(0, hFoglio - 2, W, 2);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, W, hFoglio); ctx.clip();
+    }
 
     // reticolo
     ctx.strokeStyle = "rgba(23,25,29,.11)";
@@ -2269,21 +2376,49 @@
 
     // blocchi posati
     if (grid){
+      // il pezzo appena posato si schiaccia un istante e si rimette
+      let schiaccia = null;
+      if (landed){
+        const t = Math.min(1, landed.t / 190);
+        const q = Math.sin(t * Math.PI) * (1 - t);
+        schiaccia = { q: q, celle: landed.celle };
+      }
       for (let y = 0; y < ROWS; y++){
         for (let x = 0; x < COLS; x++){
           const c = grid[y][x];
-          if (c) blockAt(ctx, x * cell, y * cell, cell, PIECES[keyOf(c)], isCursed(c), now);
+          if (!c) continue;
+          let sq = 0;
+          if (schiaccia){
+            for (const cc of schiaccia.celle) if (cc[0] === x && cc[1] === y){ sq = schiaccia.q; break; }
+          }
+          if (sq > 0){
+            const h = cell * (1 - sq * .22);
+            ctx.save();
+            ctx.translate(x * cell, y * cell + (cell - h));
+            ctx.scale(1, h / cell);
+            blockAt(ctx, 0, 0, cell, PIECES[keyOf(c)], isCursed(c), now);
+            ctx.restore();
+          } else {
+            blockAt(ctx, x * cell, y * cell, cell, PIECES[keyOf(c)], isCursed(c), now);
+          }
         }
       }
     }
 
     // righe in stampa
     if (clearing){
-      const t = Math.min(1, clearing.t / (reduceMotion ? 60 : 190));
-      for (const y of clearing.rows){
-        ctx.fillStyle = "rgba(23,25,29," + (1 - t * .5).toFixed(3) + ")";
-        const inset = t * (cell / 2);
-        ctx.fillRect(0, y * cell + inset, W, cell - inset * 2);
+      if (clearing.rows.length === 4 && !reduceMotion){
+        // quadricromia: l'inchiostro si stacca dal foglio e la carta torna bianca
+        const t = Math.min(1, clearing.t / 300);
+        ctx.fillStyle = "rgba(251,250,247," + t.toFixed(3) + ")";
+        for (const y of clearing.rows) ctx.fillRect(0, y * cell, W, cell);
+      } else {
+        const t = Math.min(1, clearing.t / (reduceMotion ? 60 : 190));
+        for (const y of clearing.rows){
+          ctx.fillStyle = "rgba(23,25,29," + (1 - t * .5).toFixed(3) + ")";
+          const inset = t * (cell / 2);
+          ctx.fillRect(0, y * cell + inset, W, cell - inset * 2);
+        }
       }
     }
 
@@ -2380,6 +2515,8 @@
       ctx.restore();
       ctx.globalAlpha = 1;
     }
+
+    if (sheetIn > 0) ctx.restore();   // chiude la mascheratura del foglio in entrata
 
     // fuori registro: le lastre si scollano per un istante
     if (misreg > 0){
