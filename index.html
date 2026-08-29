@@ -617,13 +617,9 @@
 
   <section class="board" id="board">
     <div class="board-head">
-      <h2 class="board-title"><button id="boardOpen">Classifica<span class="board-open-hint">vedi tutti</span></button></h2>
-      <div class="board-nav">
-        <button id="dayPrev" aria-label="Giorno precedente">‹</button>
-        <span class="board-day" id="dayLabel">—</span>
-        <button id="dayNext" aria-label="Giorno successivo">›</button>
-      </div>
-      <span class="board-meta" id="boardMeta">Composizione del giorno</span>
+      <h2 class="board-title"><button id="boardOpen">Classifica<span class="board-open-hint">generale · vedi tutti</span></button></h2>
+      <span class="board-day" id="dayLabel">di sempre</span>
+      <span class="board-meta" id="boardMeta">—</span>
     </div>
     <ol class="board-list" id="boardList"></ol>
     <p class="board-note" id="boardNote">Carico la classifica…</p>
@@ -650,17 +646,14 @@
         <button class="btn ghost" id="boardClose">Chiudi</button>
       </div>
       <div class="board-head">
-        <div class="board-nav">
-          <button id="mDayPrev" aria-label="Giorno precedente">‹</button>
-          <span class="board-day" id="mDayLabel">—</span>
-          <button id="mDayNext" aria-label="Giorno successivo">›</button>
-        </div>
+        <span class="board-day" id="mDayLabel">Di sempre</span>
         <span class="board-meta" id="mBoardMeta"></span>
       </div>
       <ol class="board-list" id="mBoardList"></ol>
       <p class="board-note" id="mBoardNote"></p>
-      <p class="modal-foot">Ogni giorno la composizione è la stessa per tutti: la sequenza dei pezzi
-      non cambia da giocatore a giocatore. Di ciascuno resta la partita migliore della giornata.</p>
+      <p class="modal-foot">Classifica generale: di ogni giocatore resta la partita migliore di
+      sempre, con la data in cui l'ha fatta. Ogni giorno la composizione è la stessa per tutti,
+      quindi le partite dello stesso giorno si confrontano alla pari.</p>
     </div>
   </div>
 
@@ -738,10 +731,11 @@
       Pantone delle sovrastampe sono approssimazioni: la resa in stampa va verificata su campione.</p>
 
       <h3>Composizione del giorno e classifica</h3>
-      <p>Ogni giorno la sequenza dei pezzi è <b>identica per tutti</b> fino a mezzanotte: i punteggi
-      sono confrontabili e la classifica ha senso. A fine partita metti il tuo nome e finisci in
-      classifica; con le frecce sfogli i giorni passati e vedi chi ha giocato. La
-      <b>partita libera</b> ha una sequenza casuale e non entra in classifica.</p>
+      <p>Ogni giorno la sequenza dei pezzi è <b>identica per tutti</b> fino a mezzanotte: chi gioca
+      lo stesso giorno si confronta alla pari, senza scuse sui pezzi fortunati.</p>
+      <p>La <b>classifica è generale</b>: di ogni giocatore resta la partita migliore di sempre, con
+      la data in cui l'ha fatta. Il nome si mette prima di cominciare e il punteggio entra da solo a
+      fine partita. La <b>partita libera</b> ha una sequenza casuale e non entra in classifica.</p>
 
       <h3>Comandi</h3>
       <table class="rules-table">
@@ -1694,8 +1688,6 @@
   const boardNote = document.getElementById("boardNote");
   const boardMeta = document.getElementById("boardMeta");
   const dayLabel = document.getElementById("dayLabel");
-  const dayPrev = document.getElementById("dayPrev");
-  const dayNext = document.getElementById("dayNext");
 
   const signupEdit = document.getElementById("signupEdit");
   const changeName = document.getElementById("changeName");
@@ -1704,19 +1696,20 @@
   const mBoardNote = document.getElementById("mBoardNote");
   const mBoardMeta = document.getElementById("mBoardMeta");
   const mDayLabel = document.getElementById("mDayLabel");
-  const mDayPrev = document.getElementById("mDayPrev");
-  const mDayNext = document.getElementById("mDayNext");
 
-  let boardDays = [];          // giorni con almeno una partita, dal più recente
-  let boardIndex = 0;          // posizione nella lista
   let myEntry = null;          // { day, name } appena iscritto, per evidenziarlo
   let submitted = false;
-  let lastRows = [], lastDay = null;
+  let lastRows = [];
 
+  let nomeGiocatore = "";
   function nomeSalvato(){
+    if (nomeGiocatore) return nomeGiocatore;
     try { return (localStorage.getItem("baseline.nome") || "").trim(); } catch(e){ return ""; }
   }
-  function salvaNome(n){ try { localStorage.setItem("baseline.nome", n); } catch(e){} }
+  function salvaNome(n){
+    nomeGiocatore = n;
+    try { localStorage.setItem("baseline.nome", n); } catch(e){}
+  }
   function pulisci(n){ return (n || "").trim().replace(/\s+/g, " ").slice(0, 20); }
 
   function dayToLabel(d){
@@ -1756,18 +1749,7 @@
     return Array.from(map.values()).sort(function(a, b){ return b.score - a.score; });
   }
 
-  async function loadDays(){
-    let rows = [];
-    try {
-      rows = await db("scores_days?select=day,partite,record&order=day.desc&limit=60") || [];
-    } catch(e){ rows = []; }
-    const today = dateKey();
-    boardDays = rows.map(function(r){ return r.day; });
-    if (boardDays.indexOf(today) === -1) boardDays.unshift(today);
-    boardDays.sort(function(a, b){ return b - a; });
-    boardIndex = Math.max(0, boardDays.indexOf(today));
-    return rows;
-  }
+  async function initBoard(){ await showBoard(); }
 
   function rigaClassifica(r, i, day){
     const li = document.createElement("li");
@@ -1785,7 +1767,8 @@
     tag.className = "tag";
     tag.textContent = plur(r.lines, "riga", "righe") +
                       (r.quads ? " · " + plur(r.quads, "quadricromia", "quadricromie") : "") +
-                      " · corpo " + (6 + r.level * 2) + " pt";
+                      " · corpo " + (6 + r.level * 2) + " pt" +
+                      (r.day ? " · " + dayToLabel(r.day) : "");
     nm.appendChild(tag);
     const sc = document.createElement("span");
     sc.className = "board-score";
@@ -1794,60 +1777,45 @@
     return li;
   }
 
-  function renderBoard(rows, day){
-    lastRows = rows; lastDay = day;
+  function renderBoard(rows){
+    lastRows = rows;
     const list = bestPerName(rows);
-    const oggi = (day === dateKey());
 
     // anteprima sotto al campo: i primi dieci
     boardList.innerHTML = "";
-    dayLabel.textContent = dayToLabel(day);
-    dayPrev.disabled = boardIndex >= boardDays.length - 1;
-    dayNext.disabled = boardIndex <= 0;
-    list.slice(0, 10).forEach(function(r, i){ boardList.appendChild(rigaClassifica(r, i, day)); });
+    list.slice(0, 10).forEach(function(r, i){ boardList.appendChild(rigaClassifica(r, i, r.day)); });
 
     // schermata completa: tutti i partecipanti
     mBoardList.innerHTML = "";
-    mDayLabel.textContent = dayToLabel(day);
-    mDayPrev.disabled = dayPrev.disabled;
-    mDayNext.disabled = dayNext.disabled;
-    list.forEach(function(r, i){ mBoardList.appendChild(rigaClassifica(r, i, day)); });
+    list.forEach(function(r, i){ mBoardList.appendChild(rigaClassifica(r, i, r.day)); });
 
     if (!list.length){
-      const vuoto = oggi
-        ? "Nessuno ha ancora stampato niente oggi. Sii il primo."
-        : "Nessuno ha giocato la composizione del " + dayToLong(day) + ".";
+      const vuoto = "Nessuno ha ancora stampato niente. Sii il primo.";
       boardNote.textContent = vuoto;
       mBoardNote.textContent = vuoto;
-      boardMeta.textContent = "Composizione del " + dayToLabel(day);
+      boardMeta.textContent = "Classifica generale";
       mBoardMeta.textContent = boardMeta.textContent;
       return;
     }
 
-    const meta = "Composizione del " + dayToLabel(day) + " · " +
-                 plur(list.length, "giocatore", "giocatori");
+    const meta = plur(list.length, "giocatore", "giocatori") + " · record " + fmt(list[0].score);
     boardMeta.textContent = meta;
-    mBoardMeta.textContent = meta + " · record " + fmt(list[0].score);
-    boardNote.textContent = oggi
-      ? (list.length > 10 ? "Primi dieci. Tocca «Classifica» per l'elenco completo." :
-         "Oggi tutti compongono la stessa sequenza di pezzi. Domani si ricomincia.")
-      : "Composizione del " + dayToLong(day) + ", chiusa.";
-    mBoardNote.textContent = oggi
-      ? "Oggi tutti compongono la stessa sequenza di pezzi. Domani si ricomincia."
-      : "Composizione del " + dayToLong(day) + ", chiusa.";
+    mBoardMeta.textContent = meta;
+    boardNote.textContent = list.length > 10
+      ? "Primi dieci di sempre. Tocca «Classifica» per l'elenco completo."
+      : "Di ogni giocatore resta la partita migliore di sempre.";
+    mBoardNote.textContent = "Di ogni giocatore resta la partita migliore di sempre.";
   }
 
-  async function showBoard(day){
+  async function showBoard(){
     boardNote.textContent = "Carico la classifica…";
     mBoardNote.textContent = "Carico la classifica…";
     try {
-      const rows = await db("scores?day=eq." + day +
-        "&select=name,score,lines,quads,level&order=score.desc&limit=500") || [];
-      renderBoard(rows, day);
+      const rows = await db("scores?select=name,score,lines,quads,level,day" +
+        "&order=score.desc&limit=500") || [];
+      renderBoard(rows);
     } catch(e){
       boardList.innerHTML = ""; mBoardList.innerHTML = "";
-      dayLabel.textContent = dayToLabel(day);
-      mDayLabel.textContent = dayToLabel(day);
       const msg = "Classifica non raggiungibile in questo momento. Il gioco funziona lo stesso.";
       boardNote.textContent = msg; mBoardNote.textContent = msg;
     }
@@ -1862,24 +1830,7 @@
   document.getElementById("boardOpen").addEventListener("click", apriClassifica);
   document.getElementById("boardClose").addEventListener("click", chiudiClassifica);
   boardModal.addEventListener("click", function(e){ if (e.target === boardModal) chiudiClassifica(); });
-  mDayPrev.addEventListener("click", function(){
-    if (boardIndex < boardDays.length - 1){ boardIndex++; showBoard(boardDays[boardIndex]); }
-  });
-  mDayNext.addEventListener("click", function(){
-    if (boardIndex > 0){ boardIndex--; showBoard(boardDays[boardIndex]); }
-  });
 
-  async function initBoard(){
-    await loadDays();
-    await showBoard(boardDays[boardIndex] || dateKey());
-  }
-
-  dayPrev.addEventListener("click", function(){
-    if (boardIndex < boardDays.length - 1){ boardIndex++; showBoard(boardDays[boardIndex]); }
-  });
-  dayNext.addEventListener("click", function(){
-    if (boardIndex > 0){ boardIndex--; showBoard(boardDays[boardIndex]); }
-  });
 
   async function doSubmit(nomePassato){
     const nome = pulisci(nomePassato !== undefined ? nomePassato : playerName.value);
@@ -1903,23 +1854,24 @@
       });
       submitted = true;
       myEntry = { day: day, name: nome };
-      const rows = await db("scores?day=eq." + day +
-        "&select=name,score,lines,quads,level&order=score.desc&limit=200") || [];
+      const rows = await db("scores?select=name,score,lines,quads,level,day" +
+        "&order=score.desc&limit=500") || [];
       const list = bestPerName(rows);
-      let pos = list.findIndex(function(r){
+      const mio = list.find(function(r){
         return (r.name || "").trim().toLowerCase() === nome.toLowerCase();
       });
+      let pos = list.indexOf(mio);
       pos = pos === -1 ? list.length : pos + 1;
       signupMsg.className = "signup-msg ok";
+      const primato = mio && mio.score === score;
       signupMsg.textContent = pos + "º su " + plur(list.length, "giocatore", "giocatori") +
-                              " oggi, come " + nome;
+                              (primato ? ", nuovo record tuo" : " · il tuo record resta " +
+                               fmt(mio ? mio.score : score));
       submitBtn.textContent = "Invia";
       submitBtn.disabled = false;
       signupEdit.hidden = true;
       changeName.hidden = false;
-      boardIndex = 0;
-      if (boardDays.indexOf(day) === -1) boardDays.unshift(day);
-      renderBoard(rows, day);
+      renderBoard(rows);
     } catch(e){
       submitBtn.disabled = false;
       signupMsg.className = "signup-msg ko";
