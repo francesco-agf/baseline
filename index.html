@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Baseline — tetris tipografico</title>
-<meta name="description" content="Baseline: il tetris tipografico di AGF Milano. Componi i glifi, stampa le righe.">
+<meta name="description" content="Baseline: il tetris tipografico di Arti Grafiche Fimognari. Componi i glifi, stampa le righe.">
 <meta name="theme-color" content="#080B0F">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,12 +13,15 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://francesco-agf.github.io/baseline/">
 <meta property="og:title" content="Baseline — tetris tipografico">
-<meta property="og:description" content="Incastra aste, occhielli e grazie sulla linea di base. Ogni giorno la stessa composizione per tutti.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080B0F'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='%23EDEAE3' text-anchor='middle'%3EB%3C/text%3E%3Crect x='4' y='26' width='24' height='2' fill='%231EA7E1'/%3E%3C/svg%3E">
+<meta property="og:description" content="Incastra aste, occhielli e grazie sulla linea di base. Ogni giorno la stessa composizione per tutti. Un arcade di Arti Grafiche Fimognari.">
+<link rel="icon" href="data:image/svg+xml,<svg width='130' height='168' role='img' aria-label='Fimognari' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 168'> <path fill='%23EDEAE3' d='M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 '/> <path fill='%23EDEAE3' d='M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 '/> </svg>">
 <style>*{box-sizing:border-box}html{color-scheme:dark;-webkit-text-size-adjust:100%}body{margin:0;background:#080B0F}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Comic+Neue:wght@700&display=swap">
+<!-- I caratteri della scala tipografica: servono solo per i sette glifi dei pezzi,
+     quindi vengono scaricati con il solo sottoinsieme che ci serve. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@700&family=Libre+Baskerville:wght@700&family=Anton&text=IOTbpSz&display=swap">
 <style>
   :root{
     --ground:#080B0F;
@@ -69,6 +72,16 @@
   }
   .tagline b{color:var(--paper);font-weight:500}
 
+  /* marchio dello studio */
+  .signature{display:flex;flex-direction:column;align-items:flex-end;gap:7px;padding-bottom:5px}
+  .signature .kicker{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-2);
+  }
+  .logo-agf{width:172px;height:auto;color:var(--paper);display:block}
+  .logo-f{width:26px;height:auto;color:var(--paper);display:block}
+  .sig-full{display:block}
+  .sig-mono{display:none}
+
   /* ---------- stage ---------- */
   .stage{
     display:grid;grid-template-columns:200px minmax(0,auto) 200px;
@@ -102,8 +115,26 @@
   }
   .curse-row .val{font-family:var(--mono);font-size:12px;color:var(--danger);font-variant-numeric:tabular-nums}
 
+  /* ---------- striscia compatta, solo mobile ---------- */
+  .hud-strip{display:none}
+  .hs-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .hs-row + .hs-row{margin-top:5px}
+  .hs-cell{display:flex;align-items:baseline;gap:7px;min-width:0}
+  .hs-cell.right{margin-left:auto}
+  .hs-k{
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted-2);
+  }
+  .hs-v{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--paper);line-height:1}
+  .hs-v.big{font-size:22px;letter-spacing:-.02em}
+  .hs-grade{font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink-y);line-height:1}
+  .hs-curse{font-family:"Comic Neue","Comic Sans MS",cursive;font-size:11px;color:var(--danger)}
+  .hs-pieces{display:flex;align-items:center;gap:4px;margin-left:auto}
+  .hs-mini{display:block;width:44px;height:26px}
+  .hs-sep{width:1px;height:16px;background:var(--rule)}
+
   /* ---------- playfield ---------- */
-  .chase-wrap{display:flex;flex-direction:column;align-items:center}
+  .chase-wrap{display:flex;flex-direction:column;align-items:center;width:100%}
   .board{position:relative;padding:14px}
   .chase{position:relative;border:1px solid #2B3948;background:var(--surface);line-height:0}
   #field{display:block;touch-action:none}
@@ -163,9 +194,14 @@
 
   /* ---------- legend ---------- */
   .legend{display:flex;flex-direction:column;gap:1px;margin:0;padding:0;list-style:none}
-  .legend li{display:grid;grid-template-columns:14px 1fr auto;gap:9px;align-items:center;padding:3.5px 0}
+  .legend li{display:grid;grid-template-columns:14px 1fr auto;gap:9px;align-items:center;padding:5px 0}
+  .legend li + li{border-top:1px solid var(--rule-soft)}
   .legend .sw{width:14px;height:14px}
-  .legend .nm{font-size:11.5px;color:var(--paper)}
+  .legend .nm{font-size:11.5px;color:var(--paper);display:flex;flex-direction:column;gap:2px;min-width:0}
+  .legend .ink{
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--muted-2);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
   .legend .gl{font-family:var(--display);font-size:14px;color:var(--muted-2);line-height:1}
 
   .keys{display:flex;flex-direction:column;gap:5px}
@@ -207,37 +243,172 @@
     overflow-x:auto;letter-spacing:0;
   }
 
+  /* ---------- iscrizione alla classifica ---------- */
+  .signup{display:flex;flex-direction:column;gap:7px;align-items:center;width:100%;max-width:300px}
+  .signup-row{display:flex;gap:6px;width:100%}
+  .signup input{
+    flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--rule);
+    color:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+    padding:9px 10px;
+  }
+  .signup input::placeholder{color:var(--muted-2)}
+  .signup .btn{padding:9px 14px;white-space:nowrap}
+  .signup-msg{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin:0;text-align:center;
+  }
+  .signup-msg.ok{color:var(--ink-y)}
+  .signup-msg.ko{color:var(--danger)}
+
+  /* ---------- classifica ---------- */
+  .board{margin-top:34px;border-top:1px solid var(--rule);padding-top:14px}
+  .board-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .board-title{
+    font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.01em;margin:0;
+  }
+  .board-nav{display:flex;align-items:center;gap:8px}
+  .board-nav button{
+    background:none;border:1px solid var(--rule);color:var(--muted);
+    font-family:var(--mono);font-size:12px;line-height:1;padding:5px 9px;
+  }
+  .board-nav button:hover:not(:disabled){color:var(--paper);border-color:var(--muted-2)}
+  .board-nav button:disabled{opacity:.3;cursor:default}
+  .board-day{
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--paper);
+    min-width:74px;text-align:center;font-variant-numeric:tabular-nums;
+  }
+  .board-meta{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);
+  }
+  .board-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .board-list li{
+    display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:baseline;
+    padding:8px 0;border-top:1px solid var(--rule-soft);
+  }
+  .board-list li:first-child{border-top:none}
+  .board-list li.me{background:rgba(30,167,225,.07)}
+  .board-pos{
+    font-family:var(--mono);font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums;
+  }
+  .board-list li:nth-child(1) .board-pos{color:var(--ink-y)}
+  .board-name{font-size:13.5px;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .board-name .tag{
+    font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted-2);margin-left:9px;
+  }
+  .board-score{
+    font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;color:var(--paper);
+  }
+  .board-note{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);
+    margin:10px 0 0;line-height:1.7;
+  }
+
+  /* ---------- regole ---------- */
+  .modal{
+    position:fixed;inset:0;z-index:50;background:rgba(8,11,15,.96);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+    overflow-y:auto;padding:26px 18px 40px;
+  }
+  .modal-sheet{max-width:660px;margin:0 auto}
+  .modal-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:20px;
+  }
+  .modal-title{font-family:var(--display);font-weight:700;font-size:30px;letter-spacing:-.02em;margin:0}
+  .modal h3{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);margin:26px 0 8px;font-weight:500;
+  }
+  .modal h3:first-of-type{margin-top:0}
+  .modal p{font-size:13.5px;line-height:1.65;color:var(--muted);margin:0 0 9px;max-width:62ch}
+  .modal p b,.modal p strong{color:var(--paper);font-weight:600}
+  .modal .lead{color:var(--paper);font-size:15px}
+  .rules-table{width:100%;border-collapse:collapse;margin:4px 0 6px}
+  .rules-table td{
+    padding:6px 0;border-top:1px solid var(--rule-soft);font-size:12.5px;color:var(--muted);
+    vertical-align:baseline;
+  }
+  .rules-table tr:first-child td{border-top:none}
+  .rules-table td:first-child{color:var(--paper);width:42%;padding-right:14px}
+  .rules-table td.num{
+    font-family:var(--mono);text-align:right;color:var(--ink-y);font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .rules-swatch{
+    display:inline-block;width:11px;height:11px;margin-right:8px;vertical-align:-1px;
+  }
+  .rules-glyph{font-family:var(--display);color:var(--muted-2);margin-left:8px}
+
+  /* ---------- musica ---------- */
+  .audio-bar{display:flex;align-items:center;gap:6px}
+  .audio-bar select{
+    background:var(--surface);border:1px solid var(--rule);color:var(--muted);
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    padding:4px 6px;
+  }
+  .audio-bar select:focus{color:var(--paper)}
+
   .flash{animation:flash .35s ease}
   @keyframes flash{0%{color:var(--accent)}100%{color:var(--paper)}}
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
   @media (max-width:900px){
-    .sheet{padding:14px 14px 26px}
-    .stage{grid-template-columns:minmax(0,1fr);gap:14px;padding-top:14px}
-    .rail{flex-direction:row;flex-wrap:wrap;gap:10px;align-items:stretch}
-    .rail .panel{flex:1 1 0;min-width:0}
-    .rail-left{order:3}
-    .chase-wrap{order:2}
-    .board{padding:12px}
-    .rail-right{order:1;align-items:stretch}
-    .rail-right .panel:first-child{flex:1 1 44%}
-    .rail-right .panel:last-child{flex:1 1 48%}
-    .readout.big{font-size:22px}
-    .panel{padding:10px 11px 11px}
-    .stat-row{padding:4px 0}
+    /* Il campo da gioco si prende tutta l'altezza utile: intestazione ridotta a
+       una riga, pannelli sostituiti da una striscia compatta, riferimenti sotto. */
+    .sheet{padding:8px 10px 24px}
+    .stage{grid-template-columns:minmax(0,1fr);gap:10px;padding-top:8px}
+
+    .masthead{align-items:baseline;gap:10px;padding-bottom:7px;flex-wrap:nowrap}
+    .logotype{font-size:26px;letter-spacing:-.03em}
+    .signature{flex-direction:row;align-items:center;gap:9px;padding-bottom:0;margin-left:auto}
+    .signature .kicker{font-size:8px;letter-spacing:.18em}
+    .sig-full{display:none}
+    .sig-mono{display:block}
+    .logo-f{width:20px}
     .hide-sm{display:none}
-    .queue{flex-direction:row;gap:5px}
-    .queue .slot{flex:1 1 0;min-width:0;padding:4px}
-    .panel.anatomy{flex-basis:100%;order:9}
-    .pad{display:flex}
-    .tagline{text-align:left;padding-bottom:0;font-size:10px}
-    .masthead{align-items:flex-start;gap:8px}
-    .logotype{font-size:clamp(34px,11vw,52px)}
-    .keys .d{font-size:10.5px}
-    .overlay{padding:14px 12px;gap:9px}
+
+    .hud-strip{display:block;width:100%;max-width:460px;padding:0 2px 8px}
+    .rail-right{display:none}
+    .panel.hold-panel,.panel.keys-panel{display:none}
+
+    .chase-wrap{order:2}
+    .board{padding:0}
+    .reg{display:none}
+    .overlay{inset:0;padding:14px 12px;gap:9px}
+
+    .rail{flex-direction:column;gap:10px;order:3}
+    .rail .panel{width:100%}
+    .panel{padding:10px 11px 11px}
+
+    .pad{display:flex;gap:6px;padding-top:10px;max-width:460px}
+    .pad button{padding:12px 0;font-size:16px}
+    .pad .sub{font-size:7px;margin-top:4px}
+
+    .board-list li{grid-template-columns:26px 1fr auto;gap:9px}
+    .board-name .tag{display:block;margin-left:0;margin-top:2px}
+    .board-head{gap:9px}
+    .board-title{font-size:18px}
   }
   @media (pointer:coarse){.pad{display:flex}}
+  @media (max-width:900px) and (min-height:900px){
+    .logotype{font-size:34px}
+  }
+  /* schermi bassi: si comprime l'intestazione per lasciare il campo più grande */
+  @media (max-width:900px) and (max-height:780px){
+    .logotype{font-size:22px}
+    .signature .kicker{display:none}
+    .hs-v.big{font-size:19px}
+    .hs-row + .hs-row{margin-top:3px}
+    .hud-strip{padding-bottom:6px}
+    .pad button{padding:10px 0}
+    .pad .sub{display:none}
+    .sheet{padding:6px 10px 22px}
+  }
 </style>
 
 </head>
@@ -245,27 +416,27 @@
 <div class="sheet">
   <header class="masthead">
     <h1 class="logotype">Baseline<span class="dot">.</span></h1>
-    <div class="tagline">
-      <b>Tetris tipografico</b><br>
-      <span class="hide-sm">Componi i glifi, stampa le righe<br></span>
-      AGF Milano
+    <div class="signature">
+      <span class="kicker">Tetris tipografico</span>
+      <span class="sig-full"><svg class="logo-agf" role="img" aria-label="Arti Grafiche Fimognari, dal 1950" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 794 288"> <path fill="currentColor" d="M 116 199 C 119 199 122 199 123 199 L 123 200 L 32 200 L 32 199 L 39 199 C 41 199 42 199 43 199 C 44 199 44 198 45 198 C 45 197 46 197 46 196 C 46 196 47 195 47 195 C 47 195 47 195 47 194 L 47 121 L 32 121 L 32 120 C 35 120 37 120 39 119 C 41 118 42 118 43 117 C 44 116 45 114 45 113 C 46 111 46 110 47 109 C 47 108 47 107 47 106 C 47 105 47 104 47 104 L 47 104 C 47 102 47 100 47 98 C 48 95 48 92 49 89 C 50 87 51 85 52 83 C 53 81 54 80 55 78 C 58 74 62 70 67 67 C 72 64 77 63 83 63 C 87 63 90 63 93 65 C 94 65 96 66 97 66 C 98 66 99 66 100 66 C 103 66 105 67 107 68 C 108 70 109 72 109 75 C 109 78 108 80 107 82 C 105 83 103 84 100 84 C 97 84 95 83 94 82 C 92 80 91 78 91 75 C 91 73 91 71 93 69 C 92 67 91 66 89 65 C 87 64 84 64 81 64 C 76 64 71 66 67 71 C 63 76 61 83 61 93 L 61 103 C 61 106 61 108 61 110 C 60 112 60 114 59 115 C 59 116 58 117 57 118 C 56 118 55 119 55 119 C 54 119 53 120 52 120 C 52 120 52 120 51 120 L 85 120 L 85 121 L 61 121 L 61 199 L 61 194 C 61 194 61 195 61 195 C 61 195 62 196 62 196 C 62 197 63 197 63 198 C 64 198 64 198 65 199 C 66 199 68 199 69 199 C 74 199 78 199 79 199 L 86 199 C 88 199 90 199 91 198 C 92 197 93 196 93 196 L 93 194 L 93 144 C 93 141 93 138 93 137 C 93 135 93 133 93 132 C 92 131 92 130 91 130 C 91 129 90 129 89 129 C 89 129 88 129 87 129 C 86 130 85 130 83 131 C 81 131 80 132 79 132 L 79 132 C 84 130 88 128 93 125 C 95 124 97 123 100 121 C 102 120 104 119 104 118 L 105 118 C 105 118 105 118 105 118 C 105 118 105 118 106 118 L 106 118 C 107 118 108 120 108 121 L 108 140 L 108 194 C 108 194 108 195 108 195 C 108 195 108 196 108 196 C 109 197 109 197 110 198 C 110 198 111 198 112 199 C 113 199 114 199 116 199 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 4 0 6 0 7 0 L 7 -1 L -83 -1 L -83 0 L -76 0 C -75 0 -74 0 -73 0 C -72 1 -71 1 -71 1 C -70 2 -70 2 -69 3 C -69 3 -69 4 -69 4 C -69 4 -69 5 -69 5 L -69 78 L -83 78 L -83 79 C -81 79 -79 80 -77 80 C -75 81 -73 82 -72 83 C -72 84 -71 85 -70 87 C -70 88 -69 89 -69 90 C -69 91 -69 92 -69 93 C -69 95 -69 95 -69 96 L -69 96 C -69 97 -68 99 -68 102 C -68 105 -67 108 -66 110 C -66 113 -65 115 -64 116 C -63 118 -62 120 -60 121 C -57 125 -53 129 -48 132 C -43 135 -38 137 -33 137 C -29 137 -25 136 -22 135 C -21 134 -20 134 -19 133 C -18 133 -17 134 -15 134 C -13 134 -11 133 -9 131 C -7 129 -6 127 -6 125 C -6 122 -7 120 -9 118 C -11 116 -13 115 -15 115 C -18 115 -20 116 -22 118 C -24 120 -25 122 -25 125 C -25 127 -24 128 -23 130 C -23 132 -25 133 -27 134 C -29 135 -32 136 -34 136 C -40 136 -44 133 -48 129 C -52 124 -54 116 -54 107 L -54 96 C -54 93 -54 91 -55 89 C -55 87 -56 86 -56 85 C -57 84 -57 83 -59 82 C -60 81 -61 80 -61 80 C -61 80 -62 80 -64 79 C -64 79 -64 79 -64 79 L -31 79 L -31 78 L -54 78 L -54 0 L -54 5 C -54 5 -54 5 -54 4 C -54 4 -54 4 -54 3 C -53 3 -53 2 -53 2 C -52 1 -51 1 -50 1 C -49 0 -48 0 -47 0 C -41 0 -38 0 -37 0 L -30 0 C -28 0 -26 0 -25 1 C -23 2 -23 3 -22 4 L -22 5 L -22 56 C -22 59 -22 61 -22 63 C -22 64 -23 66 -23 67 C -23 68 -24 69 -24 70 C -25 70 -25 70 -26 70 C -27 70 -28 70 -29 70 C -30 70 -31 69 -33 69 C -34 68 -35 68 -36 67 L -36 68 C -32 70 -27 72 -22 74 C -21 75 -18 76 -16 78 C -13 80 -12 81 -11 81 L -11 81 C -11 81 -11 81 -11 81 C -10 81 -10 81 -10 81 L -10 81 C -8 81 -8 80 -8 78 L -8 59 L -8 5 C -8 5 -8 5 -8 4 C -7 4 -7 4 -7 3 C -7 3 -6 2 -6 2 C -5 1 -5 1 -4 1 C -3 0 -1 0 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 116, 199)"/> <path fill="currentColor" d="M 279 199 L 280 199 L 280 200 L 236 200 L 236 199 L 237 199 L 243 199 C 245 199 246 199 247 199 C 248 198 248 198 249 198 C 249 197 250 197 250 196 C 250 196 251 195 251 195 C 251 195 251 195 251 194 L 251 134 C 251 129 249 126 247 123 C 244 120 241 119 237 119 C 234 119 230 120 228 121 C 225 122 222 123 220 125 C 219 126 217 128 216 130 C 214 131 213 133 212 135 C 211 137 211 138 210 140 C 210 141 210 142 210 143 C 209 146 209 148 209 150 L 209 199 L 209 194 C 209 194 209 195 209 195 C 209 195 209 196 209 196 C 210 197 210 197 211 198 C 211 198 212 198 213 199 C 214 199 215 199 217 199 C 219 199 221 199 223 199 L 224 199 L 224 200 L 180 200 L 180 199 L 187 199 C 188 199 189 199 190 199 C 191 198 192 198 193 198 C 193 197 194 197 194 196 C 194 196 194 195 194 195 C 194 195 194 195 194 194 L 194 136 C 194 131 193 126 191 123 C 188 120 185 119 181 119 C 178 119 175 120 172 121 C 169 122 166 125 163 128 C 160 131 157 134 156 139 C 154 144 153 149 153 156 L 153 194 C 153 195 153 195 153 195 C 153 195 153 196 154 196 C 154 197 154 197 155 198 C 155 198 156 199 157 199 C 158 199 159 199 160 199 C 164 199 166 199 167 199 L 167 200 L 123 200 L 123 199 L 131 199 C 132 199 133 199 135 199 C 136 198 136 198 137 197 C 137 197 138 196 138 196 C 138 195 138 195 138 195 L 138 146 C 138 140 138 136 137 134 C 137 132 136 131 134 131 C 132 131 130 132 127 133 C 126 134 125 134 124 134 L 124 134 C 129 132 134 130 138 127 C 138 127 138 127 138 127 C 138 127 138 127 138 127 C 140 126 142 125 144 124 C 146 122 148 121 149 121 L 149 120 C 149 120 150 120 150 120 C 152 121 152 122 152 124 L 152 142 L 152 147 L 154 140 L 155 140 C 157 132 161 127 166 123 C 171 120 177 118 183 118 C 190 118 195 120 200 122 C 204 124 206 128 208 132 C 208 132 208 132 208 133 L 208 133 L 208 133 C 208 133 208 133 208 134 C 208 134 209 134 209 134 C 209 134 209 134 209 135 C 209 135 209 135 209 135 C 209 135 209 135 209 135 C 209 135 209 136 209 136 L 209 136 C 209 137 209 138 210 139 L 211 136 L 211 136 C 211 136 212 134 213 132 L 213 132 C 213 132 213 132 213 132 C 213 132 213 132 213 132 C 214 131 214 130 215 129 C 216 127 218 125 220 124 C 221 123 222 122 223 122 L 223 122 C 223 122 223 122 223 122 L 223 122 C 223 122 224 122 224 121 C 225 121 227 120 228 120 C 230 119 232 119 235 118 C 236 118 238 118 238 118 C 247 118 254 120 259 125 C 263 130 265 136 265 146 L 265 195 C 265 195 265 195 266 196 C 266 196 266 197 267 197 C 267 198 268 198 269 199 C 270 199 271 199 273 199 C 275 199 277 199 279 199 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 1 0 L 1 -1 L -43 -1 L -43 0 L -42 0 L -36 0 C -34 0 -33 0 -32 1 C -31 1 -30 1 -30 2 C -29 2 -29 3 -29 3 C -28 4 -28 4 -28 4 C -28 5 -28 5 -28 5 L -28 66 C -28 70 -29 74 -32 77 C -34 79 -38 80 -42 80 C -45 80 -48 80 -51 79 C -54 78 -57 77 -58 75 C -60 73 -62 72 -63 70 C -65 68 -66 66 -67 65 C -67 63 -68 61 -68 60 C -69 59 -69 57 -69 56 C -70 54 -70 52 -70 50 L -70 0 L -70 5 C -70 5 -70 5 -70 5 C -70 4 -70 4 -69 3 C -69 3 -69 2 -68 2 C -68 1 -67 1 -66 1 C -65 0 -64 0 -62 0 C -60 0 -58 0 -56 0 L -55 0 L -55 -1 L -99 -1 L -99 0 L -92 0 C -91 0 -90 0 -89 1 C -88 1 -87 1 -86 2 C -86 2 -85 3 -85 3 C -85 4 -85 4 -85 4 C -85 5 -84 5 -84 5 L -84 63 C -84 69 -86 73 -88 76 C -91 79 -94 80 -98 80 C -101 80 -104 80 -107 78 C -110 77 -113 75 -116 72 C -119 69 -122 65 -123 60 C -125 56 -126 50 -126 43 L -126 5 C -126 5 -126 4 -126 4 C -126 4 -126 4 -125 3 C -125 2 -125 2 -124 2 C -124 1 -123 1 -122 1 C -121 0 -120 0 -119 0 C -115 0 -112 0 -112 0 L -112 -1 L -156 -1 L -156 0 L -148 0 C -147 0 -145 0 -144 1 C -143 1 -142 2 -142 2 C -142 3 -141 3 -141 4 C -141 4 -141 5 -141 5 L -141 54 C -141 59 -141 63 -142 65 C -142 67 -143 68 -145 68 C -147 68 -149 68 -152 66 C -153 66 -154 66 -155 65 L -155 66 C -150 68 -145 70 -141 72 C -141 72 -141 72 -141 72 C -141 72 -141 72 -141 72 C -139 73 -137 74 -135 76 C -133 77 -131 78 -130 79 L -130 79 C -130 79 -129 79 -129 79 C -127 79 -127 78 -127 76 L -127 57 L -127 53 L -125 59 L -124 60 C -122 67 -118 72 -113 76 C -108 80 -102 81 -96 81 C -89 81 -84 80 -79 77 C -75 75 -73 72 -71 68 C -71 67 -71 67 -71 67 L -71 67 L -71 67 C -71 66 -71 66 -70 66 C -70 66 -70 65 -70 65 C -70 65 -70 65 -70 65 C -70 65 -70 65 -70 65 C -70 65 -70 65 -70 64 C -70 64 -70 64 -70 64 L -70 64 C -70 63 -69 62 -69 60 L -68 63 L -68 64 C -68 64 -67 65 -66 67 L -66 67 C -66 67 -66 67 -66 67 C -66 68 -66 68 -66 68 C -65 69 -65 70 -64 70 C -63 72 -61 74 -59 76 C -58 77 -57 77 -56 78 L -56 78 C -56 78 -56 78 -56 78 L -56 78 C -55 78 -55 78 -55 78 C -54 79 -52 79 -51 80 C -49 81 -46 81 -44 81 C -42 81 -41 81 -41 81 C -32 81 -25 79 -20 74 C -16 70 -14 63 -14 54 L -14 5 C -14 4 -13 4 -13 4 C -13 3 -13 3 -12 2 C -12 2 -11 1 -10 1 C -9 0 -7 0 -6 0 C -3 0 -1 0 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 279, 199)"/> <path fill="currentColor" d="M 342 182 C 344 177 345 169 345 160 C 345 153 344 147 343 141 C 342 136 340 131 338 128 C 336 125 333 122 330 121 C 327 119 323 119 318 119 C 314 119 310 119 307 121 C 303 122 300 125 298 128 C 296 132 295 136 294 141 C 293 146 292 153 292 160 C 292 169 293 177 294 182 C 295 187 297 192 300 195 C 302 198 305 200 308 201 C 312 202 315 202 318 202 C 322 202 325 202 328 201 C 331 200 334 198 337 195 C 339 192 341 187 342 182 M 358 143 C 360 149 362 154 362 160 C 362 166 361 172 358 177 C 356 182 352 187 348 190 C 344 194 340 197 334 200 C 329 202 324 203 318 203 C 313 203 308 202 302 200 C 297 197 292 194 288 190 C 284 187 281 182 278 177 C 276 172 275 166 275 160 C 275 154 276 149 279 143 C 281 138 285 134 289 130 C 293 126 298 123 303 121 C 308 119 313 118 318 118 C 323 118 328 119 333 121 C 339 123 343 126 348 130 C 352 134 355 138 358 143 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 1 5 2 13 2 22 C 2 29 2 36 1 41 C -1 47 -2 51 -4 54 C -6 57 -9 60 -13 61 C -16 63 -20 64 -24 64 C -29 64 -32 63 -36 61 C -39 60 -42 57 -44 54 C -46 51 -48 46 -49 41 C -50 36 -51 29 -51 22 C -51 13 -50 5 -48 0 C -47 -5 -45 -9 -43 -13 C -40 -16 -37 -18 -34 -19 C -31 -20 -28 -20 -24 -20 C -21 -20 -17 -20 -14 -19 C -11 -18 -8 -16 -6 -13 C -3 -9 -1 -5 0 0 Z M 15 39 C 18 34 19 28 19 22 C 19 16 18 10 16 5 C 13 0 10 -4 6 -8 C 2 -12 -3 -15 -8 -17 C -13 -20 -19 -21 -24 -21 C -30 -21 -35 -20 -40 -17 C -46 -15 -50 -12 -54 -8 C -58 -5 -61 0 -64 5 C -66 10 -68 16 -68 22 C -68 28 -66 34 -64 39 C -61 44 -58 48 -53 52 C -49 56 -45 59 -39 61 C -34 63 -29 64 -24 64 C -19 64 -14 63 -9 61 C -4 59 1 56 5 52 C 9 48 13 44 15 39 Z M 15 39 " transform="matrix(1, 0, 0, -1, 342, 182)"/> <path fill="currentColor" d="M 477 224 C 480 222 481 220 481 216 C 481 213 480 209 477 207 C 475 205 471 204 467 204 C 464 204 461 205 459 205 C 457 206 455 208 453 209 C 451 210 450 212 449 214 C 448 215 447 217 446 219 L 445 220 L 446 220 C 450 222 454 224 457 225 C 461 227 465 228 468 228 C 471 228 475 227 477 224 M 391 125 C 388 129 386 136 386 145 C 386 149 386 152 387 155 C 387 158 388 161 390 164 C 391 166 394 168 396 169 C 399 170 403 171 407 171 C 414 171 418 169 421 164 C 424 160 426 154 426 145 C 426 142 426 139 425 136 L 425 136 C 425 135 425 135 425 135 C 425 135 425 135 425 134 C 425 134 425 134 425 134 C 424 131 424 129 423 127 C 421 125 419 123 417 121 C 414 119 411 119 406 119 C 400 119 394 121 391 125 M 439 233 L 439 232 L 379 201 L 378 201 C 376 204 373 207 371 211 C 370 214 369 218 369 222 C 369 225 370 229 373 233 C 376 236 379 239 384 242 C 388 245 393 247 398 249 C 404 251 409 251 414 251 C 420 251 425 250 429 246 C 432 243 436 239 439 233 M 478 207 C 481 210 482 213 482 217 C 482 220 481 222 480 225 C 479 227 478 229 476 231 C 474 233 472 235 469 236 C 466 237 463 238 460 238 C 455 238 451 237 449 236 C 445 235 442 234 440 233 L 440 233 L 439 233 C 437 237 435 241 433 244 C 431 247 428 250 425 253 C 422 256 418 259 414 261 C 410 263 406 264 400 264 C 397 264 394 263 390 262 C 386 261 382 259 379 256 C 375 253 372 250 370 245 C 367 241 366 235 366 229 C 366 226 366 223 367 220 C 368 217 369 214 370 212 C 371 210 372 207 374 206 C 375 204 376 202 377 201 L 378 200 L 377 200 C 375 198 373 197 372 196 C 371 196 370 194 369 193 C 368 192 367 190 367 189 C 366 187 366 186 366 184 C 366 182 366 180 367 178 C 367 176 369 174 370 172 C 372 170 375 169 377 168 C 380 167 382 166 385 166 L 384 165 C 377 160 373 154 373 145 C 373 141 374 137 376 134 C 378 131 381 128 384 125 C 388 123 391 121 395 120 C 399 118 403 118 406 118 C 412 118 417 119 421 121 C 425 123 428 125 429 127 L 430 128 C 430 128 430 127 431 127 C 431 127 431 126 432 126 C 435 124 437 122 440 120 C 443 119 446 118 449 118 C 453 118 456 119 459 121 C 460 122 461 124 462 125 C 462 126 463 127 463 128 C 462 129 462 130 462 131 C 462 132 461 133 461 133 L 460 134 C 459 136 458 136 456 137 C 455 137 454 137 453 137 C 452 137 451 136 450 135 C 449 135 448 134 448 134 L 447 133 C 445 130 444 129 442 128 C 440 126 436 125 433 127 C 432 128 431 128 431 128 L 431 128 L 431 129 L 432 129 C 433 130 434 132 436 135 C 438 138 438 142 438 146 C 438 150 438 153 436 156 C 434 159 431 162 428 164 C 426 166 422 168 418 170 C 414 171 410 172 405 172 C 401 172 397 171 394 170 C 390 169 388 168 387 167 C 386 167 386 167 385 167 C 385 167 384 167 384 167 C 384 167 383 167 383 167 C 381 167 379 168 378 168 C 376 169 375 170 374 171 C 373 172 372 173 372 175 C 372 178 374 181 377 183 C 380 185 384 188 389 191 L 389 191 L 390 191 C 393 189 395 187 397 187 C 399 186 402 185 405 184 C 408 183 411 183 414 182 C 418 182 421 182 426 182 C 429 182 432 181 435 181 C 437 181 439 180 441 179 C 443 178 444 177 445 175 C 446 173 446 171 446 169 L 447 169 L 447 198 L 446 198 C 446 195 446 193 445 191 C 445 189 444 187 442 186 C 440 184 438 183 435 183 C 432 182 427 182 422 182 C 418 182 412 183 407 184 C 402 185 396 187 391 190 L 390 191 L 445 219 L 445 219 C 445 219 446 217 448 214 C 450 212 451 210 453 209 C 454 207 456 206 459 205 C 461 204 464 203 467 203 C 472 203 476 205 478 207 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 2 2 4 5 4 8 C 4 12 2 15 -1 17 C -3 19 -6 20 -10 20 C -14 20 -16 20 -18 19 C -21 18 -22 17 -24 15 C -26 14 -27 12 -28 11 C -29 9 -30 7 -32 5 L -32 5 L -31 4 C -27 2 -23 0 -20 -1 C -16 -3 -12 -3 -10 -3 C -6 -3 -3 -2 0 0 Z M -86 100 C -90 95 -92 89 -92 79 C -92 76 -91 72 -91 69 C -90 66 -89 63 -87 61 C -86 58 -84 57 -81 55 C -78 54 -75 53 -71 53 C -64 53 -59 56 -56 60 C -53 64 -52 71 -52 79 C -52 83 -52 86 -52 88 L -52 89 C -52 89 -52 89 -52 89 C -52 89 -52 90 -52 90 C -52 90 -53 90 -53 90 C -53 93 -54 95 -55 97 C -56 100 -58 102 -60 103 C -63 105 -67 106 -71 106 C -78 106 -83 104 -86 100 Z M -39 -9 L -38 -8 L -99 24 L -99 23 C -102 20 -104 17 -106 14 C -108 10 -109 7 -109 3 C -109 -1 -107 -5 -104 -8 C -102 -12 -98 -15 -94 -18 C -89 -21 -84 -23 -79 -25 C -74 -26 -69 -27 -64 -27 C -57 -27 -52 -25 -48 -22 C -45 -19 -42 -15 -39 -9 Z M 1 17 C 3 14 5 11 5 7 C 5 5 4 2 3 0 C 2 -3 1 -5 -1 -7 C -3 -9 -6 -11 -8 -12 C -11 -13 -14 -14 -18 -14 C -22 -14 -26 -13 -29 -12 C -32 -11 -35 -10 -37 -9 L -38 -8 L -38 -9 C -40 -13 -42 -16 -44 -19 C -47 -23 -49 -26 -52 -29 C -55 -32 -59 -35 -63 -36 C -67 -38 -72 -39 -77 -39 C -80 -39 -83 -39 -87 -38 C -91 -36 -95 -34 -99 -32 C -102 -29 -105 -25 -108 -21 C -110 -17 -112 -11 -112 -4 C -112 -1 -111 2 -110 5 C -110 8 -109 10 -108 12 C -106 15 -105 17 -104 19 C -103 20 -101 22 -100 23 L -99 24 L -100 25 C -103 26 -104 27 -105 28 C -106 29 -108 30 -109 31 C -110 33 -111 34 -111 35 C -111 37 -112 39 -112 41 C -112 43 -111 45 -111 47 C -110 49 -109 51 -107 52 C -105 54 -103 55 -100 57 C -98 58 -95 58 -92 58 L -93 59 C -101 64 -104 71 -104 79 C -104 83 -103 87 -101 90 C -99 94 -96 97 -93 99 C -90 102 -86 103 -82 105 C -78 106 -75 107 -71 107 C -65 107 -61 105 -57 103 C -53 101 -50 99 -48 97 L -47 97 C -47 97 -47 97 -46 97 C -46 98 -46 98 -46 98 C -43 101 -40 103 -37 104 C -34 105 -31 106 -28 106 C -24 106 -21 105 -18 103 C -17 102 -16 101 -15 100 C -15 98 -15 97 -15 96 C -15 95 -15 94 -15 93 C -16 92 -16 92 -16 91 L -17 90 C -18 89 -19 88 -21 87 C -22 87 -24 87 -25 87 C -26 88 -27 88 -27 89 C -28 90 -29 90 -30 91 L -30 92 C -32 94 -33 96 -35 97 C -38 99 -41 99 -44 97 C -45 97 -46 96 -46 96 L -46 96 L -46 96 L -46 96 C -44 94 -43 92 -41 89 C -40 86 -39 83 -39 78 C -39 75 -40 71 -42 68 C -43 65 -46 63 -49 60 C -52 58 -55 56 -60 55 C -63 53 -68 53 -72 53 C -76 53 -80 53 -83 54 C -87 56 -89 57 -91 58 C -91 58 -92 58 -92 58 C -93 57 -93 57 -93 57 C -94 57 -94 57 -95 57 C -97 57 -98 57 -100 56 C -101 56 -103 55 -104 54 C -105 53 -105 51 -105 49 C -105 46 -104 43 -101 41 C -98 39 -94 37 -88 34 L -88 34 L -88 34 C -84 36 -82 37 -80 38 C -78 39 -76 39 -73 40 C -70 41 -67 42 -63 42 C -60 43 -56 43 -52 43 C -49 43 -46 43 -43 43 C -40 43 -38 44 -36 45 C -35 46 -33 47 -33 49 C -32 51 -31 53 -31 55 L -31 55 L -31 27 L -31 27 C -31 29 -32 31 -32 34 C -33 36 -34 37 -35 39 C -37 40 -40 41 -43 41 C -46 42 -50 42 -55 42 C -60 42 -65 42 -70 40 C -76 39 -81 37 -86 34 L -87 33 L -33 5 L -32 6 C -32 6 -31 7 -29 11 C -28 13 -26 14 -25 16 C -23 17 -21 18 -18 19 C -16 20 -13 21 -10 21 C -5 21 -1 20 1 17 Z M 1 17 " transform="matrix(1, 0, 0, -1, 477, 224)"/> <path fill="currentColor" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 0 -1 L -44 -1 L -44 0 L -37 0 C -36 0 -34 0 -33 1 C -32 1 -32 1 -31 2 C -31 2 -30 3 -30 3 C -30 4 -29 4 -29 4 C -29 5 -29 5 -29 5 L -29 63 C -29 69 -30 73 -33 76 C -35 79 -39 80 -43 80 C -46 80 -49 80 -52 78 C -55 77 -58 75 -61 72 C -64 69 -66 65 -68 60 C -70 56 -71 50 -71 43 L -71 5 C -71 5 -71 4 -71 4 C -71 4 -71 4 -70 3 C -70 2 -69 2 -69 2 C -68 1 -68 1 -67 1 C -66 0 -65 0 -63 0 C -60 0 -57 0 -56 0 L -56 -1 L -100 -1 L -100 0 L -99 0 L -93 0 C -92 0 -90 0 -89 1 C -88 1 -87 2 -87 2 C -86 3 -86 3 -86 4 C -86 4 -86 4 -86 5 L -86 54 C -86 59 -86 63 -86 65 C -87 67 -88 68 -90 68 C -91 68 -94 68 -97 66 C -98 66 -99 66 -100 65 L -100 66 C -95 68 -90 70 -86 72 C -86 72 -86 72 -86 72 C -86 72 -86 72 -86 72 C -84 73 -82 74 -80 76 C -77 77 -76 78 -75 79 L -75 79 C -74 79 -74 79 -74 79 C -72 79 -71 78 -71 76 L -71 57 L -71 53 L -69 59 L -69 60 C -67 67 -63 73 -58 76 C -53 80 -47 81 -40 81 C -34 81 -28 80 -24 77 C -18 73 -15 64 -15 50 L -15 0 L -15 5 C -15 5 -15 5 -15 5 C -15 4 -14 4 -14 3 C -14 3 -13 2 -13 2 C -13 1 -12 1 -11 1 C -10 0 -8 0 -7 0 C -5 0 -3 0 -1 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 563, 199)"/> <path fill="currentColor" d="M 610 151 L 610 151 C 610 151 610 151 610 151 C 610 151 610 151 610 151 M 608 194 C 612 188 614 180 614 169 C 614 167 614 165 612 163 C 611 162 608 161 605 160 C 605 160 605 160 604 160 L 603 160 C 599 161 594 163 589 166 C 587 167 585 168 583 170 C 583 170 583 170 583 171 C 582 171 582 171 582 171 C 582 171 582 171 582 172 C 582 172 582 172 582 172 C 581 173 581 173 580 174 L 580 174 C 579 177 578 181 578 185 C 578 189 579 192 581 195 C 582 197 584 199 587 200 C 590 200 593 201 596 200 C 596 200 596 200 596 200 C 596 200 597 200 597 200 C 600 200 602 199 604 198 C 605 197 607 195 608 194 M 637 199 C 641 199 643 199 644 199 L 644 200 L 630 200 C 629 200 629 200 628 200 C 627 200 626 200 625 199 C 623 199 622 198 620 197 C 619 196 618 194 617 192 C 616 189 616 186 616 183 L 615 171 L 615 171 C 615 182 613 189 609 195 C 607 197 605 198 602 200 C 599 201 595 202 591 203 C 587 204 582 203 578 202 C 574 201 570 199 568 197 C 565 194 564 191 563 187 C 563 183 564 180 565 177 C 567 173 570 171 573 170 C 576 168 581 166 588 164 C 593 162 596 161 598 161 C 603 159 607 157 610 155 C 614 151 616 146 616 139 C 616 135 615 132 615 129 C 614 126 614 124 613 123 C 612 121 611 120 609 119 C 608 119 606 118 605 118 C 604 118 602 118 600 118 C 596 118 592 118 589 120 C 586 122 584 125 584 128 C 584 129 584 130 585 130 C 585 131 586 132 588 132 C 590 134 592 136 591 139 C 591 141 590 142 589 143 C 588 145 586 145 584 146 C 581 146 579 145 577 143 C 575 141 574 139 574 136 C 574 132 577 127 582 123 C 584 121 587 120 590 119 C 593 118 597 117 600 117 C 610 117 617 119 622 124 C 627 128 630 133 630 139 C 630 142 629 145 628 148 C 627 150 625 152 623 154 C 621 155 619 156 616 157 C 614 158 611 159 608 159 C 610 159 612 159 613 159 C 615 159 617 160 619 160 C 621 161 623 162 624 163 C 626 164 627 166 628 168 C 629 170 630 173 630 176 L 630 194 C 630 194 630 195 630 195 C 630 195 630 195 630 196 C 630 197 631 197 631 198 C 632 198 633 198 634 199 C 635 199 636 199 637 199 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 0 0 C 0 0 0 0 0 0 C 0 0 0 0 0 0 Z M -2 -43 C 3 -37 5 -29 4 -18 C 4 -15 4 -14 3 -12 C 1 -10 -1 -9 -4 -9 C -5 -9 -5 -9 -6 -9 L -7 -9 C -11 -10 -15 -11 -21 -15 C -23 -16 -25 -17 -27 -19 C -27 -19 -27 -19 -27 -19 C -27 -20 -28 -20 -28 -20 C -28 -20 -28 -20 -28 -20 C -28 -21 -28 -21 -28 -21 C -29 -22 -29 -22 -29 -23 L -29 -23 C -31 -26 -32 -30 -32 -33 C -32 -37 -31 -41 -29 -44 C -28 -46 -26 -48 -23 -48 C -20 -49 -17 -50 -14 -49 C -14 -49 -14 -49 -14 -49 C -13 -49 -13 -49 -13 -49 C -10 -49 -8 -48 -6 -46 C -4 -45 -3 -44 -2 -43 Z M 27 -48 C 31 -48 34 -48 35 -48 L 35 -49 L 20 -49 C 19 -49 19 -49 18 -49 C 18 -49 17 -49 15 -48 C 13 -47 12 -47 11 -46 C 9 -45 8 -43 7 -40 C 6 -38 6 -35 6 -32 L 6 -20 L 5 -20 C 5 -30 3 -38 -1 -44 C -3 -46 -5 -47 -8 -48 C -11 -50 -15 -51 -19 -52 C -23 -52 -28 -52 -32 -51 C -36 -50 -39 -48 -42 -46 C -45 -43 -46 -40 -47 -36 C -47 -32 -46 -29 -44 -26 C -43 -22 -40 -20 -37 -18 C -34 -17 -29 -15 -22 -13 C -17 -11 -14 -10 -12 -10 C -7 -8 -3 -6 0 -4 C 4 0 6 6 6 12 C 6 16 6 19 5 22 C 4 25 4 27 3 28 C 2 30 1 31 0 32 C -2 33 -3 33 -5 33 C -6 34 -8 34 -9 34 C -14 34 -18 33 -21 31 C -24 29 -26 27 -26 23 C -26 22 -25 21 -25 21 C -24 20 -23 20 -22 19 C -19 17 -18 15 -19 13 C -19 11 -19 9 -21 8 C -22 6 -24 6 -26 6 C -29 5 -31 6 -33 8 C -35 10 -35 12 -35 15 C -35 19 -33 24 -28 28 C -26 30 -23 31 -20 33 C -16 34 -13 34 -9 34 C 0 34 7 32 12 27 C 17 23 20 18 20 12 C 20 9 19 6 18 4 C 17 1 15 -1 13 -2 C 11 -4 9 -5 7 -6 C 4 -7 2 -8 -2 -8 C 0 -8 2 -8 4 -8 C 6 -8 7 -8 9 -9 C 11 -10 13 -11 15 -12 C 16 -13 17 -14 18 -17 C 19 -19 20 -22 20 -25 L 20 -43 C 20 -43 20 -43 20 -44 C 20 -44 20 -44 20 -45 C 21 -45 21 -46 22 -46 C 22 -47 23 -47 24 -48 C 25 -48 26 -48 27 -48 Z M 27 -48 " transform="matrix(1, 0, 0, -1, 610, 151)"/> <path fill="currentColor" d="M 713 128 C 714 130 714 132 714 133 C 714 134 714 135 714 135 L 714 136 C 714 136 714 136 714 136 C 714 136 714 136 714 136 C 713 137 713 139 712 140 L 712 140 C 712 140 712 140 712 140 C 712 140 712 140 712 140 C 712 140 712 140 712 140 C 712 140 712 140 711 141 C 711 141 711 141 711 141 C 711 141 711 141 711 141 L 711 141 C 711 141 710 142 710 142 C 709 142 709 142 709 142 C 709 142 709 142 709 142 L 709 142 L 708 143 C 708 143 708 143 708 143 C 707 143 707 143 707 143 C 706 143 706 143 706 143 L 705 143 C 705 143 705 143 705 143 C 705 143 705 143 705 143 C 704 143 704 143 704 143 C 702 143 701 142 700 141 L 699 140 C 699 140 699 140 699 140 C 698 139 697 137 697 136 L 697 136 L 697 136 L 697 135 L 697 135 C 697 133 697 131 699 129 C 700 128 700 127 700 126 L 700 126 C 700 126 700 126 700 126 C 700 126 700 126 700 126 L 700 125 C 700 123 699 122 698 121 C 697 121 695 120 693 120 C 690 120 688 121 686 122 C 683 124 681 126 679 129 C 677 133 675 136 674 140 C 673 145 672 149 672 155 L 672 195 C 672 195 672 196 673 196 C 673 197 674 198 675 198 C 676 199 678 199 679 199 C 682 199 684 199 686 199 L 688 199 L 688 200 L 643 200 L 643 199 L 644 199 L 650 199 C 651 199 652 199 653 199 C 654 198 655 198 656 198 C 656 197 656 197 657 196 C 657 196 657 195 657 195 C 657 195 657 194 657 194 L 657 141 C 657 139 657 138 657 137 C 657 136 657 136 657 135 C 656 134 656 133 656 133 C 656 133 655 132 655 132 C 655 132 654 131 654 131 C 653 131 653 131 652 131 C 652 131 651 131 651 132 C 650 132 649 132 648 132 C 648 132 647 133 646 133 C 645 134 644 134 643 134 L 643 134 C 648 132 653 130 657 127 C 657 127 657 127 657 127 L 657 127 C 659 126 661 125 663 124 C 666 122 667 121 668 121 C 668 121 668 121 668 120 C 669 120 669 120 669 120 C 671 121 672 122 672 124 L 672 146 L 674 139 L 674 139 C 674 137 675 135 676 132 C 677 130 679 128 681 126 C 683 124 685 122 688 120 C 691 119 694 118 698 118 C 701 118 703 119 705 119 C 707 120 709 121 710 123 C 711 124 712 126 713 128 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 1 -2 1 -4 1 -5 C 1 -6 1 -7 1 -8 L 1 -8 C 1 -8 1 -8 1 -8 C 1 -8 1 -8 1 -8 C 1 -10 0 -11 -1 -12 L -1 -12 C -1 -12 -1 -12 -1 -12 C -1 -12 -1 -12 -1 -13 C -1 -13 -1 -13 -1 -13 C -1 -13 -1 -13 -1 -13 C -2 -13 -2 -13 -2 -13 C -2 -13 -2 -13 -2 -13 L -2 -14 C -2 -14 -3 -14 -3 -15 C -4 -15 -4 -15 -4 -15 C -4 -15 -4 -15 -4 -15 L -4 -15 L -5 -15 C -5 -15 -5 -15 -5 -15 C -6 -15 -6 -15 -6 -15 C -7 -15 -7 -16 -7 -16 L -7 -16 C -8 -16 -8 -16 -8 -15 C -8 -15 -8 -15 -8 -15 C -9 -15 -9 -15 -9 -15 C -11 -15 -12 -14 -13 -13 L -14 -13 C -14 -13 -14 -13 -14 -12 C -15 -11 -16 -10 -16 -8 L -16 -8 L -16 -8 L -16 -8 L -16 -7 C -16 -5 -16 -3 -14 -1 C -13 0 -13 0 -13 1 L -13 1 C -13 1 -13 1 -13 1 C -13 1 -13 2 -13 2 L -13 3 C -13 4 -13 5 -15 6 C -16 7 -18 7 -20 7 C -23 7 -25 7 -27 5 C -30 4 -32 1 -34 -2 C -36 -5 -38 -9 -39 -13 C -40 -17 -41 -22 -41 -27 L -41 -67 C -41 -68 -41 -68 -40 -69 C -40 -69 -39 -70 -38 -71 C -37 -71 -35 -72 -34 -72 C -31 -72 -29 -72 -27 -72 L -25 -72 L -25 -73 L -70 -73 L -70 -72 L -69 -72 L -63 -72 C -62 -72 -61 -72 -60 -71 C -59 -71 -58 -71 -57 -70 C -57 -70 -57 -69 -56 -69 C -56 -68 -56 -68 -56 -67 C -56 -67 -56 -67 -56 -67 L -56 -13 C -56 -12 -56 -11 -56 -10 C -56 -9 -56 -8 -56 -7 C -57 -7 -57 -6 -57 -5 C -57 -5 -58 -5 -58 -4 C -58 -4 -59 -4 -59 -4 C -60 -4 -60 -4 -61 -4 C -61 -4 -62 -4 -62 -4 C -63 -4 -64 -5 -65 -5 C -65 -5 -66 -5 -67 -6 C -68 -6 -69 -6 -70 -7 L -70 -6 C -65 -4 -60 -2 -56 0 C -56 0 -56 0 -56 0 L -56 0 C -54 1 -52 2 -50 4 C -47 5 -46 6 -45 7 C -45 7 -45 7 -45 7 C -44 7 -44 7 -44 7 C -42 7 -41 6 -41 4 L -41 -19 L -39 -12 L -39 -11 C -39 -9 -38 -7 -37 -5 C -36 -3 -34 0 -32 2 C -30 4 -28 6 -25 7 C -22 9 -19 9 -15 9 C -12 9 -10 9 -8 8 C -6 7 -4 6 -3 5 C -2 3 -1 2 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 713, 128)"/> <path fill="currentColor" d="M 735 84 C 732 84 730 83 728 81 C 726 80 726 77 726 75 C 726 72 726 70 728 68 C 730 67 732 66 735 66 C 737 66 739 67 741 68 C 743 70 744 72 744 75 C 744 77 743 80 741 81 C 739 83 737 84 735 84 M 750 199 C 754 199 756 199 757 199 L 757 200 L 713 200 L 713 199 L 720 199 C 722 199 723 199 724 199 C 725 198 726 198 726 198 C 727 197 727 197 728 196 C 728 196 728 195 728 195 L 728 194 L 728 144 C 728 138 728 134 727 132 C 727 130 726 129 724 129 C 723 129 720 130 717 131 C 716 131 715 132 714 132 L 714 132 C 719 130 723 128 728 125 C 730 124 732 123 734 121 C 737 120 739 119 739 118 L 739 118 C 740 118 740 118 740 118 L 741 118 C 742 118 743 120 743 121 L 743 140 L 743 194 C 743 194 743 195 743 195 C 743 195 743 196 743 196 C 743 197 744 197 744 198 C 745 198 746 198 747 199 C 748 199 749 199 750 199 "/> <path fill="none" stroke-width="0" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C -3 0 -5 1 -7 3 C -8 5 -9 7 -9 9 C -9 12 -8 14 -7 16 C -5 18 -3 18 0 18 C 2 18 5 18 6 16 C 8 14 9 12 9 9 C 9 7 8 5 6 3 C 5 1 2 0 0 0 Z M 15 -115 C 19 -115 22 -115 23 -115 L 23 -116 L -21 -116 L -21 -115 L -14 -115 C -13 -115 -12 -115 -11 -115 C -10 -114 -9 -114 -8 -114 C -8 -113 -8 -113 -7 -112 C -7 -112 -7 -111 -7 -111 L -7 -110 L -7 -60 C -7 -54 -7 -50 -8 -48 C -8 -46 -9 -45 -11 -45 C -12 -45 -14 -45 -17 -47 C -19 -47 -20 -48 -21 -48 L -21 -47 C -16 -46 -12 -43 -7 -41 C -5 -40 -3 -39 0 -37 C 2 -36 4 -35 4 -34 L 5 -34 C 5 -34 5 -34 6 -34 L 6 -34 C 7 -34 8 -35 8 -37 L 8 -56 L 8 -110 C 8 -110 8 -111 8 -111 C 8 -111 8 -112 8 -112 C 9 -113 9 -113 10 -114 C 10 -114 11 -114 12 -115 C 13 -115 14 -115 15 -115 Z M 15 -115 " transform="matrix(1, 0, 0, -1, 735, 84)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 12 0 L 6 15 Z M 16 -10 L 12 0 L 0 0 L -4 -10 L -5 -10 L 6 16 L 6 16 L 17 -10 Z M 16 -10 " transform="matrix(1, 0, 0, -1, 158, 68)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 4 0 C 9 0 12 3 12 6 C 12 10 10 13 4 13 L 0 13 Z M 13 -13 L 12 -13 L 0 0 L 0 -13 L 0 -13 L 0 13 L 4 13 C 10 13 12 10 12 6 C 12 2 10 0 4 0 L 1 0 Z M 13 -13 " transform="matrix(1, 0, 0, -1, 186, 66)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L -9 0 L -9 0 L 9 0 L 9 0 L 0 0 L 0 -25 L 0 -25 Z M 0 0 " transform="matrix(1, 0, 0, -1, 215, 53)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 235 235 L 236 235 L 236 209 L 235 209 Z M 235 235 " transform="matrix(1, 0, 0, -1, 0, 287)"/> <path fill="currentColor" d="M 276 78 C 278 78 280 78 282 77 L 282 65 L 283 65 L 283 77 C 281 78 278 79 276 79 C 269 79 263 74 263 66 C 263 58 269 52 275 52 C 278 52 280 53 283 54 L 283 55 C 280 53 278 53 275 53 C 269 53 264 58 264 66 C 264 73 269 78 276 78 "/> <path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 3 0 5 0 7 1 L 7 13 L 7 13 L 7 1 C 5 0 3 0 0 0 C -7 0 -12 5 -12 13 C -12 21 -7 26 0 26 C 2 26 5 25 7 24 L 7 23 C 5 25 2 25 0 25 C -7 25 -12 21 -12 13 C -12 5 -7 0 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 276, 78)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 4 0 C 9 0 12 3 12 6 C 12 10 10 13 4 13 L 0 13 Z M 13 -13 L 12 -13 L 0 0 L 0 -13 L 0 -13 L 0 13 L 4 13 C 10 13 12 10 12 6 C 12 2 10 0 4 0 L 1 0 Z M 13 -13 " transform="matrix(1, 0, 0, -1, 296, 66)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 12 0 L 6 15 Z M 16 -10 L 12 0 L 0 0 L -4 -10 L -5 -10 L 6 16 L 6 16 L 17 -10 Z M 16 -10 " transform="matrix(1, 0, 0, -1, 321, 68)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 12 0 L 12 0 L 0 0 L 0 -13 L 12 -13 L 12 -13 L 0 -13 L 0 -26 L 0 -26 Z M 0 0 " transform="matrix(1, 0, 0, -1, 348, 53)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 372 235 L 373 235 L 373 209 L 372 209 Z M 372 235 " transform="matrix(1, 0, 0, -1, 0, 287)"/> <path fill="currentColor" d="M 397 79 C 391 79 384 74 384 66 C 384 57 391 52 396 52 C 399 52 401 53 403 54 L 403 55 C 401 53 399 53 396 53 C 391 53 385 57 385 66 C 385 74 391 78 397 78 C 399 78 401 78 403 77 L 403 77 C 401 78 399 79 397 79 "/> <path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C -6 0 -12 5 -12 13 C -12 22 -6 26 0 26 C 2 26 5 26 7 25 L 7 24 C 5 25 2 26 0 26 C -6 26 -12 21 -12 13 C -12 5 -6 0 0 0 C 2 0 5 1 7 2 L 7 2 C 5 1 2 0 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 397, 79)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L -17 0 L -17 -13 L -17 -13 L -17 13 L -17 13 L -17 0 L 0 0 L 0 13 L 0 13 L 0 -13 L 0 -13 Z M 0 0 " transform="matrix(1, 0, 0, -1, 432, 65)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 12 0 L 12 0 L 0 0 L 0 -13 L 11 -13 L 11 -13 L 0 -13 L 0 -25 L 12 -25 L 12 -26 L 0 -26 Z M 0 0 " transform="matrix(1, 0, 0, -1, 446, 53)"/> <path fill="currentColor" d="M 487 78 L 491 78 C 498 78 504 73 504 66 C 504 58 498 53 491 53 L 487 53 Z M 504 66 C 504 74 499 79 491 79 L 486 79 L 486 53 L 491 53 C 499 53 504 57 504 66 "/> <path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 4 0 C 12 0 17 5 17 13 C 17 20 12 25 4 25 L 0 25 Z M 18 13 C 18 5 12 0 4 0 L 0 0 L 0 25 L 4 25 C 12 25 18 21 18 13 Z M 18 13 " transform="matrix(1, 0, 0, -1, 487, 78)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 12 0 L 6 15 Z M 16 -10 L 12 0 L 0 0 L -4 -10 L -5 -10 L 6 16 L 6 16 L 17 -10 Z M 16 -10 " transform="matrix(1, 0, 0, -1, 517, 68)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L 0 0 L 0 -25 L 13 -25 L 13 -26 L 0 -26 Z M 0 0 " transform="matrix(1, 0, 0, -1, 544, 53)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L -7 -3 L -7 -3 L 0 1 L 0 1 L 0 -25 L 0 -25 Z M 0 0 " transform="matrix(1, 0, 0, -1, 586, 53)"/> <path fill="currentColor" d="M 614 60 C 614 56 611 53 607 53 C 603 53 600 56 600 60 C 600 65 604 68 608 68 C 609 68 611 67 611 67 C 613 64 614 63 614 60 M 602 79 L 611 67 L 611 67 C 610 68 609 68 608 68 C 604 68 599 65 599 60 C 599 56 603 52 607 52 C 612 52 615 56 615 60 C 615 63 614 65 612 67 L 603 79 Z M 602 79 "/> <path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 0 4 -3 7 -7 7 C -12 7 -15 4 -15 0 C -15 -5 -11 -7 -7 -7 C -5 -7 -4 -7 -3 -7 C -1 -4 0 -2 0 0 Z M -12 -18 L -3 -7 L -3 -7 C -4 -7 -5 -8 -7 -8 C -11 -8 -15 -5 -15 0 C -15 4 -12 8 -7 8 C -3 8 0 4 0 0 C 0 -3 -1 -4 -3 -7 L -12 -18 Z M -12 -18 " transform="matrix(1, 0, 0, -1, 614, 60)"/> <path fill="currentColor" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 L -9 0 L -11 -11 L -11 -11 C -10 -11 -9 -10 -7 -10 C -2 -10 1 -14 1 -18 C 1 -22 -2 -26 -7 -26 C -10 -26 -12 -24 -14 -23 L -14 -22 C -12 -24 -10 -25 -7 -25 C -2 -25 1 -22 1 -18 C 1 -14 -2 -11 -7 -11 C -9 -11 -10 -11 -12 -12 L -12 -12 L -9 0 L 0 0 Z M 0 0 " transform="matrix(1, 0, 0, -1, 637, 53)"/> <path fill="currentColor" d="M 649 66 C 649 74 653 78 657 78 C 662 78 665 74 665 66 C 665 57 662 53 657 53 C 653 53 649 57 649 66 M 666 66 C 666 74 662 79 657 79 C 653 79 649 74 649 66 C 649 57 653 52 657 52 C 662 52 666 57 666 66 "/> <path fill="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke="rgb(14%, 12%, 13%)" stroke-opacity="1" stroke-miterlimit="10" d="M 0 0 C 0 -8 4 -13 8 -13 C 13 -13 16 -8 16 0 C 16 8 13 13 8 13 C 4 13 0 8 0 0 Z M 17 0 C 17 -8 13 -13 8 -13 C 3 -13 0 -8 0 0 C 0 8 3 13 8 13 C 13 13 17 8 17 0 Z M 17 0 " transform="matrix(1, 0, 0, -1, 649, 66)"/> </svg></span>
+      <span class="sig-mono"><svg class="logo-f" role="img" aria-label="Fimognari" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 168"> <path fill="currentColor" d="M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 "/> <path fill="currentColor" d="M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 "/> </svg></span>
     </div>
   </header>
 
   <div class="stage">
 
     <div class="rail rail-left">
-      <div class="panel">
+      <div class="panel hold-panel">
         <div class="panel-label"><span>Tenuta</span><span>C</span></div>
         <canvas id="hold" class="mini" width="120" height="62"></canvas>
       </div>
 
       <div class="panel anatomy">
-        <div class="panel-label"><span>Anatomia</span><span>7 parti</span></div>
+        <div class="panel-label"><span>Anatomia e inchiostri</span><span>7 parti</span></div>
         <ul class="legend" id="legend"></ul>
       </div>
 
-      <div class="panel">
+      <div class="panel keys-panel">
         <div class="panel-label"><span>Comandi</span></div>
         <div class="keys">
           <div><span class="k">← →</span><span class="d">Sposta</span></div>
@@ -279,6 +450,23 @@
     </div>
 
     <div class="chase-wrap">
+     <div class="hud-strip" id="hudStrip">
+       <div class="hs-row">
+         <div class="hs-cell"><span class="hs-k">Punti</span><span class="hs-v big" id="msScore">0</span></div>
+         <div class="hs-cell right"><span class="hs-k">Grado</span><span class="hs-grade" id="msGrade">Garzone</span></div>
+       </div>
+       <div class="hs-row">
+         <div class="hs-cell inline"><span class="hs-k">Righe</span><span class="hs-v" id="msLines">0</span></div>
+         <div class="hs-cell inline"><span class="hs-k">Corpo</span><span class="hs-v" id="msCorpo">8 pt</span></div>
+         <div class="hs-curse" id="msCurse" hidden>Comic Sans!</div>
+         <div class="hs-pieces">
+           <canvas id="msHold" class="hs-mini" width="46" height="26"></canvas>
+           <span class="hs-sep"></span>
+           <canvas id="msN0" class="hs-mini" width="46" height="26"></canvas>
+           <canvas id="msN1" class="hs-mini" width="46" height="26"></canvas>
+         </div>
+       </div>
+     </div>
      <div class="board">
       <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
       <div class="chase">
@@ -303,12 +491,21 @@
             <canvas id="spPrint" width="140" height="120"></canvas>
             <span class="spec-next" id="spNext"></span>
           </div>
+          <div class="signup" id="signup" hidden>
+            <div class="signup-row">
+              <input id="playerName" type="text" maxlength="20" autocomplete="nickname"
+                     spellcheck="false" placeholder="Il tuo nome" aria-label="Il tuo nome">
+              <button class="btn" id="submitScore">In classifica</button>
+            </div>
+            <p class="signup-msg" id="signupMsg"></p>
+          </div>
           <pre class="share-box" id="shareBox" hidden></pre>
         </div>
 
         <div class="btn-row" id="ovButtons">
           <button class="btn" id="dailyBtn">Composizione del giorno</button>
           <button class="btn ghost" id="freeBtn">Partita libera</button>
+          <button class="btn ghost" id="rulesBtn2">Regole</button>
           <button class="btn ghost" id="copyBtn" hidden>Copia risultato</button>
         </div>
       </div>
@@ -350,11 +547,103 @@
 
   </div>
 
+  <section class="board" id="board">
+    <div class="board-head">
+      <h2 class="board-title">Classifica</h2>
+      <div class="board-nav">
+        <button id="dayPrev" aria-label="Giorno precedente">‹</button>
+        <span class="board-day" id="dayLabel">—</span>
+        <button id="dayNext" aria-label="Giorno successivo">›</button>
+      </div>
+      <span class="board-meta" id="boardMeta">Composizione del giorno</span>
+    </div>
+    <ol class="board-list" id="boardList"></ol>
+    <p class="board-note" id="boardNote">Carico la classifica…</p>
+  </section>
+
   <footer class="colofoot">
-    <span class="studio">AGF Milano — Baseline v2.0</span>
-    <span>Ciano · Magenta · Giallo · Nero</span>
-    <button class="sound-toggle" id="soundBtn" aria-pressed="true">Audio on</button>
+    <span class="studio">Arti Grafiche Fimognari, dal 1950 — Baseline v3.0</span>
+    <button class="sound-toggle" id="rulesBtn">Regole del gioco</button>
+    <span class="audio-bar">
+      <button class="sound-toggle" id="soundBtn" aria-pressed="true">Effetti on</button>
+      <select id="musicSel" aria-label="Musica">
+        <option value="off">Musica off</option>
+        <option value="torchio">Torchio</option>
+        <option value="rotativa">Rotativa</option>
+        <option value="buio">Camera oscura</option>
+      </select>
+    </span>
   </footer>
+
+  <div class="modal" id="rules" hidden>
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <h2 class="modal-title">Regole del gioco</h2>
+        <button class="btn ghost" id="rulesClose">Chiudi</button>
+      </div>
+
+      <p class="lead">Cadono le parti anatomiche di una lettera. Le incastri finché una riga
+      non è piena: quella riga <b>va in stampa</b> e sparisce. Quando la pila arriva in cima,
+      la forma si chiude e la tiratura finisce.</p>
+
+      <h3>Le righe guida</h3>
+      <p>Quattro filetti attraversano il campo — <b>ascendente</b>, <b>altezza maiuscola</b>,
+      <b>altezza x</b> e la <b>linea di base</b> in ciano. Chiudere una riga esattamente su una
+      guida vale un bonus di allineamento: sono i punti che separano chi gioca a caso da chi compone.</p>
+
+      <h3>Le giocate</h3>
+      <table class="rules-table">
+        <tr><td>Una riga</td><td>Riga</td><td class="num">100</td></tr>
+        <tr><td>Due righe</td><td>Capoverso</td><td class="num">300</td></tr>
+        <tr><td>Tre righe</td><td>Colonna</td><td class="num">500</td></tr>
+        <tr><td>Quattro righe</td><td>Quadricromia</td><td class="num">800</td></tr>
+        <tr><td>Riga chiusa su una guida</td><td>Allineamento</td><td class="num">+150</td></tr>
+        <tr><td>Scarichi consecutivi</td><td>Combo</td><td class="num">+50 ×n</td></tr>
+      </table>
+      <p>Tutti i punteggi si moltiplicano per il corpo a cui stai giocando. La
+      <b>quadricromia</b> — quattro righe in un colpo solo — fa lampeggiare le quattro lastre
+      e fa scendere il timbro del capo reparto.</p>
+
+      <h3>Il Comic Sans maledetto</h3>
+      <p>Ogni tanto arriva un pezzo composto in Comic Sans: traballa, ha il contorno rosso
+      tratteggiato e finché resta sul campo <b>ti mangia due punti al secondo per ogni cella</b>.
+      L'unico modo di liberartene è mandarlo in stampa: la riga che lo contiene vale un bonus
+      di esorcismo.</p>
+
+      <h3>Il corpo e la scala dei caratteri</h3>
+      <p>Ogni dieci righe sali di <b>corpo</b>, da 8 pt in su: i pezzi cadono più in fretta e i
+      glifi cambiano classe tipografica. Si comincia con un bastone e si finisce in condensato,
+      passando per egiziano, transizionale e bodoniano — a colpo d'occhio si capisce quanto
+      lontano è arrivata una partita.</p>
+
+      <h3>I gradi</h3>
+      <p>Il punteggio ti assegna un grado di tipografia: <b>Garzone</b>, poi Compositore a 2.000,
+      Impaginatore a 6.000, <b>Proto</b> a 12.000, Punzonista a 25.000, Incisore a 45.000 e
+      <b>Bodoni</b> a 80.000.</p>
+
+      <h3>Gli inchiostri</h3>
+      <table class="rules-table" id="rulesInks"></table>
+      <p>I sette colori sono le sette combinazioni della quadricromia. I riferimenti Pantone
+      sono approssimazioni a video: la resa in stampa va verificata su campione.</p>
+
+      <h3>Composizione del giorno e classifica</h3>
+      <p>Ogni giorno la sequenza dei pezzi è <b>identica per tutti</b> fino a mezzanotte: i punteggi
+      sono confrontabili e la classifica ha senso. A fine partita metti il tuo nome e finisci in
+      classifica; con le frecce sfogli i giorni passati e vedi chi ha giocato. La
+      <b>partita libera</b> ha una sequenza casuale e non entra in classifica.</p>
+
+      <h3>Comandi</h3>
+      <table class="rules-table">
+        <tr><td>Frecce destra e sinistra</td><td>Sposta il pezzo</td><td></td></tr>
+        <tr><td>Freccia su, oppure X</td><td>Ruota</td><td></td></tr>
+        <tr><td>Freccia giù</td><td>Discesa dolce</td><td></td></tr>
+        <tr><td>Barra spaziatrice</td><td>Battuta secca</td><td></td></tr>
+        <tr><td>C</td><td>Tieni il pezzo da parte</td><td></td></tr>
+        <tr><td>P</td><td>Pausa</td><td></td></tr>
+        <tr><td>Da telefono</td><td>I tasti sotto al campo, oppure scorri per spostare, tocca per ruotare, scorri in basso per la battuta secca</td><td></td></tr>
+      </table>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -368,16 +657,30 @@
      ==================================================================== */
   const SHARE_URL = "https://francesco-agf.github.io/baseline/";
 
+  /* --------------------------------------------------------------------
+     Classifica. Progetto Supabase dedicato che contiene SOLO punteggi:
+     la chiave qui sotto e' pubblicabile per definizione (la legge chiunque
+     apra la pagina) e non da' accesso a nient'altro. Le regole del database
+     permettono di leggere e aggiungere una riga, mai di modificarla o
+     cancellarla.
+     -------------------------------------------------------------------- */
+  const DB_URL = "https://piaxtjwgmjuajuuqpftj.supabase.co/rest/v1/";
+  const DB_KEY = "sb_publishable_UrQBn4-s-RECuQPv-Nm_Ww_iFYmoGSC";
+
   const COLS = 10, ROWS = 20;
 
+  /* Ogni pezzo è un inchiostro: `mix` è la separazione in quadricromia, esatta
+     per costruzione; `pantone` è il riferimento più vicino nella scala Pantone,
+     un'approssimazione a video — la resa in stampa va sempre verificata su
+     campione. Sostituibili con i codici di reparto. */
   const PIECES = {
-    I: { name:"Asta",        glyph:"I", ink:"#EDEAE3", cells:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
-    O: { name:"Occhiello",   glyph:"O", ink:"#1EA7E1", cells:[[1,1],[1,1]] },
-    T: { name:"Traversa",    glyph:"T", ink:"#E5007D", cells:[[0,1,0],[1,1,1],[0,0,0]] },
-    L: { name:"Ascendente",  glyph:"b", ink:"#FFD400", cells:[[0,0,1],[1,1,1],[0,0,0]] },
-    J: { name:"Discendente", glyph:"p", ink:"#F04A2A", cells:[[1,0,0],[1,1,1],[0,0,0]] },
-    S: { name:"Grazia",      glyph:"S", ink:"#00B36B", cells:[[0,1,1],[1,1,0],[0,0,0]] },
-    Z: { name:"Terminale",   glyph:"z", ink:"#6C4FE0", cells:[[1,1,0],[0,1,1],[0,0,0]] }
+    I: { name:"Asta",        glyph:"I", ink:"#EDEAE3", mix:"K 0",        pantone:"Warm Gray 1 C", cells:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
+    O: { name:"Occhiello",   glyph:"O", ink:"#1EA7E1", mix:"C 100",      pantone:"2995 C",        cells:[[1,1],[1,1]] },
+    T: { name:"Traversa",    glyph:"T", ink:"#E5007D", mix:"M 100",      pantone:"Rubine Red C",  cells:[[0,1,0],[1,1,1],[0,0,0]] },
+    L: { name:"Ascendente",  glyph:"b", ink:"#FFD400", mix:"Y 100",      pantone:"116 C",         cells:[[0,0,1],[1,1,1],[0,0,0]] },
+    J: { name:"Discendente", glyph:"p", ink:"#F04A2A", mix:"M 100 Y 90", pantone:"1655 C",        cells:[[1,0,0],[1,1,1],[0,0,0]] },
+    S: { name:"Grazia",      glyph:"S", ink:"#00B36B", mix:"C 100 Y 70", pantone:"340 C",         cells:[[0,1,1],[1,1,0],[0,0,0]] },
+    Z: { name:"Terminale",   glyph:"z", ink:"#6C4FE0", mix:"C 70 M 80",  pantone:"2725 C",        cells:[[1,1,0],[0,1,1],[0,0,0]] }
   };
   const KEYS = ["I","O","T","L","J","S","Z"];
 
@@ -391,6 +694,11 @@
 
   // nomi delle giocate
   const PLAY_NAMES = ["", "RIGA", "CAPOVERSO", "COLONNA", "QUADRICROMIA"];
+
+  // il monogramma dello studio, in filigrana sul campo
+  const MARK_PATHS = ["M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 ", "M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 "];
+  const MARK_BOX = [130, 168];
+
 
   // gradi di tipografia
   const GRADES = [
@@ -412,11 +720,19 @@
     return null;
   }
 
-  // stili del carattere per corpo
+  /* La scala dei caratteri: salendo di corpo cambia la classe tipografica dei
+     glifi, dal bastone al bodoniano al condensato. */
+  const SCALE = [
+    { upTo:2,        label:"Grottesco",      font:'700 $PXpx "Archivo", Helvetica, Arial, sans-serif' },
+    { upTo:4,        label:"Egiziano",       font:'700 $PXpx "Zilla Slab", Rockwell, Georgia, serif' },
+    { upTo:6,        label:"Transizionale",  font:'700 $PXpx "Libre Baskerville", Baskerville, Georgia, serif' },
+    { upTo:8,        label:"Bodoniano",      font:'400 $PXpx "Bodoni Moda", Didot, Georgia, serif' },
+    { upTo:10,       label:"Bodoniano nero", font:'900 $PXpx "Bodoni Moda", Didot, Georgia, serif' },
+    { upTo:Infinity, label:"Condensato",     font:'400 $PXpx "Anton", "Archivo", Impact, sans-serif' }
+  ];
   function styleFor(lv){
-    if (lv <= 3) return { label:"Grottesco",       font:'700 $PXpx "Archivo", Helvetica, Arial, sans-serif' };
-    if (lv <= 6) return { label:"Bodoniano",       font:'400 $PXpx "Bodoni Moda", Didot, Georgia, serif' };
-    return          { label:"Bodoniano nero", font:'900 $PXpx "Bodoni Moda", Didot, Georgia, serif' };
+    for (const s of SCALE) if (lv <= s.upTo) return s;
+    return SCALE[SCALE.length - 1];
   }
 
   /* ============ elementi ============ */
@@ -473,6 +789,10 @@
   let phase = "start";
   let cell = 30, last = 0, raf = null;
   let toast = null, shake = 0, quadFlash = 0, particles = [], piecesSpawned = 0;
+  let stamp = 0;          // timbro VISTO SI STAMPI
+  let misreg = 0;         // fuori registro: le lastre si scollano per un istante
+  let regMarks = null;    // crocini di registro che rientrano sulle righe stampate
+  let markPath = null;    // filigrana del monogramma
 
   function newGrid(){ return Array.from({length:ROWS}, () => new Array(COLS).fill(null)); }
 
@@ -603,10 +923,13 @@
       for (const y of full) printed.push(grid[y].slice());
       events.push({ n: n, aligned: aligned, cursed: exorcised > 0 });
 
+      // crocini di registro che rientrano sulle righe appena chiuse
+      if (!reduceMotion) regMarks = { rows: full.slice(), t: 0 };
+
       let word = PLAY_NAMES[n];
       if (n === 4){
         quadFlash = 1;
-        if (!reduceMotion) shake = 7;
+        if (!reduceMotion){ shake = 7; stamp = 1; misreg = 1; }
       } else if (aligned){
         word = word + " ALLINEATA";
       }
@@ -690,6 +1013,7 @@
     printed = []; events = []; piecesSpawned = 0;
     clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
     toast = null; particles = []; shake = 0; quadFlash = 0;
+    stamp = 0; misreg = 0; regMarks = null;
     best = loadBest();
     phase = "play";
     setCurseUi(0);
@@ -699,12 +1023,14 @@
     ovBody.hidden = false;
     ovTitle.hidden = false;
     specimen.hidden = true;
+    signup.hidden = true;
     copyBtn.hidden = true;
     overlay.hidden = true;
     cur = spawn(shiftQueue());
     paintHud(); paintSide();
     last = performance.now();
     if (!raf) raf = requestAnimationFrame(loop);
+    if (musicKey !== "off" && !musicTimer) startMusic();
   }
 
   function bestKey(){ return mode === "daily" ? ("baseline.daily." + dateKey()) : "baseline.best"; }
@@ -732,7 +1058,7 @@
       ovTitle.hidden = false;
       ovBody.textContent = "Premi P o il pulsante per riprendere la composizione.";
       ovBody.hidden = false;
-      specimen.hidden = true; copyBtn.hidden = true;
+      specimen.hidden = true; copyBtn.hidden = true; signup.hidden = true;
       dailyBtn.textContent = "Riprendi"; dailyBtn.dataset.resume = "1";
       freeBtn.hidden = true;
       overlay.hidden = false;
@@ -784,6 +1110,9 @@
     if (toast){ toast.t += dt; if (toast.t > 1100) toast = null; }
     if (shake > 0) shake = Math.max(0, shake - dt * .022);
     if (quadFlash > 0) quadFlash = Math.max(0, quadFlash - dt / 420);
+    if (stamp > 0) stamp = Math.max(0, stamp - dt / 1150);
+    if (misreg > 0) misreg = Math.max(0, misreg - dt / 620);
+    if (regMarks){ regMarks.t += dt; if (regMarks.t > 620) regMarks = null; }
     if (particles.length){
       for (const p of particles){
         p.x += p.vx; p.y += p.vy; p.vy += .16; p.life -= dt / 620;
@@ -918,6 +1247,7 @@
 
     shareBox.textContent = shareText();
     shareBox.hidden = true;
+    prepareSignup();
     specimen.hidden = false;
     ovBody.hidden = true;
     ovTitle.hidden = true;
@@ -961,22 +1291,376 @@
     }
   }
 
+  /* ============ classifica ============ */
+  const signup = document.getElementById("signup");
+  const playerName = document.getElementById("playerName");
+  const submitBtn = document.getElementById("submitScore");
+  const signupMsg = document.getElementById("signupMsg");
+  const boardList = document.getElementById("boardList");
+  const boardNote = document.getElementById("boardNote");
+  const boardMeta = document.getElementById("boardMeta");
+  const dayLabel = document.getElementById("dayLabel");
+  const dayPrev = document.getElementById("dayPrev");
+  const dayNext = document.getElementById("dayNext");
+
+  let boardDays = [];          // giorni con almeno una partita, dal più recente
+  let boardIndex = 0;          // posizione nella lista
+  let myEntry = null;          // { day, name } appena iscritto, per evidenziarlo
+  let submitted = false;
+
+  function dayToLabel(d){
+    const s = String(d);
+    return s.slice(6, 8) + "." + s.slice(4, 6);
+  }
+  function dayToLong(d){
+    const s = String(d);
+    return s.slice(6, 8) + "." + s.slice(4, 6) + "." + s.slice(0, 4);
+  }
+
+  async function db(path, opts){
+    const o = opts || {};
+    const res = await fetch(DB_URL + path, {
+      method: o.method || "GET",
+      headers: Object.assign({
+        "apikey": DB_KEY,
+        "Authorization": "Bearer " + DB_KEY,
+        "Content-Type": "application/json"
+      }, o.headers || {}),
+      body: o.body ? JSON.stringify(o.body) : undefined
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const txt = await res.text();
+    return txt ? JSON.parse(txt) : null;
+  }
+
+  // un nome per giocatore: tiene solo la partita migliore di ciascuno
+  function bestPerName(rows){
+    const map = new Map();
+    for (const r of rows){
+      const k = (r.name || "").trim().toLowerCase();
+      if (!k) continue;
+      const cur = map.get(k);
+      if (!cur || r.score > cur.score) map.set(k, r);
+    }
+    return Array.from(map.values()).sort(function(a, b){ return b.score - a.score; });
+  }
+
+  async function loadDays(){
+    let rows = [];
+    try {
+      rows = await db("scores_days?select=day,partite,record&order=day.desc&limit=60") || [];
+    } catch(e){ rows = []; }
+    const today = dateKey();
+    boardDays = rows.map(function(r){ return r.day; });
+    if (boardDays.indexOf(today) === -1) boardDays.unshift(today);
+    boardDays.sort(function(a, b){ return b - a; });
+    boardIndex = Math.max(0, boardDays.indexOf(today));
+    return rows;
+  }
+
+  function renderBoard(rows, day){
+    boardList.innerHTML = "";
+    dayLabel.textContent = dayToLabel(day);
+    dayPrev.disabled = boardIndex >= boardDays.length - 1;
+    dayNext.disabled = boardIndex <= 0;
+
+    const list = bestPerName(rows).slice(0, 10);
+    if (!list.length){
+      boardNote.textContent = day === dateKey()
+        ? "Nessuno ha ancora stampato niente oggi. Sii il primo."
+        : "Nessuno ha giocato la composizione del " + dayToLong(day) + ".";
+      boardMeta.textContent = "Composizione del " + dayToLabel(day);
+      return;
+    }
+    list.forEach(function(r, i){
+      const li = document.createElement("li");
+      if (myEntry && myEntry.day === day &&
+          myEntry.name.trim().toLowerCase() === (r.name || "").trim().toLowerCase()){
+        li.className = "me";
+      }
+      const pos = document.createElement("span");
+      pos.className = "board-pos";
+      pos.textContent = (i + 1) + "º";
+      const nm = document.createElement("span");
+      nm.className = "board-name";
+      nm.textContent = r.name;
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = plur(r.lines, "riga", "righe") +
+                        (r.quads ? " · " + plur(r.quads, "quadricromia", "quadricromie") : "") +
+                        " · corpo " + (6 + r.level * 2) + " pt";
+      nm.appendChild(tag);
+      const sc = document.createElement("span");
+      sc.className = "board-score";
+      sc.textContent = fmt(r.score);
+      li.appendChild(pos); li.appendChild(nm); li.appendChild(sc);
+      boardList.appendChild(li);
+    });
+    const tot = bestPerName(rows).length;
+    boardMeta.textContent = "Composizione del " + dayToLabel(day) + " · " +
+                            plur(tot, "giocatore", "giocatori");
+    boardNote.textContent = day === dateKey()
+      ? "Oggi tutti compongono la stessa sequenza di pezzi. Domani si ricomincia."
+      : "Composizione del " + dayToLong(day) + ", chiusa.";
+  }
+
+  async function showBoard(day){
+    boardNote.textContent = "Carico la classifica…";
+    try {
+      const rows = await db("scores?day=eq." + day +
+        "&select=name,score,lines,quads,level&order=score.desc&limit=200") || [];
+      renderBoard(rows, day);
+    } catch(e){
+      boardList.innerHTML = "";
+      dayLabel.textContent = dayToLabel(day);
+      boardNote.textContent = "Classifica non raggiungibile in questo momento. Il gioco funziona lo stesso.";
+    }
+  }
+
+  async function initBoard(){
+    await loadDays();
+    await showBoard(boardDays[boardIndex] || dateKey());
+  }
+
+  dayPrev.addEventListener("click", function(){
+    if (boardIndex < boardDays.length - 1){ boardIndex++; showBoard(boardDays[boardIndex]); }
+  });
+  dayNext.addEventListener("click", function(){
+    if (boardIndex > 0){ boardIndex--; showBoard(boardDays[boardIndex]); }
+  });
+
+  async function doSubmit(){
+    const nome = (playerName.value || "").trim().replace(/\s+/g, " ");
+    if (nome.length < 1){
+      signupMsg.className = "signup-msg ko";
+      signupMsg.textContent = "Scrivi un nome";
+      playerName.focus();
+      return;
+    }
+    submitBtn.disabled = true;
+    signupMsg.className = "signup-msg";
+    signupMsg.textContent = "Invio…";
+    try {
+      localStorage.setItem("baseline.nome", nome);
+    } catch(e){}
+    const day = dateKey();
+    try {
+      await db("scores", {
+        method: "POST",
+        headers: { "Prefer": "return=minimal" },
+        body: { day: day, name: nome, score: score, lines: lines, quads: quads, level: level }
+      });
+      submitted = true;
+      myEntry = { day: day, name: nome };
+      const rows = await db("scores?day=eq." + day +
+        "&select=name,score,lines,quads,level&order=score.desc&limit=200") || [];
+      const list = bestPerName(rows);
+      let pos = list.findIndex(function(r){
+        return (r.name || "").trim().toLowerCase() === nome.toLowerCase();
+      });
+      pos = pos === -1 ? list.length : pos + 1;
+      signupMsg.className = "signup-msg ok";
+      signupMsg.textContent = pos + "º su " + plur(list.length, "giocatore", "giocatori") + " oggi";
+      submitBtn.textContent = "In classifica";
+      boardIndex = 0;
+      if (boardDays.indexOf(day) === -1) boardDays.unshift(day);
+      renderBoard(rows, day);
+    } catch(e){
+      submitBtn.disabled = false;
+      signupMsg.className = "signup-msg ko";
+      signupMsg.textContent = "Non sono riuscito a inviare. Riprova.";
+    }
+  }
+  submitBtn.addEventListener("click", doSubmit);
+  playerName.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){ e.preventDefault(); doSubmit(); }
+    e.stopPropagation();
+  });
+
+  function prepareSignup(){
+    submitted = false;
+    signupMsg.textContent = "";
+    signupMsg.className = "signup-msg";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "In classifica";
+    if (mode !== "daily"){
+      signup.hidden = true;
+      return;
+    }
+    if (score <= 0){
+      signup.hidden = true;
+      return;
+    }
+    signup.hidden = false;
+    try {
+      const n = localStorage.getItem("baseline.nome");
+      if (n && !playerName.value) playerName.value = n;
+    } catch(e){}
+  }
+
   /* ============ audio ============ */
   let actx = null, soundOn = true;
+
+  function audioCtx(){
+    if (!actx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      actx = new AC();
+    }
+    if (actx.state === "suspended") actx.resume();
+    return actx;
+  }
+
   soundBtn.addEventListener("click", function(){
     soundOn = !soundOn;
     soundBtn.setAttribute("aria-pressed", String(soundOn));
-    soundBtn.textContent = soundOn ? "Audio on" : "Audio off";
+    soundBtn.textContent = soundOn ? "Effetti on" : "Effetti off";
+  });
+
+  /* ---- musica: tre giri originali, sintetizzati sul momento ----
+     Ogni traccia è una griglia di sedicesimi su un giro di quattro accordi.
+     Il tempo sale col corpo, così la partita si fa più concitata da sola. */
+  const SEMI = function(n){ return 440 * Math.pow(2, n / 12); };
+  const MUSIC = {
+    torchio: {
+      bpm: 104, step: 8, vol: .055, wave: "square",
+      bass:  [-24, null, null, null, -29, null, null, null, -21, null, null, null, -26, null, null, null],
+      arp:   [0, 3, 7, 12, -4, 0, 5, 12, -9, 4, 7, 12, -2, 3, 7, 10],
+      hat:   [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1]
+    },
+    rotativa: {
+      bpm: 138, step: 16, vol: .045, wave: "square",
+      bass:  [-24, -24, null, -24, -29, null, -29, null, -21, -21, null, -21, -26, null, -26, null],
+      arp:   [12, 7, 3, 7, 8, 5, 0, 5, 15, 12, 7, 12, 10, 7, 3, 7],
+      hat:   [1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1]
+    },
+    buio: {
+      bpm: 72, step: 4, vol: .05, wave: "triangle",
+      bass:  [-36, null, null, null, -29, null, null, null, -33, null, null, null, -31, null, null, null],
+      arp:   [null, 12, null, 7, null, 8, null, 3, null, 15, null, 10, null, 7, null, 3],
+      hat:   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  };
+
+  let musicKey = "off", musicTimer = null, musicStep = 0, musicNext = 0, musicGain = null;
+
+  function stopMusic(){
+    if (musicTimer){ clearInterval(musicTimer); musicTimer = null; }
+    if (musicGain){
+      try {
+        musicGain.gain.setTargetAtTime(0, actx.currentTime, .05);
+        const g = musicGain;
+        setTimeout(function(){ try { g.disconnect(); } catch(e){} }, 400);
+      } catch(e){}
+      musicGain = null;
+    }
+  }
+
+  function startMusic(){
+    stopMusic();
+    if (musicKey === "off") return;
+    const c = audioCtx();
+    if (!c) return;
+    const track = MUSIC[musicKey];
+    if (!track) return;
+    musicGain = c.createGain();
+    musicGain.gain.value = track.vol;
+    musicGain.connect(c.destination);
+    musicStep = 0;
+    musicNext = c.currentTime + .08;
+
+    function nota(freq, at, dur, wave, vol){
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = wave; o.frequency.value = freq;
+      g.gain.setValueAtTime(0, at);
+      g.gain.linearRampToValueAtTime(vol, at + .01);
+      g.gain.exponentialRampToValueAtTime(.0001, at + dur);
+      o.connect(g); g.connect(musicGain);
+      o.start(at); o.stop(at + dur + .02);
+    }
+    function colpo(at){
+      const len = 0.03, sr = c.sampleRate;
+      const buf = c.createBuffer(1, Math.max(1, Math.floor(sr * len)), sr);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+      const s = c.createBufferSource(); s.buffer = buf;
+      const g = c.createGain(); g.gain.value = .16;
+      const f = c.createBiquadFilter(); f.type = "highpass"; f.frequency.value = 5200;
+      s.connect(f); f.connect(g); g.connect(musicGain);
+      s.start(at);
+    }
+
+    musicTimer = setInterval(function(){
+      if (!musicGain || !actx) return;
+      // il tempo segue il corpo: più sali, più la rotativa gira
+      const bpm = track.bpm + Math.min(40, (level - 1) * 4);
+      const dur = 60 / bpm / 4;                       // durata di un sedicesimo
+      while (musicNext < actx.currentTime + .12){
+        const i = musicStep % 16;
+        const fermo = (phase !== "play");
+        const b = track.bass[i];
+        if (b !== null && b !== undefined) nota(SEMI(b), musicNext, dur * 3.4, "triangle", .5);
+        const a = track.arp[i];
+        if (a !== null && a !== undefined && !fermo && musicStep % (16 / track.step) === 0)
+          nota(SEMI(a), musicNext, dur * 1.5, track.wave, .22);
+        if (track.hat[i] && !fermo) colpo(musicNext);
+        musicNext += dur;
+        musicStep++;
+      }
+    }, 40);
+  }
+
+  const musicSel = document.getElementById("musicSel");
+  musicSel.addEventListener("change", function(){
+    musicKey = musicSel.value;
+    try { localStorage.setItem("baseline.musica", musicKey); } catch(e){}
+    startMusic();
+  });
+  try {
+    const m = localStorage.getItem("baseline.musica");
+    if (m && (m === "off" || MUSIC[m])){ musicKey = m; musicSel.value = m; }
+  } catch(e){}
+
+  /* ---- regole ---- */
+  const rules = document.getElementById("rules");
+  function buildRules(){
+    const t = document.getElementById("rulesInks");
+    t.innerHTML = "";
+    for (const k of KEYS){
+      const p = PIECES[k];
+      const tr = document.createElement("tr");
+      const c1 = document.createElement("td");
+      const sw = document.createElement("span");
+      sw.className = "rules-swatch"; sw.style.background = p.ink;
+      c1.appendChild(sw);
+      c1.appendChild(document.createTextNode(p.name));
+      const gl = document.createElement("span");
+      gl.className = "rules-glyph"; gl.textContent = p.glyph;
+      c1.appendChild(gl);
+      const c2 = document.createElement("td"); c2.textContent = p.mix;
+      const c3 = document.createElement("td"); c3.className = "num"; c3.textContent = "≈ " + p.pantone;
+      tr.appendChild(c1); tr.appendChild(c2); tr.appendChild(c3);
+      t.appendChild(tr);
+    }
+  }
+  function openRules(){
+    buildRules();
+    rules.hidden = false;
+    if (phase === "play") togglePause();
+    document.getElementById("rulesClose").focus();
+  }
+  function closeRules(){ rules.hidden = true; }
+  document.getElementById("rulesBtn").addEventListener("click", openRules);
+  document.getElementById("rulesBtn2").addEventListener("click", openRules);
+  document.getElementById("rulesClose").addEventListener("click", closeRules);
+  rules.addEventListener("click", function(e){ if (e.target === rules) closeRules(); });
+  window.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && !rules.hidden) closeRules();
   });
   function beep(freq, dur, vol){
     if (!soundOn) return;
     try {
-      if (!actx){
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return;
-        actx = new AC();
-      }
-      if (actx.state === "suspended") actx.resume();
+      if (!audioCtx()) return;
       const o = actx.createOscillator(), g = actx.createGain();
       o.type = "square"; o.frequency.value = freq;
       g.gain.setValueAtTime(vol, actx.currentTime);
@@ -996,18 +1680,37 @@
   }
 
   function setCurseUi(n){
-    if (n > 0){ curseRow.classList.add("on"); curseVal.textContent = "−" + (n * 2) + "/s"; }
-    else curseRow.classList.remove("on");
+    if (n > 0){
+      curseRow.classList.add("on");
+      curseVal.textContent = "−" + (n * 2) + "/s";
+      msCurse.hidden = false;
+      msCurse.textContent = "Comic Sans −" + (n * 2) + "/s";
+    } else {
+      curseRow.classList.remove("on");
+      msCurse.hidden = true;
+    }
   }
 
+  const msScore = document.getElementById("msScore");
+  const msGrade = document.getElementById("msGrade");
+  const msLines = document.getElementById("msLines");
+  const msCorpo = document.getElementById("msCorpo");
+  const msCurse = document.getElementById("msCurse");
+
   function paintHud(){
-    elScore.textContent = fmt(score);
+    const punti = fmt(score), grado = gradeFor(score).name;
+    elScore.textContent = punti;
     elBest.textContent = fmt(Math.max(best, score));
     elLines.textContent = fmt(lines);
     elCorpo.textContent = corpoLabel();
-    elGrade.textContent = gradeFor(score).name;
+    elGrade.textContent = grado;
     elCar.textContent = styleFor(level).label;
     elMode.textContent = mode === "daily" ? dateLabel() : "libera";
+    // striscia compatta del mobile
+    msScore.textContent = punti;
+    msGrade.textContent = grado;
+    msLines.textContent = fmt(lines);
+    msCorpo.textContent = corpoLabel();
   }
 
   function miniDraw(canvas, key){
@@ -1040,6 +1743,9 @@
   function paintSide(){
     miniDraw(document.getElementById("hold"), holdKey);
     for (let i = 0; i < 3; i++) miniDraw(document.getElementById("n" + i), queue[i]);
+    miniDraw(document.getElementById("msHold"), holdKey);
+    miniDraw(document.getElementById("msN0"), queue[0]);
+    miniDraw(document.getElementById("msN1"), queue[1]);
   }
 
   function buildLegend(){
@@ -1049,7 +1755,11 @@
       const p = PIECES[k];
       const li = document.createElement("li");
       const sw = document.createElement("span"); sw.className = "sw"; sw.style.background = p.ink;
-      const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = p.name;
+      const nm = document.createElement("span"); nm.className = "nm";
+      nm.textContent = p.name;
+      const ink = document.createElement("span"); ink.className = "ink";
+      ink.textContent = p.mix + "  ·  ≈ " + p.pantone;
+      nm.appendChild(ink);
       const gl = document.createElement("span"); gl.className = "gl"; gl.textContent = p.glyph;
       li.appendChild(sw); li.appendChild(nm); li.appendChild(gl);
       ul.appendChild(li);
@@ -1092,9 +1802,22 @@
 
   function resize(){
     const narrow = window.innerWidth < 900;
-    const availW = narrow ? (window.innerWidth - 56) : 400;
-    const maxH = Math.max(300, window.innerHeight - (narrow ? 296 : 250));
-    cell = Math.max(13, Math.min(34, Math.floor(Math.min(availW / COLS, maxH / ROWS))));
+    let availW, maxH;
+    if (narrow){
+      // il campo si prende tutto lo spazio che avanza sotto intestazione,
+      // striscia e pulsanti: misurati, non stimati
+      const vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+      const h = function(el){ return el ? el.offsetHeight : 0; };
+      const riservato = h(document.querySelector(".masthead")) +
+                        h(document.getElementById("hudStrip")) +
+                        h(document.getElementById("pad")) + 46;
+      availW = window.innerWidth - 20;
+      maxH = Math.max(260, vh - riservato);
+    } else {
+      availW = 400;
+      maxH = Math.max(300, window.innerHeight - 250);
+    }
+    cell = Math.max(13, Math.min(narrow ? 40 : 34, Math.floor(Math.min(availW / COLS, maxH / ROWS))));
     const dpr = window.devicePixelRatio || 1;
     cv.style.width = (cell * COLS) + "px";
     cv.style.height = (cell * ROWS) + "px";
@@ -1137,6 +1860,18 @@
     }
     ctx.setLineDash([]);
 
+    // filigrana del monogramma
+    if (markPath){
+      ctx.save();
+      ctx.globalAlpha = .05;
+      ctx.fillStyle = "#EDEAE3";
+      const s = (H * .34) / MARK_BOX[1];
+      ctx.translate(W / 2 - (MARK_BOX[0] * s) / 2, H * .30);
+      ctx.scale(s, s);
+      for (const p of markPath) ctx.fill(p);
+      ctx.restore();
+    }
+
     // blocchi posati
     if (grid){
       for (let y = 0; y < ROWS; y++){
@@ -1158,6 +1893,33 @@
     }
 
     if (cur && phase === "play" && !clearing){
+      // guide di taglio: due filetti verticali sulle spalle del pezzo, come in un menabò
+      let minX = 9, maxX = 0;
+      for (let y = 0; y < cur.shape.length; y++)
+        for (let x = 0; x < cur.shape.length; x++)
+          if (cur.shape[y][x]){
+            if (cur.x + x < minX) minX = cur.x + x;
+            if (cur.x + x > maxX) maxX = cur.x + x;
+          }
+      ctx.save();
+      ctx.strokeStyle = "rgba(237,234,227,.11)";
+      ctx.setLineDash([2, 5]);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(minX * cell + .5, 0); ctx.lineTo(minX * cell + .5, H);
+      ctx.moveTo((maxX + 1) * cell - .5, 0); ctx.lineTo((maxX + 1) * cell - .5, H);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // crocini di taglio ai due margini
+      ctx.strokeStyle = "rgba(30,167,225,.5)";
+      ctx.beginPath();
+      for (const x of [minX * cell, (maxX + 1) * cell]){
+        ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, 7);
+        ctx.moveTo(x + .5, H - 7); ctx.lineTo(x + .5, H);
+      }
+      ctx.stroke();
+      ctx.restore();
+
       let gy = cur.y;
       while (!collide(cur.shape, cur.x, gy + 1)) gy++;
       ctx.strokeStyle = "rgba(237,234,227,.28)";
@@ -1183,6 +1945,31 @@
     }
     ctx.globalAlpha = 1;
 
+    // crocini di registro che rientrano sulle righe stampate
+    if (regMarks){
+      const t = Math.min(1, regMarks.t / 620);
+      const ease = 1 - Math.pow(1 - t, 3);
+      ctx.save();
+      ctx.lineWidth = 1;
+      for (const y of regMarks.rows){
+        const cy = y * cell + cell / 2;
+        const r = cell * (.62 - .28 * ease);
+        for (const side of [0, 1]){
+          const from = side ? W + cell : -cell;
+          const to = side ? W - cell * .8 : cell * .8;
+          const cx = from + (to - from) * ease;
+          ctx.globalAlpha = (1 - t) * .95;
+          ctx.strokeStyle = side ? "#E5007D" : "#1EA7E1";
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(cx - r * 1.7, cy); ctx.lineTo(cx + r * 1.7, cy);
+          ctx.moveTo(cx, cy - r * 1.7); ctx.lineTo(cx, cy + r * 1.7);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+
     // lampo di quadricromia
     if (quadFlash > 0){
       const bands = ["#1EA7E1", "#E5007D", "#FFD400", "#EDEAE3"];
@@ -1194,6 +1981,47 @@
         ctx.fillRect(0, i * bh + k * bh * .5, W, bh * quadFlash);
       }
       ctx.globalAlpha = 1;
+    }
+
+    // fuori registro: le lastre si scollano per un istante
+    if (misreg > 0){
+      const d = misreg * 4.5;
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = misreg * .2;
+      ctx.fillStyle = "#1EA7E1";
+      ctx.fillRect(-d, -d * .5, W, H);
+      ctx.fillStyle = "#E5007D";
+      ctx.fillRect(d, d * .5, W, H);
+      ctx.restore();
+    }
+
+    // il timbro del capo reparto
+    if (stamp > 0){
+      const t = 1 - stamp;
+      const sc = t < .18 ? 1.9 - (t / .18) * .9 : 1;
+      const a = stamp > .72 ? (1 - stamp) / .28 : Math.min(1, stamp / .5);
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, a)) * .92;
+      ctx.translate(W / 2, H * .66);
+      ctx.rotate(-0.13);
+      ctx.scale(sc, sc);
+      const fs = Math.max(11, Math.min(W / 12.5, cell * .78));
+      ctx.font = '700 ' + Math.round(fs) + 'px "Archivo", Helvetica, sans-serif';
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      const label = "VISTO SI STAMPI";
+      const tw = ctx.measureText(label).width;
+      const bw = tw + fs * 1.5, bh = fs * 2.5;
+      ctx.strokeStyle = "#E5007D"; ctx.fillStyle = "#E5007D";
+      ctx.lineWidth = Math.max(2, fs * .16);
+      ctx.strokeRect(-bw / 2, -bh / 2, bw, bh);
+      ctx.lineWidth = Math.max(1, fs * .06);
+      ctx.strokeRect(-bw / 2 + fs * .28, -bh / 2 + fs * .28, bw - fs * .56, bh - fs * .56);
+      ctx.save();
+      ctx.scale(1, .96);
+      ctx.fillText(label, 0, 0);
+      ctx.restore();
+      ctx.restore();
     }
 
     // etichette delle guide
@@ -1226,7 +2054,7 @@
         size = Math.max(11, size * (maxW / measured));
         ctx.font = '900 ' + Math.round(size) + 'px ' + face;
       }
-      const yy = H * .38 - t * 18;
+      const yy = (toast.big ? H * .30 : H * .38) - t * 18;
       ctx.fillStyle = "rgba(8,11,15,.85)";
       const tw = ctx.measureText(toast.text).width;
       ctx.fillRect(W / 2 - tw / 2 - 10, yy - size * .62, tw + 20, size * 1.24);
@@ -1261,9 +2089,29 @@
   buildLegend();
   paintHud();
   window.addEventListener("resize", resize);
+  window.addEventListener("orientationchange", function(){ setTimeout(resize, 250); });
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", resize);
+
+  // i caratteri usati solo dentro il canvas vanno chiesti esplicitamente:
+  // il browser non li scarica per il disegno su tela
+  if (document.fonts && document.fonts.load){
+    const facce = ['700 24px "Archivo"', '700 24px "Zilla Slab"', '700 24px "Libre Baskerville"',
+                   '400 24px "Bodoni Moda"', '900 24px "Bodoni Moda"', '400 24px "Anton"',
+                   '700 24px "Comic Neue"'];
+    Promise.all(facce.map(function(f){
+      try { return document.fonts.load(f, "IOTbpSz"); } catch(e){ return null; }
+    })).then(function(){ render(); }, function(){});
+  }
+  // filigrana del monogramma
+  try {
+    if (window.Path2D && typeof MARK_PATHS !== "undefined")
+      markPath = MARK_PATHS.map(function(d){ return new Path2D(d); });
+  } catch(e){ markPath = null; }
+
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ resize(); });
   resize();
   raf = requestAnimationFrame(loop);
+  initBoard();
 
   window.__baseline = {
     state: function(){ return { phase:phase, score:score, lines:lines, level:level, combo:combo,
