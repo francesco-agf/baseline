@@ -15,20 +15,31 @@ Gioca: https://francesco-agf.github.io/baseline/
 - **Righe guida** — ascendente, altezza maiuscola, altezza x, linea di base. Chiudere una riga
   su una guida vale il doppio.
 - **Quadricromia** — quattro righe in un colpo solo: lampeggiano le quattro lastre, i crocini
-  di registro rientrano e scende il timbro del capo reparto.
+  di registro rientrano e scende il timbro del capo reparto. Dalle percentuali di inchiostro
+  delle righe chiuse nasce un **campione**, mattoncino 1×1 di un colore che non esiste fra i
+  sette pezzi.
+- **I segni speciali** — mattoncini singoli di piombo bianco con un segno inciso: ¶ capoverso
+  (manda in stampa la riga dove si posa), ✂ taglierina (rifila la riga più alta), & legatura
+  (lega le caselle vuote a fianco), ✱ chiamata di nota (la prossima riga vale il doppio).
+- **La barra colore** — la scala di controllo che corre sul bordo del foglio: quattro celle con
+  un'iride che scorre. È sempre orizzontale e **non si gira**: si indirizza e basta.
 - **Gradi** — da Garzone a Bodoni, passando per Proto e Punzonista.
 - **Comic Sans maledetto** — ogni tanto arriva un pezzo cursed: consuma punti finché resta in
   campo. Stamparlo lo esorcizza.
 - **La scala dei caratteri** — salendo di corpo i glifi cambiano classe: grottesco, egiziano,
   transizionale, bodoniano, bodoniano nero, condensato.
-- **Musica** — tre giri originali sintetizzati sul momento: Torchio, Rotativa, Camera oscura.
-  Il tempo accelera col corpo.
+- **Musica e rumore di macchina** — tre giri originali sintetizzati sul momento (Torchio,
+  Rotativa, Camera oscura) e due rumori di reparto: Heidelberg che gira e Mettifoglio. Il tempo
+  accelera col corpo.
 
 ## Comandi
 
 Frecce per spostare, ↑ o X per ruotare, ↓ discesa dolce, spazio battuta secca, C per tenere un
 pezzo, P pausa. Da telefono: i tasti sotto al campo, oppure scorri sul campo per spostare,
-tocca per ruotare, scorri in basso per la battuta secca.
+tocca per ruotare, scorri in basso per la battuta secca; la pausa è il pulsante nella striscia
+sopra al foglio.
+
+Il campo è **12 × 17**, la proporzione di un A4: su telefono il foglio arriva quasi ai bordi.
 
 ## Tecnica
 
