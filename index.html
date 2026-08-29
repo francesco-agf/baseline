@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Baseline — tetris tipografico</title>
+<meta name="description" content="Baseline: il tetris tipografico di AGF Milano. Componi i glifi, stampa le righe.">
+<meta name="theme-color" content="#080B0F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Baseline">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Baseline — tetris tipografico">
+<meta property="og:description" content="Incastra aste, occhielli e grazie sulla linea di base. Ogni giorno la stessa composizione per tutti.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080B0F'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='22' font-weight='bold' fill='%23EDEAE3' text-anchor='middle'%3EB%3C/text%3E%3Crect x='4' y='26' width='24' height='2' fill='%231EA7E1'/%3E%3C/svg%3E">
+<style>*{box-sizing:border-box}html{color-scheme:dark;-webkit-text-size-adjust:100%}body{margin:0;background:#080B0F}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Comic+Neue:wght@700&display=swap">
+<style>
+  :root{
+    --ground:#080B0F;
+    --surface:#0F141B;
+    --surface-2:#141B24;
+    --rule:#1F2A36;
+    --rule-soft:#161E27;
+    --paper:#EDEAE3;
+    --muted:#6E8091;
+    --muted-2:#42525F;
+    --ink-c:#1EA7E1;
+    --ink-m:#E5007D;
+    --ink-y:#FFD400;
+    --danger:#FF4A3D;
+    --accent:#1EA7E1;
+    --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --ui:"Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --display:"Bodoni Moda", "Didot", Georgia, "Times New Roman", serif;
+  }
+
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--paper);
+    font-family:var(--ui);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  .sheet{max-width:1180px;margin:0 auto;padding:22px 24px 40px}
+
+  /* ---------- header ---------- */
+  .masthead{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:24px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--rule);
+  }
+  .logotype{
+    font-family:var(--display);font-weight:900;
+    font-size:clamp(38px,7vw,68px);line-height:.86;letter-spacing:-.035em;margin:0;
+  }
+  .logotype .dot{color:var(--accent)}
+  .tagline{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);text-align:right;line-height:1.7;padding-bottom:6px;
+  }
+  .tagline b{color:var(--paper);font-weight:500}
+
+  /* ---------- stage ---------- */
+  .stage{
+    display:grid;grid-template-columns:200px minmax(0,auto) 200px;
+    gap:26px;justify-content:center;align-items:start;padding-top:22px;
+  }
+  .rail{display:flex;flex-direction:column;gap:16px}
+
+  .panel{background:var(--surface);border:1px solid var(--rule-soft);padding:12px 13px 14px}
+  .panel-label{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted-2);margin-bottom:9px;display:flex;justify-content:space-between;align-items:baseline;
+  }
+
+  .readout{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500;letter-spacing:-.01em}
+  .readout.big{font-size:30px;line-height:1;color:var(--paper)}
+  .readout.mid{font-size:18px;line-height:1}
+  .readout.sm{font-size:12px;line-height:1;letter-spacing:.04em}
+  .stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;gap:10px}
+  .stat-row + .stat-row{border-top:1px solid var(--rule-soft)}
+  .stat-key{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  .grade{
+    font-family:var(--display);font-weight:700;font-size:19px;line-height:1;
+    letter-spacing:-.01em;color:var(--ink-y);
+  }
+  .curse-row{display:none;align-items:baseline;justify-content:space-between;gap:8px;
+    margin-top:9px;padding-top:8px;border-top:1px solid var(--rule-soft)}
+  .curse-row.on{display:flex}
+  .curse-row .lbl{
+    font-family:"Comic Neue","Comic Sans MS",cursive;font-size:12px;color:var(--danger);
+  }
+  .curse-row .val{font-family:var(--mono);font-size:12px;color:var(--danger);font-variant-numeric:tabular-nums}
+
+  /* ---------- playfield ---------- */
+  .chase-wrap{display:flex;flex-direction:column;align-items:center}
+  .board{position:relative;padding:14px}
+  .chase{position:relative;border:1px solid #2B3948;background:var(--surface);line-height:0}
+  #field{display:block;touch-action:none}
+
+  .reg{position:absolute;width:13px;height:13px;pointer-events:none;opacity:.5}
+  .reg::before,.reg::after{content:"";position:absolute;background:var(--muted-2)}
+  .reg::before{left:0;top:6px;width:13px;height:1px}
+  .reg::after{top:0;left:6px;width:1px;height:13px}
+  .reg.tl{top:1px;left:1px}
+  .reg.tr{top:1px;right:1px}
+  .reg.bl{bottom:1px;left:1px}
+  .reg.br{bottom:1px;right:1px}
+
+  /* ---------- overlay ---------- */
+  .overlay{
+    position:absolute;inset:14px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:12px;text-align:center;padding:20px 16px;
+    background:rgba(8,11,15,.94);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    line-height:normal;overflow-y:auto;
+  }
+  .overlay[hidden]{display:none}
+  .ov-kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0}
+  .ov-title{font-family:var(--display);font-weight:700;font-size:clamp(24px,5.4vw,36px);line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance}
+  .ov-body{font-size:12.5px;line-height:1.55;color:var(--muted);max-width:34ch;margin:0}
+  .ov-body em{color:var(--paper);font-style:normal}
+
+  /* specimen di fine partita */
+  .specimen{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%}
+  .spec-grade{
+    font-family:var(--display);font-weight:900;font-size:clamp(26px,7vw,40px);
+    line-height:.9;letter-spacing:-.03em;color:var(--paper);margin:0;
+  }
+  .spec-score{
+    font-family:var(--display);font-weight:400;font-size:clamp(46px,13vw,74px);
+    line-height:.82;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin:0;
+  }
+  .spec-meta{
+    font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);line-height:1.8;
+  }
+  .spec-rule{width:100%;max-width:300px;height:1px;background:var(--rule)}
+  .spec-print{display:flex;flex-direction:column;align-items:center;gap:5px}
+  .spec-print canvas{display:block;image-rendering:pixelated}
+  .spec-next{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2)}
+
+  button{font-family:inherit;cursor:pointer}
+  .btn{
+    background:var(--paper);color:var(--ground);border:none;font-family:var(--mono);
+    font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    padding:11px 18px;transition:transform .12s ease,background .12s ease;
+  }
+  .btn:hover{background:#fff;transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+  .btn.ghost:hover{color:var(--paper);border-color:var(--muted-2);background:transparent}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ---------- legend ---------- */
+  .legend{display:flex;flex-direction:column;gap:1px;margin:0;padding:0;list-style:none}
+  .legend li{display:grid;grid-template-columns:14px 1fr auto;gap:9px;align-items:center;padding:3.5px 0}
+  .legend .sw{width:14px;height:14px}
+  .legend .nm{font-size:11.5px;color:var(--paper)}
+  .legend .gl{font-family:var(--display);font-size:14px;color:var(--muted-2);line-height:1}
+
+  .keys{display:flex;flex-direction:column;gap:5px}
+  .keys div{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .keys .k{font-family:var(--mono);font-size:9.5px;color:var(--muted);border:1px solid var(--rule);padding:1px 5px;white-space:nowrap}
+  .keys .d{font-size:11px;color:var(--muted);text-align:right}
+
+  .mini{display:block;width:100%}
+  .queue{display:flex;flex-direction:column;gap:6px}
+  .queue .slot{background:var(--surface-2);padding:5px 6px;line-height:0;min-width:0}
+
+  /* ---------- touch ---------- */
+  .pad{display:none;gap:8px;padding-top:12px;width:100%;max-width:420px}
+  .pad button{
+    flex:1;background:var(--surface);border:1px solid var(--rule);color:var(--paper);
+    font-family:var(--mono);font-size:15px;padding:15px 0;line-height:1;
+    -webkit-user-select:none;user-select:none;
+  }
+  .pad button:active{background:var(--surface-2);border-color:var(--accent)}
+  .pad .sub{display:block;font-size:7.5px;letter-spacing:.14em;color:var(--muted-2);margin-top:5px}
+
+  /* ---------- footer ---------- */
+  .colofoot{
+    display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+    margin-top:32px;padding-top:12px;border-top:1px solid var(--rule);
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);
+  }
+  .colofoot .studio{color:var(--muted)}
+  .sound-toggle{
+    background:none;border:1px solid var(--rule);color:var(--muted);font-family:var(--mono);
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;
+  }
+  .sound-toggle[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+
+  .share-box{
+    width:100%;max-width:320px;background:var(--surface-2);border:1px solid var(--rule);
+    padding:8px 9px;font-family:var(--mono);font-size:10.5px;line-height:1.35;
+    color:var(--paper);white-space:pre-wrap;text-align:left;margin:0;
+    overflow-x:auto;letter-spacing:0;
+  }
+
+  .flash{animation:flash .35s ease}
+  @keyframes flash{0%{color:var(--accent)}100%{color:var(--paper)}}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  @media (max-width:900px){
+    .sheet{padding:14px 14px 26px}
+    .stage{grid-template-columns:minmax(0,1fr);gap:14px;padding-top:14px}
+    .rail{flex-direction:row;flex-wrap:wrap;gap:10px;align-items:stretch}
+    .rail .panel{flex:1 1 0;min-width:0}
+    .rail-left{order:3}
+    .chase-wrap{order:2}
+    .board{padding:12px}
+    .rail-right{order:1;align-items:stretch}
+    .rail-right .panel:first-child{flex:1 1 44%}
+    .rail-right .panel:last-child{flex:1 1 48%}
+    .readout.big{font-size:22px}
+    .panel{padding:10px 11px 11px}
+    .stat-row{padding:4px 0}
+    .hide-sm{display:none}
+    .queue{flex-direction:row;gap:5px}
+    .queue .slot{flex:1 1 0;min-width:0;padding:4px}
+    .panel.anatomy{flex-basis:100%;order:9}
+    .pad{display:flex}
+    .tagline{text-align:left;padding-bottom:0;font-size:10px}
+    .masthead{align-items:flex-start;gap:8px}
+    .logotype{font-size:clamp(34px,11vw,52px)}
+    .keys .d{font-size:10.5px}
+    .overlay{padding:14px 12px;gap:9px}
+  }
+  @media (pointer:coarse){.pad{display:flex}}
+</style>
+
+</head>
+<body>
+<div class="sheet">
+  <header class="masthead">
+    <h1 class="logotype">Baseline<span class="dot">.</span></h1>
+    <div class="tagline">
+      <b>Tetris tipografico</b><br>
+      <span class="hide-sm">Componi i glifi, stampa le righe<br></span>
+      AGF Milano
+    </div>
+  </header>
+
+  <div class="stage">
+
+    <div class="rail rail-left">
+      <div class="panel">
+        <div class="panel-label"><span>Tenuta</span><span>C</span></div>
+        <canvas id="hold" class="mini" width="120" height="62"></canvas>
+      </div>
+
+      <div class="panel anatomy">
+        <div class="panel-label"><span>Anatomia</span><span>7 parti</span></div>
+        <ul class="legend" id="legend"></ul>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label"><span>Comandi</span></div>
+        <div class="keys">
+          <div><span class="k">← →</span><span class="d">Sposta</span></div>
+          <div><span class="k">↑ / X</span><span class="d">Ruota</span></div>
+          <div><span class="k">↓</span><span class="d">Discesa dolce</span></div>
+          <div><span class="k">Spazio</span><span class="d">Battuta secca</span></div>
+          <div><span class="k">C</span><span class="d">Tieni pezzo</span></div>
+          <div><span class="k">P</span><span class="d">Pausa</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chase-wrap">
+     <div class="board">
+      <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i>
+      <div class="chase">
+        <canvas id="field" width="300" height="600"></canvas>
+      </div>
+
+      <div class="overlay" id="overlay">
+        <p class="ov-kicker" id="ovKicker">Prova di stampa</p>
+        <h2 class="ov-title" id="ovTitle">Metti in riga i glifi</h2>
+        <p class="ov-body" id="ovBody">
+          Cadono le parti della lettera: aste, occhielli, grazie, ascendenti.
+          Incastrale finché una riga non è piena — quella riga va in stampa.
+          Chiuderla <em>su una guida</em> vale il doppio.
+        </p>
+
+        <div class="specimen" id="specimen" hidden>
+          <p class="spec-grade" id="spGrade">Proto</p>
+          <p class="spec-score" id="spScore">0</p>
+          <div class="spec-rule"></div>
+          <p class="spec-meta" id="spMeta">—</p>
+          <div class="spec-print">
+            <canvas id="spPrint" width="140" height="120"></canvas>
+            <span class="spec-next" id="spNext"></span>
+          </div>
+          <pre class="share-box" id="shareBox" hidden></pre>
+        </div>
+
+        <div class="btn-row" id="ovButtons">
+          <button class="btn" id="dailyBtn">Composizione del giorno</button>
+          <button class="btn ghost" id="freeBtn">Partita libera</button>
+          <button class="btn ghost" id="copyBtn" hidden>Copia risultato</button>
+        </div>
+      </div>
+     </div>
+
+      <div class="pad" id="pad">
+        <button data-act="left">←<span class="sub">Sposta</span></button>
+        <button data-act="rotate">↻<span class="sub">Ruota</span></button>
+        <button data-act="right">→<span class="sub">Sposta</span></button>
+        <button data-act="soft">↓<span class="sub">Dolce</span></button>
+        <button data-act="hard">⤓<span class="sub">Secca</span></button>
+        <button data-act="hold">↺<span class="sub">Tieni</span></button>
+      </div>
+    </div>
+
+    <div class="rail rail-right">
+      <div class="panel">
+        <div class="panel-label"><span>Punti</span><span id="modeTag">—</span></div>
+        <div class="readout big" id="score">0</div>
+        <div class="stat-row"><span class="stat-key">Grado</span><span class="grade" id="grade">Garzone</span></div>
+        <div class="stat-row"><span class="stat-key">Record</span><span class="readout mid" id="best">0</span></div>
+        <div class="stat-row"><span class="stat-key">Righe</span><span class="readout mid" id="lines">0</span></div>
+        <div class="stat-row"><span class="stat-key">Corpo</span><span class="readout mid" id="corpo">8 pt</span></div>
+        <div class="stat-row"><span class="stat-key">Carattere</span><span class="readout sm" id="carattere">Grottesco</span></div>
+        <div class="curse-row" id="curseRow">
+          <span class="lbl">Comic Sans!</span><span class="val" id="curseVal">−0/s</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label"><span>Prossimi</span><span>3</span></div>
+        <div class="queue">
+          <div class="slot"><canvas class="mini" id="n0" width="110" height="50"></canvas></div>
+          <div class="slot"><canvas class="mini" id="n1" width="110" height="50"></canvas></div>
+          <div class="slot"><canvas class="mini" id="n2" width="110" height="50"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="colofoot">
+    <span class="studio">AGF Milano — Baseline v2.0</span>
+    <span>Ciano · Magenta · Giallo · Nero</span>
+    <button class="sound-toggle" id="soundBtn" aria-pressed="true">Audio on</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ====================================================================
+     BASELINE — tetris tipografico
+     Per pubblicarlo su un dominio vostro: metti l'indirizzo qui sotto e
+     comparirà in fondo al risultato condivisibile.
+     ==================================================================== */
+  const SHARE_URL = "";
+
+  const COLS = 10, ROWS = 20;
+
+  const PIECES = {
+    I: { name:"Asta",        glyph:"I", ink:"#EDEAE3", cells:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
+    O: { name:"Occhiello",   glyph:"O", ink:"#1EA7E1", cells:[[1,1],[1,1]] },
+    T: { name:"Traversa",    glyph:"T", ink:"#E5007D", cells:[[0,1,0],[1,1,1],[0,0,0]] },
+    L: { name:"Ascendente",  glyph:"b", ink:"#FFD400", cells:[[0,0,1],[1,1,1],[0,0,0]] },
+    J: { name:"Discendente", glyph:"p", ink:"#F04A2A", cells:[[1,0,0],[1,1,1],[0,0,0]] },
+    S: { name:"Grazia",      glyph:"S", ink:"#00B36B", cells:[[0,1,1],[1,1,0],[0,0,0]] },
+    Z: { name:"Terminale",   glyph:"z", ink:"#6C4FE0", cells:[[1,1,0],[0,1,1],[0,0,0]] }
+  };
+  const KEYS = ["I","O","T","L","J","S","Z"];
+
+  const GUIDES = [
+    { y:3,  label:"ASCENDENTE" },
+    { y:6,  label:"ALTEZZA MAIUSCOLA" },
+    { y:12, label:"ALTEZZA X" },
+    { y:18, label:"LINEA DI BASE" }
+  ];
+  const GUIDE_ROWS = GUIDES.map(g => g.y);
+
+  // nomi delle giocate
+  const PLAY_NAMES = ["", "RIGA", "CAPOVERSO", "COLONNA", "QUADRICROMIA"];
+
+  // gradi di tipografia
+  const GRADES = [
+    { min:0,     name:"Garzone" },
+    { min:2000,  name:"Compositore" },
+    { min:6000,  name:"Impaginatore" },
+    { min:12000, name:"Proto" },
+    { min:25000, name:"Punzonista" },
+    { min:45000, name:"Incisore" },
+    { min:80000, name:"Bodoni" }
+  ];
+  function gradeFor(s){
+    let g = GRADES[0];
+    for (const x of GRADES) if (s >= x.min) g = x;
+    return g;
+  }
+  function nextGrade(s){
+    for (const x of GRADES) if (s < x.min) return x;
+    return null;
+  }
+
+  // stili del carattere per corpo
+  function styleFor(lv){
+    if (lv <= 3) return { label:"Grottesco",       font:'700 $PXpx "Archivo", Helvetica, Arial, sans-serif' };
+    if (lv <= 6) return { label:"Bodoniano",       font:'400 $PXpx "Bodoni Moda", Didot, Georgia, serif' };
+    return          { label:"Bodoniano nero", font:'900 $PXpx "Bodoni Moda", Didot, Georgia, serif' };
+  }
+
+  /* ============ elementi ============ */
+  const cv = document.getElementById("field");
+  const ctx = cv.getContext("2d");
+  const overlay = document.getElementById("overlay");
+  const ovKicker = document.getElementById("ovKicker");
+  const ovTitle = document.getElementById("ovTitle");
+  const ovBody = document.getElementById("ovBody");
+  const specimen = document.getElementById("specimen");
+  const dailyBtn = document.getElementById("dailyBtn");
+  const freeBtn = document.getElementById("freeBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const shareBox = document.getElementById("shareBox");
+  const elScore = document.getElementById("score");
+  const elBest = document.getElementById("best");
+  const elLines = document.getElementById("lines");
+  const elCorpo = document.getElementById("corpo");
+  const elGrade = document.getElementById("grade");
+  const elCar = document.getElementById("carattere");
+  const elMode = document.getElementById("modeTag");
+  const curseRow = document.getElementById("curseRow");
+  const curseVal = document.getElementById("curseVal");
+  const soundBtn = document.getElementById("soundBtn");
+  const spPrint = document.getElementById("spPrint");
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ============ caso ============ */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      let t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function dateKey(d){
+    d = d || new Date();
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  }
+  function dateLabel(d){
+    d = d || new Date();
+    const p = n => (n < 10 ? "0" : "") + n;
+    return p(d.getDate()) + "." + p(d.getMonth() + 1);
+  }
+
+  /* ============ stato ============ */
+  let grid, cur, holdKey, canHold, bag, queue, rng;
+  let score, lines, level, combo, best = 0;
+  let mode = "daily";
+  let dropTimer, lockTimer, lockResets, clearing, curseTick;
+  let printed, events, quads;
+  let phase = "start";
+  let cell = 30, last = 0, raf = null;
+  let toast = null, shake = 0, quadFlash = 0, particles = [], piecesSpawned = 0;
+
+  function newGrid(){ return Array.from({length:ROWS}, () => new Array(COLS).fill(null)); }
+
+  function refillBag(){
+    const b = KEYS.slice();
+    for (let i = b.length - 1; i > 0; i--){
+      const j = Math.floor(rng() * (i + 1));
+      const t = b[i]; b[i] = b[j]; b[j] = t;
+    }
+    bag = bag.concat(b);
+  }
+  function nextKey(){
+    if (bag.length < 8) refillBag();
+    return bag.shift();
+  }
+  function rotateCW(m){
+    const n = m.length;
+    const out = Array.from({length:n}, () => new Array(n).fill(0));
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) out[x][n - 1 - y] = m[y][x];
+    return out;
+  }
+  // una estrazione per pezzo: la composizione del giorno resta identica per tutti
+  function spawn(key, roll){
+    const shape = PIECES[key].cells.map(r => r.slice());
+    const r = (typeof roll === "number") ? roll : rng();
+    piecesSpawned++;
+    return {
+      key: key,
+      shape: shape,
+      x: Math.floor((COLS - shape.length) / 2),
+      y: (key === "I" ? -1 : 0),
+      cursed: (piecesSpawned > 8 && r < 0.08)
+    };
+  }
+  function collide(shape, px, py){
+    for (let y = 0; y < shape.length; y++){
+      for (let x = 0; x < shape.length; x++){
+        if (!shape[y][x]) continue;
+        const gx = px + x, gy = py + y;
+        if (gx < 0 || gx >= COLS || gy >= ROWS) return true;
+        if (gy >= 0 && grid[gy][gx]) return true;
+      }
+    }
+    return false;
+  }
+  const keyOf = c => c ? c.charAt(0) : null;
+  const isCursed = c => !!c && c.length > 1;
+
+  /* ============ azioni ============ */
+  function busy(){ return phase !== "play" || !cur || clearing; }
+
+  function move(dx){
+    if (busy()) return;
+    if (!collide(cur.shape, cur.x + dx, cur.y)){ cur.x += dx; resetLock(); }
+  }
+  function rotate(){
+    if (busy()) return;
+    const r = rotateCW(cur.shape);
+    for (const k of [0, -1, 1, -2, 2]){
+      if (!collide(r, cur.x + k, cur.y)){
+        cur.shape = r; cur.x += k; resetLock(); beep(420, .02, .014); return;
+      }
+    }
+    if (!collide(r, cur.x, cur.y - 1)){ cur.shape = r; cur.y -= 1; resetLock(); }
+  }
+  function softDrop(){
+    if (busy()) return;
+    if (!collide(cur.shape, cur.x, cur.y + 1)){ cur.y++; score += 1; dropTimer = 0; paintHud(); }
+  }
+  function hardDrop(){
+    if (busy()) return;
+    let d = 0;
+    while (!collide(cur.shape, cur.x, cur.y + 1)){ cur.y++; d++; }
+    score += d * 2;
+    if (!reduceMotion) shake = Math.min(5, 1.4 + d * .18);
+    beep(90, .06, .05);
+    lock();
+  }
+  function doHold(){
+    if (busy() || !canHold) return;
+    const prev = holdKey;
+    holdKey = cur.key;
+    cur = prev ? spawn(prev, 1) : spawn(shiftQueue(), 1);
+    canHold = false;
+    if (collide(cur.shape, cur.x, cur.y)) return gameOver();
+    paintSide();
+    beep(300, .03, .016);
+  }
+  function resetLock(){ if (lockTimer > 0 && lockResets < 15){ lockTimer = 0; lockResets++; } }
+  function shiftQueue(){ const k = queue.shift(); queue.push(nextKey()); return k; }
+
+  function countCursed(){
+    let n = 0;
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (isCursed(grid[y][x])) n++;
+    return n;
+  }
+
+  function lock(){
+    const mark = cur.cursed ? "!" : "";
+    for (let y = 0; y < cur.shape.length; y++){
+      for (let x = 0; x < cur.shape.length; x++){
+        if (!cur.shape[y][x]) continue;
+        const gy = cur.y + y, gx = cur.x + x;
+        if (gy < 0) return gameOver();
+        grid[gy][gx] = cur.key + mark;
+      }
+    }
+
+    const full = [];
+    for (let y = 0; y < ROWS; y++) if (grid[y].every(c => c)) full.push(y);
+
+    if (full.length){
+      const n = full.length;
+      let gain = [0, 100, 300, 500, 800][n] * level;
+      const aligned = full.filter(y => GUIDE_ROWS.indexOf(y) !== -1).length;
+      gain += aligned * 150 * level;
+
+      let exorcised = 0;
+      for (const y of full) for (let x = 0; x < COLS; x++) if (isCursed(grid[y][x])) exorcised++;
+      if (exorcised) gain += 400 * level;
+
+      combo++;
+      if (combo > 1) gain += 50 * (combo - 1) * level;
+      score += gain;
+      if (n === 4) quads++;
+
+      // registra il foglio stampato e l'evento per il blocchetto condivisibile
+      for (const y of full) printed.push(grid[y].slice());
+      events.push({ n: n, aligned: aligned, cursed: exorcised > 0 });
+
+      let word = PLAY_NAMES[n];
+      if (n === 4){
+        quadFlash = 1;
+        if (!reduceMotion) shake = 7;
+      } else if (aligned){
+        word = word + " ALLINEATA";
+      }
+      if (exorcised) word = "ESORCIZZATO";
+      showToast(word, n === 4);
+      splash(full);
+
+      clearing = { rows: full, t: 0 };
+      beep(n === 4 ? 660 : 520, .18, .05);
+      if (aligned || n === 4) setTimeout(() => beep(880, .16, .04), 90);
+    } else {
+      combo = 0;
+      beep(140, .04, .022);
+      nextPiece();
+    }
+    paintHud();
+  }
+
+  function finishClear(){
+    const rows = clearing.rows.slice().sort((a, b) => a - b);
+    for (const y of rows){
+      grid.splice(y, 1);
+      grid.unshift(new Array(COLS).fill(null));
+    }
+    lines += rows.length;
+    const nl = Math.floor(lines / 10) + 1;
+    if (nl !== level){
+      level = nl;
+      elCorpo.classList.remove("flash"); void elCorpo.offsetWidth;
+      if (!reduceMotion) elCorpo.classList.add("flash");
+      const st = styleFor(level);
+      // lascia passare prima il nome della giocata
+      if (st.label !== elCar.textContent) setTimeout(function(){ showToast(st.label.toUpperCase(), false); }, 950);
+    }
+    clearing = null;
+    paintHud();
+    nextPiece();
+  }
+
+  function nextPiece(){
+    cur = spawn(shiftQueue());
+    canHold = true;
+    dropTimer = 0; lockTimer = 0; lockResets = 0;
+    paintSide();
+    if (collide(cur.shape, cur.x, cur.y)) gameOver();
+  }
+
+  function dropInterval(){ return Math.max(90, 820 - (level - 1) * 68); }
+
+  /* ============ effetti ============ */
+  function showToast(text, big){
+    if (!text) return;
+    toast = { text: text, t: 0, big: !!big };
+  }
+  function splash(rows){
+    if (reduceMotion) return;
+    for (const y of rows){
+      for (let x = 0; x < COLS; x += 1){
+        const k = keyOf(grid[y][x]);
+        if (!k) continue;
+        if (Math.random() > .55) continue;
+        particles.push({
+          x: (x + .5) * cell, y: (y + .5) * cell,
+          vx: (Math.random() - .5) * 3.2, vy: -Math.random() * 2.6 - .6,
+          life: 1, ink: PIECES[k].ink, r: 1 + Math.random() * 2.2
+        });
+      }
+    }
+    if (particles.length > 220) particles.splice(0, particles.length - 220);
+  }
+
+  /* ============ ciclo ============ */
+  function begin(m){
+    mode = m;
+    rng = (mode === "daily") ? mulberry32(dateKey()) : Math.random;
+    grid = newGrid();
+    bag = []; refillBag();
+    queue = [nextKey(), nextKey(), nextKey()];
+    holdKey = null; canHold = true;
+    score = 0; lines = 0; level = 1; combo = 0; quads = 0;
+    printed = []; events = []; piecesSpawned = 0;
+    clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
+    toast = null; particles = []; shake = 0; quadFlash = 0;
+    best = loadBest();
+    phase = "play";
+    setCurseUi(0);
+    delete dailyBtn.dataset.resume;
+    dailyBtn.textContent = "Composizione del giorno";
+    freeBtn.hidden = false;
+    ovBody.hidden = false;
+    ovTitle.hidden = false;
+    specimen.hidden = true;
+    copyBtn.hidden = true;
+    overlay.hidden = true;
+    cur = spawn(shiftQueue());
+    paintHud(); paintSide();
+    last = performance.now();
+    if (!raf) raf = requestAnimationFrame(loop);
+  }
+
+  function bestKey(){ return mode === "daily" ? ("baseline.daily." + dateKey()) : "baseline.best"; }
+  function loadBest(){
+    try { const v = parseInt(localStorage.getItem(bestKey()) || "0", 10); return isNaN(v) ? 0 : v; }
+    catch(e){ return 0; }
+  }
+  function saveBest(v){ try { localStorage.setItem(bestKey(), String(v)); } catch(e){} }
+
+  function gameOver(){
+    phase = "over";
+    cur = null;
+    beep(70, .5, .06);
+    if (score > best){ best = score; saveBest(best); }
+    paintHud();
+    buildSpecimen();
+    overlay.hidden = false;
+  }
+
+  function togglePause(){
+    if (phase === "play"){
+      phase = "pause";
+      ovKicker.textContent = "In pausa";
+      ovTitle.textContent = "Torchio fermo";
+      ovTitle.hidden = false;
+      ovBody.textContent = "Premi P o il pulsante per riprendere la composizione.";
+      ovBody.hidden = false;
+      specimen.hidden = true; copyBtn.hidden = true;
+      dailyBtn.textContent = "Riprendi"; dailyBtn.dataset.resume = "1";
+      freeBtn.hidden = true;
+      overlay.hidden = false;
+    } else if (phase === "pause"){
+      phase = "play";
+      delete dailyBtn.dataset.resume;
+      dailyBtn.textContent = "Composizione del giorno";
+      freeBtn.hidden = false;
+      overlay.hidden = true;
+      last = performance.now();
+    }
+  }
+
+  function loop(now){
+    raf = requestAnimationFrame(loop);
+    const dt = Math.min(now - last, 100);
+    last = now;
+
+    if (phase === "play"){
+      if (clearing){
+        clearing.t += dt;
+        if (clearing.t >= (reduceMotion ? 60 : 190)) finishClear();
+      } else if (cur){
+        handleAutoRepeat(dt);
+        const soft = held["ArrowDown"];
+        const iv = soft ? 45 : dropInterval();
+        dropTimer += dt;
+        if (dropTimer >= iv){
+          dropTimer = 0;
+          if (!collide(cur.shape, cur.x, cur.y + 1)){ cur.y++; if (soft) score += 1; }
+        }
+        if (collide(cur.shape, cur.x, cur.y + 1)){
+          lockTimer += dt;
+          if (lockTimer >= 430) lock();
+        } else lockTimer = 0;
+      }
+
+      // la maledizione consuma punti finché resta in campo
+      curseTick += dt;
+      if (curseTick >= 1000){
+        curseTick = 0;
+        const n = countCursed();
+        if (n > 0){ score = Math.max(0, score - n * 2); paintHud(); }
+        setCurseUi(n);
+      }
+    }
+
+    // decadimenti
+    if (toast){ toast.t += dt; if (toast.t > 1100) toast = null; }
+    if (shake > 0) shake = Math.max(0, shake - dt * .022);
+    if (quadFlash > 0) quadFlash = Math.max(0, quadFlash - dt / 420);
+    if (particles.length){
+      for (const p of particles){
+        p.x += p.vx; p.y += p.vy; p.vy += .16; p.life -= dt / 620;
+      }
+      particles = particles.filter(p => p.life > 0);
+    }
+
+    render();
+  }
+
+  /* ============ input ============ */
+  const held = {};
+  let dasTimer = 0, dasDir = 0, dasPhase = 0;
+
+  function handleAutoRepeat(dt){
+    const dir = (held["ArrowLeft"] ? -1 : 0) + (held["ArrowRight"] ? 1 : 0);
+    if (dir === 0){ dasDir = 0; dasTimer = 0; dasPhase = 0; return; }
+    if (dir !== dasDir){ dasDir = dir; dasTimer = 0; dasPhase = 0; return; }
+    dasTimer += dt;
+    if (dasPhase === 0 && dasTimer >= 165){ dasPhase = 1; dasTimer = 0; move(dir); }
+    else if (dasPhase === 1 && dasTimer >= 48){ dasTimer = 0; move(dir); }
+  }
+
+  window.addEventListener("keydown", function(e){
+    const k = e.key;
+    if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar"].indexOf(k) !== -1) e.preventDefault();
+    if (k === "Enter"){
+      if (phase === "start" || phase === "over") begin(mode);
+      else if (phase === "pause") togglePause();
+      return;
+    }
+    if (k === "p" || k === "P"){ togglePause(); return; }
+    if (phase !== "play") return;
+    if (held[k] && k !== "ArrowDown") return;
+    held[k] = true;
+    if (k === "ArrowLeft"){ move(-1); dasDir = -1; dasTimer = 0; dasPhase = 0; }
+    else if (k === "ArrowRight"){ move(1); dasDir = 1; dasTimer = 0; dasPhase = 0; }
+    else if (k === "ArrowUp" || k === "x" || k === "X") rotate();
+    else if (k === "ArrowDown") softDrop();
+    else if (k === " " || k === "Spacebar") hardDrop();
+    else if (k === "c" || k === "C" || k === "Shift") doHold();
+  });
+  window.addEventListener("keyup", function(e){ held[e.key] = false; });
+  window.addEventListener("blur", function(){
+    for (const k in held) held[k] = false;
+    if (phase === "play") togglePause();
+  });
+
+  const acts = { left: () => move(-1), right: () => move(1), rotate: rotate,
+                 soft: softDrop, hard: hardDrop, hold: doHold };
+  document.getElementById("pad").addEventListener("click", function(e){
+    const b = e.target.closest("button");
+    if (!b) return;
+    const fn = acts[b.dataset.act];
+    if (fn) fn();
+  });
+
+  let tsx = 0, tsy = 0, tst = 0;
+  cv.addEventListener("touchstart", function(e){
+    const t = e.changedTouches[0]; tsx = t.clientX; tsy = t.clientY; tst = Date.now();
+  }, {passive:true});
+  cv.addEventListener("touchend", function(e){
+    if (phase !== "play") return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - tsx, dy = t.clientY - tsy, dtime = Date.now() - tst;
+    if (Math.abs(dx) < 24 && Math.abs(dy) < 24 && dtime < 260){ rotate(); return; }
+    if (Math.abs(dx) > Math.abs(dy)){
+      const steps = Math.round(dx / (cell * 1.1));
+      for (let i = 0; i < Math.abs(steps); i++) move(steps > 0 ? 1 : -1);
+    } else if (dy > 40) hardDrop();
+  }, {passive:true});
+
+  dailyBtn.addEventListener("click", function(){
+    if (dailyBtn.dataset.resume) return togglePause();
+    begin("daily");
+  });
+  freeBtn.addEventListener("click", function(){ begin("free"); });
+
+  /* ============ risultato condivisibile ============ */
+  // il blocchetto condivisibile riproduce le ultime righe mandate in stampa,
+  // un quadretto per glifo, con i colori degli inchiostri
+  const EMOJI = { I:"⬜", O:"🟦", T:"🟥", L:"🟨", J:"🟧", S:"🟩", Z:"🟪" };
+
+  function shareText(){
+    const g = gradeFor(score).name.toUpperCase();
+    const head = "BASELINE" + (mode === "daily" ? " · composizione del " + dateLabel() : " · partita libera");
+    const line2 = g + " — " + fmt(score) + " punti";
+    const rows = printed.slice(-6).map(function(r){
+      return r.map(function(c){ return EMOJI[keyOf(c)] || "⬛"; }).join("");
+    });
+    let out = head + "\n" + line2 + "\n" + (rows.length ? rows.join("\n") + "\n" : "") + tally();
+    if (SHARE_URL) out += "\n" + SHARE_URL;
+    return out;
+  }
+
+  function buildSpecimen(){
+    const g = gradeFor(score), nx = nextGrade(score);
+    document.getElementById("spGrade").textContent = g.name;
+    document.getElementById("spScore").textContent = fmt(score);
+    document.getElementById("spMeta").textContent =
+      (mode === "daily" ? "Composizione del " + dateLabel() : "Partita libera") + " · " + tally();
+    document.getElementById("spNext").textContent = nx
+      ? ("Prossimo grado: " + nx.name + " a " + fmt(nx.min) + " punti")
+      : "Grado massimo raggiunto";
+
+    // il foglio stampato: le ultime righe mandate in stampa
+    const rows = printed.slice(-12);
+    const cs = 12;
+    const dpr = window.devicePixelRatio || 1;
+    const w = COLS * cs, h = Math.max(1, rows.length) * cs;
+    spPrint.style.width = w + "px"; spPrint.style.height = h + "px";
+    spPrint.width = Math.round(w * dpr); spPrint.height = Math.round(h * dpr);
+    const c = spPrint.getContext("2d");
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.clearRect(0, 0, w, h);
+    if (!rows.length){
+      c.fillStyle = "#141B24"; c.fillRect(0, 0, w, cs);
+      c.fillStyle = "#42525F";
+      c.font = '500 8px "IBM Plex Mono", monospace';
+      c.textAlign = "center"; c.textBaseline = "middle";
+      c.fillText("nessuna riga stampata", w / 2, cs / 2);
+    } else {
+      for (let y = 0; y < rows.length; y++){
+        for (let x = 0; x < COLS; x++){
+          const k = keyOf(rows[y][x]);
+          if (!k) continue;
+          c.fillStyle = PIECES[k].ink;
+          c.fillRect(x * cs + .5, y * cs + .5, cs - 1, cs - 1);
+        }
+      }
+    }
+
+    shareBox.textContent = shareText();
+    shareBox.hidden = true;
+    specimen.hidden = false;
+    ovBody.hidden = true;
+    ovTitle.hidden = true;
+    ovKicker.textContent = quads > 0
+      ? "Fine tiratura · " + plur(quads, "quadricromia", "quadricromie")
+      : "Fine tiratura";
+    copyBtn.hidden = false;
+    copyBtn.textContent = "Copia risultato";
+    dailyBtn.textContent = mode === "daily" ? "Rigioca la composizione" : "Composizione del giorno";
+    freeBtn.hidden = false;
+    freeBtn.textContent = "Partita libera";
+  }
+
+  copyBtn.addEventListener("click", function(){
+    const txt = shareText();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(
+          function(){ copyBtn.textContent = "Copiato"; },
+          function(){ fallbackCopy(txt); }
+        );
+        return;
+      }
+    } catch(e){}
+    fallbackCopy(txt);
+  });
+  function fallbackCopy(txt){
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (ok) copyBtn.textContent = "Copiato";
+      else { shareBox.hidden = false; copyBtn.textContent = "Seleziona e copia qui sopra"; }
+      return ok;
+    } catch(e){
+      shareBox.hidden = false;
+      copyBtn.textContent = "Seleziona e copia qui sopra";
+      return false;
+    }
+  }
+
+  /* ============ audio ============ */
+  let actx = null, soundOn = true;
+  soundBtn.addEventListener("click", function(){
+    soundOn = !soundOn;
+    soundBtn.setAttribute("aria-pressed", String(soundOn));
+    soundBtn.textContent = soundOn ? "Audio on" : "Audio off";
+  });
+  function beep(freq, dur, vol){
+    if (!soundOn) return;
+    try {
+      if (!actx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        actx = new AC();
+      }
+      if (actx.state === "suspended") actx.resume();
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = "square"; o.frequency.value = freq;
+      g.gain.setValueAtTime(vol, actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + dur);
+      o.connect(g); g.connect(actx.destination);
+      o.start(); o.stop(actx.currentTime + dur + .02);
+    } catch(e){}
+  }
+
+  /* ============ hud ============ */
+  function fmt(n){ return Math.round(n).toLocaleString("it-IT"); }
+  function corpoLabel(){ return (6 + level * 2) + " pt"; }
+  function plur(n, uno, molti){ return n + " " + (n === 1 ? uno : molti); }
+  function tally(){
+    return plur(lines, "riga", "righe") + " · " +
+           plur(quads, "quadricromia", "quadricromie") + " · corpo " + corpoLabel();
+  }
+
+  function setCurseUi(n){
+    if (n > 0){ curseRow.classList.add("on"); curseVal.textContent = "−" + (n * 2) + "/s"; }
+    else curseRow.classList.remove("on");
+  }
+
+  function paintHud(){
+    elScore.textContent = fmt(score);
+    elBest.textContent = fmt(Math.max(best, score));
+    elLines.textContent = fmt(lines);
+    elCorpo.textContent = corpoLabel();
+    elGrade.textContent = gradeFor(score).name;
+    elCar.textContent = styleFor(level).label;
+    elMode.textContent = mode === "daily" ? dateLabel() : "libera";
+  }
+
+  function miniDraw(canvas, key){
+    const c = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    if (!canvas.dataset.h) canvas.dataset.h = canvas.getAttribute("height");
+    const h = parseInt(canvas.dataset.h, 10);
+    const w = Math.round(canvas.clientWidth || parseInt(canvas.getAttribute("width"), 10));
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)){
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.height = h + "px";
+    }
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.clearRect(0, 0, w, h);
+    if (!key) return;
+    const p = PIECES[key], s = p.cells;
+    let minX = 9, maxX = -1, minY = 9, maxY = -1;
+    for (let y = 0; y < s.length; y++) for (let x = 0; x < s.length; x++) if (s[y][x]){
+      if (x < minX) minX = x; if (x > maxX) maxX = x;
+      if (y < minY) minY = y; if (y > maxY) maxY = y;
+    }
+    const bw = maxX - minX + 1, bh = maxY - minY + 1;
+    const cs = Math.max(5, Math.min(17, Math.floor((w - 10) / bw), Math.floor((h - 10) / bh)));
+    const ox = (w - bw * cs) / 2, oy = (h - bh * cs) / 2;
+    for (let y = minY; y <= maxY; y++) for (let x = minX; x <= maxX; x++)
+      if (s[y][x]) blockAt(c, ox + (x - minX) * cs, oy + (y - minY) * cs, cs, p, false, 0);
+  }
+
+  function paintSide(){
+    miniDraw(document.getElementById("hold"), holdKey);
+    for (let i = 0; i < 3; i++) miniDraw(document.getElementById("n" + i), queue[i]);
+  }
+
+  function buildLegend(){
+    const ul = document.getElementById("legend");
+    ul.innerHTML = "";
+    for (const k of KEYS){
+      const p = PIECES[k];
+      const li = document.createElement("li");
+      const sw = document.createElement("span"); sw.className = "sw"; sw.style.background = p.ink;
+      const nm = document.createElement("span"); nm.className = "nm"; nm.textContent = p.name;
+      const gl = document.createElement("span"); gl.className = "gl"; gl.textContent = p.glyph;
+      li.appendChild(sw); li.appendChild(nm); li.appendChild(gl);
+      ul.appendChild(li);
+    }
+  }
+
+  /* ============ render ============ */
+  function blockAt(c, px, py, size, p, cursed, t){
+    c.fillStyle = p.ink;
+    c.fillRect(px + 1, py + 1, size - 2, size - 2);
+    c.fillStyle = "rgba(255,255,255,.16)";
+    c.fillRect(px + 1, py + 1, size - 2, 1);
+    if (cursed){
+      c.strokeStyle = "rgba(255,74,61,.9)";
+      c.lineWidth = 1;
+      c.setLineDash([3, 2]);
+      c.strokeRect(px + 1.5, py + 1.5, size - 3, size - 3);
+      c.setLineDash([]);
+    }
+    if (size > 14){
+      const px6 = Math.floor(size * .62);
+      c.fillStyle = cursed ? "rgba(8,11,15,.62)" : "rgba(8,11,15,.34)";
+      c.font = cursed
+        ? '700 ' + px6 + 'px "Comic Neue", "Comic Sans MS", cursive'
+        : styleFor(level).font.replace("$PX", px6);
+      c.textAlign = "center"; c.textBaseline = "middle";
+      const wob = cursed ? Math.sin((t + px * 7) / 130) * 1.6 : 0;
+      const rot = cursed ? Math.sin((t + py * 5) / 190) * .18 : 0;
+      if (rot){
+        c.save();
+        c.translate(px + size / 2, py + size / 2 + wob);
+        c.rotate(rot);
+        c.fillText(p.glyph, 0, size * .03);
+        c.restore();
+      } else {
+        c.fillText(p.glyph, px + size / 2, py + size / 2 + size * .03 + wob);
+      }
+    }
+  }
+
+  function resize(){
+    const narrow = window.innerWidth < 900;
+    const availW = narrow ? (window.innerWidth - 56) : 400;
+    const maxH = Math.max(300, window.innerHeight - (narrow ? 296 : 250));
+    cell = Math.max(13, Math.min(34, Math.floor(Math.min(availW / COLS, maxH / ROWS))));
+    const dpr = window.devicePixelRatio || 1;
+    cv.style.width = (cell * COLS) + "px";
+    cv.style.height = (cell * ROWS) + "px";
+    cv.width = Math.round(cell * COLS * dpr);
+    cv.height = Math.round(cell * ROWS * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    paintSide();
+    render();
+  }
+
+  function render(){
+    const W = cell * COLS, H = cell * ROWS;
+    const now = performance.now();
+    const dpr = window.devicePixelRatio || 1;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (shake > 0){
+      ctx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
+    }
+
+    ctx.clearRect(-10, -10, W + 20, H + 20);
+    ctx.fillStyle = "#0F141B";
+    ctx.fillRect(-10, -10, W + 20, H + 20);
+
+    // reticolo
+    ctx.strokeStyle = "rgba(31,42,54,.55)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 1; x < COLS; x++){ ctx.moveTo(x * cell + .5, 0); ctx.lineTo(x * cell + .5, H); }
+    for (let y = 1; y < ROWS; y++){ ctx.moveTo(0, y * cell + .5); ctx.lineTo(W, y * cell + .5); }
+    ctx.stroke();
+
+    // guide
+    for (const g of GUIDES){
+      const y = g.y * cell + .5;
+      const isBase = g.label === "LINEA DI BASE";
+      ctx.setLineDash(isBase ? [] : [3, 4]);
+      ctx.strokeStyle = isBase ? "rgba(30,167,225,.8)" : "rgba(110,128,145,.45)";
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // blocchi posati
+    if (grid){
+      for (let y = 0; y < ROWS; y++){
+        for (let x = 0; x < COLS; x++){
+          const c = grid[y][x];
+          if (c) blockAt(ctx, x * cell, y * cell, cell, PIECES[keyOf(c)], isCursed(c), now);
+        }
+      }
+    }
+
+    // righe in stampa
+    if (clearing){
+      const t = Math.min(1, clearing.t / (reduceMotion ? 60 : 190));
+      for (const y of clearing.rows){
+        ctx.fillStyle = "rgba(237,234,227," + (1 - t * .55).toFixed(3) + ")";
+        const inset = t * (cell / 2);
+        ctx.fillRect(0, y * cell + inset, W, cell - inset * 2);
+      }
+    }
+
+    if (cur && phase === "play" && !clearing){
+      let gy = cur.y;
+      while (!collide(cur.shape, cur.x, gy + 1)) gy++;
+      ctx.strokeStyle = "rgba(237,234,227,.28)";
+      ctx.lineWidth = 1;
+      for (let y = 0; y < cur.shape.length; y++)
+        for (let x = 0; x < cur.shape.length; x++)
+          if (cur.shape[y][x] && gy + y >= 0)
+            ctx.strokeRect((cur.x + x) * cell + 1.5, (gy + y) * cell + 1.5, cell - 3, cell - 3);
+
+      for (let y = 0; y < cur.shape.length; y++)
+        for (let x = 0; x < cur.shape.length; x++)
+          if (cur.shape[y][x] && cur.y + y >= 0)
+            blockAt(ctx, (cur.x + x) * cell, (cur.y + y) * cell, cell, PIECES[cur.key], cur.cursed, now);
+    }
+
+    // schizzi d'inchiostro
+    for (const p of particles){
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.ink;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // lampo di quadricromia
+    if (quadFlash > 0){
+      const bands = ["#1EA7E1", "#E5007D", "#FFD400", "#EDEAE3"];
+      const k = 1 - quadFlash;
+      for (let i = 0; i < 4; i++){
+        ctx.globalAlpha = quadFlash * .32;
+        ctx.fillStyle = bands[i];
+        const bh = H / 4;
+        ctx.fillRect(0, i * bh + k * bh * .5, W, bh * quadFlash);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // etichette delle guide
+    ctx.font = '500 8px "IBM Plex Mono", ui-monospace, monospace';
+    ctx.textAlign = "right"; ctx.textBaseline = "bottom";
+    for (const g of GUIDES){
+      const y = g.y * cell + .5;
+      const isBase = g.label === "LINEA DI BASE";
+      const tw = ctx.measureText(g.label).width;
+      ctx.fillStyle = "rgba(8,11,15,.72)";
+      ctx.fillRect(W - tw - 8, y - 11, tw + 7, 10);
+      ctx.fillStyle = isBase ? "rgba(30,167,225,.95)" : "rgba(130,148,164,.8)";
+      ctx.fillText(g.label, W - 4, y - 2);
+    }
+
+    // nome della giocata
+    if (toast){
+      const t = toast.t / 1100;
+      const a = t < .12 ? t / .12 : (t > .7 ? Math.max(0, (1 - t) / .3) : 1);
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      // parte da un corpo generoso e rientra nella larghezza del campo
+      let size = toast.big ? cell * 1.5 : cell * 1.05;
+      const face = '"Bodoni Moda", Didot, Georgia, serif';
+      ctx.font = '900 ' + Math.round(size) + 'px ' + face;
+      const maxW = W - 26;
+      const measured = ctx.measureText(toast.text).width;
+      if (measured > maxW){
+        size = Math.max(11, size * (maxW / measured));
+        ctx.font = '900 ' + Math.round(size) + 'px ' + face;
+      }
+      const yy = H * .38 - t * 18;
+      ctx.fillStyle = "rgba(8,11,15,.85)";
+      const tw = ctx.measureText(toast.text).width;
+      ctx.fillRect(W / 2 - tw / 2 - 10, yy - size * .62, tw + 20, size * 1.24);
+      ctx.fillStyle = toast.big ? "#FFD400" : "#EDEAE3";
+      ctx.fillText(toast.text, W / 2, yy);
+      ctx.restore();
+    }
+
+    // combo
+    if (combo > 1 && phase === "play"){
+      ctx.save();
+      ctx.font = '600 10px "IBM Plex Mono", monospace';
+      ctx.textAlign = "left"; ctx.textBaseline = "top";
+      ctx.fillStyle = "rgba(255,212,0,.92)";
+      ctx.fillText("COMBO ×" + combo, 5, 5);
+      ctx.restore();
+    }
+
+    ctx.strokeStyle = "rgba(43,57,72,.9)";
+    ctx.strokeRect(.5, .5, W - 1, H - 1);
+  }
+
+  /* ============ avvio ============ */
+  rng = mulberry32(dateKey());
+  grid = newGrid();
+  bag = []; refillBag();
+  queue = [nextKey(), nextKey(), nextKey()];
+  score = 0; lines = 0; level = 1; combo = 0; quads = 0;
+  printed = []; events = []; holdKey = null; curseTick = 0;
+  best = loadBest();
+
+  buildLegend();
+  paintHud();
+  window.addEventListener("resize", resize);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ resize(); });
+  resize();
+  raf = requestAnimationFrame(loop);
+
+  window.__baseline = {
+    state: function(){ return { phase:phase, score:score, lines:lines, level:level, combo:combo,
+                                quads:quads, mode:mode, grid:grid, cur:cur, queue:queue,
+                                hold:holdKey, printed:printed, events:events }; },
+    start: function(m){ begin(m || "free"); },
+    hardDrop: hardDrop, move: move, rotate: rotate, doHold: doHold,
+    force: function(key, cursed){
+      cur = spawn(key, 1); cur.cursed = !!cursed;
+      canHold = true; lockTimer = 0; dropTimer = 0;
+    },
+    setLevel: function(v){ level = v; paintHud(); },
+    setScore: function(v){ score = v; paintHud(); },
+    over: gameOver,
+    shareText: shareText,
+    seedPeek: function(m){
+      const r = (m === "daily") ? mulberry32(dateKey()) : Math.random;
+      const out = []; let b = [];
+      const fill = () => { const t = KEYS.slice();
+        for (let i = t.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); const x = t[i]; t[i] = t[j]; t[j] = x; }
+        b = b.concat(t); };
+      for (let i = 0; i < 14; i++){ if (b.length < 8) fill(); out.push(b.shift()); }
+      return out.join("");
+    },
+    PIECES: PIECES, GUIDE_ROWS: GUIDE_ROWS, GRADES: GRADES
+  };
+})();
+</script>
+
+</body>
+</html>
