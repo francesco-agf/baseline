@@ -356,6 +356,46 @@
   }
   .rules-glyph{font-family:var(--display);color:var(--muted-2);margin-left:8px}
 
+  /* nome all'ingresso */
+  .startname{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%;max-width:300px}
+  .startname label{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  }
+  .startname input{
+    width:100%;background:var(--surface-2);border:1px solid var(--rule);color:var(--paper);
+    font-family:var(--mono);font-size:14px;letter-spacing:.04em;padding:10px 12px;text-align:center;
+  }
+  .startname input::placeholder{color:var(--muted-2)}
+  .startname input.manca{border-color:var(--danger)}
+  .startname-note{
+    font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted-2);margin:0;text-align:center;line-height:1.6;
+  }
+  .startname-note.manca{color:var(--danger)}
+  .lnk{
+    background:none;border:none;color:var(--muted);font-family:var(--mono);font-size:9.5px;
+    letter-spacing:.14em;text-transform:uppercase;text-decoration:underline;
+    text-underline-offset:3px;padding:2px;
+  }
+  .lnk:hover{color:var(--paper)}
+
+  /* titolo classifica cliccabile */
+  .board-title button{
+    background:none;border:none;color:inherit;font:inherit;padding:0;
+    display:flex;align-items:baseline;gap:10px;
+  }
+  .board-title button:hover{color:var(--accent)}
+  .board-open-hint{
+    font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted-2);border-bottom:1px solid var(--rule);padding-bottom:1px;
+  }
+  .board-title button:hover .board-open-hint{color:var(--accent);border-color:var(--accent)}
+  .modal-foot{
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--muted-2);
+    line-height:1.8;margin:18px 0 0;border-top:1px solid var(--rule-soft);padding-top:12px;
+  }
+  #boardModal .board-head{margin-bottom:14px}
+
   /* ---------- musica ---------- */
   .audio-bar{display:flex;align-items:center;gap:6px}
   .audio-bar select{
@@ -506,14 +546,22 @@
             <span class="spec-next" id="spNext"></span>
           </div>
           <div class="signup" id="signup" hidden>
-            <div class="signup-row">
+            <p class="signup-msg" id="signupMsg"></p>
+            <div class="signup-row" id="signupEdit" hidden>
               <input id="playerName" type="text" maxlength="20" autocomplete="nickname"
                      spellcheck="false" placeholder="Il tuo nome" aria-label="Il tuo nome">
-              <button class="btn" id="submitScore">In classifica</button>
+              <button class="btn" id="submitScore">Invia</button>
             </div>
-            <p class="signup-msg" id="signupMsg"></p>
+            <button class="lnk" id="changeName" hidden>Cambia nome</button>
           </div>
           <pre class="share-box" id="shareBox" hidden></pre>
+        </div>
+
+        <div class="startname" id="startName">
+          <label for="nameInput">Come ti chiami?</label>
+          <input id="nameInput" type="text" maxlength="20" autocomplete="nickname"
+                 spellcheck="false" placeholder="Il tuo nome" aria-label="Il tuo nome">
+          <p class="startname-note" id="nameNote">Serve per entrare in classifica. Resta su questo dispositivo.</p>
         </div>
 
         <div class="btn-row" id="ovButtons">
@@ -563,7 +611,7 @@
 
   <section class="board" id="board">
     <div class="board-head">
-      <h2 class="board-title">Classifica</h2>
+      <h2 class="board-title"><button id="boardOpen">Classifica<span class="board-open-hint">vedi tutti</span></button></h2>
       <div class="board-nav">
         <button id="dayPrev" aria-label="Giorno precedente">‹</button>
         <span class="board-day" id="dayLabel">—</span>
@@ -588,6 +636,27 @@
       </select>
     </span>
   </footer>
+
+  <div class="modal" id="boardModal" hidden>
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <h2 class="modal-title">Classifica</h2>
+        <button class="btn ghost" id="boardClose">Chiudi</button>
+      </div>
+      <div class="board-head">
+        <div class="board-nav">
+          <button id="mDayPrev" aria-label="Giorno precedente">‹</button>
+          <span class="board-day" id="mDayLabel">—</span>
+          <button id="mDayNext" aria-label="Giorno successivo">›</button>
+        </div>
+        <span class="board-meta" id="mBoardMeta"></span>
+      </div>
+      <ol class="board-list" id="mBoardList"></ol>
+      <p class="board-note" id="mBoardNote"></p>
+      <p class="modal-foot">Ogni giorno la composizione è la stessa per tutti: la sequenza dei pezzi
+      non cambia da giocatore a giocatore. Di ciascuno resta la partita migliore della giornata.</p>
+    </div>
+  </div>
 
   <div class="modal" id="rules" hidden>
     <div class="modal-sheet">
@@ -771,6 +840,9 @@
   const curseRow = document.getElementById("curseRow");
   const curseVal = document.getElementById("curseVal");
   const soundBtn = document.getElementById("soundBtn");
+  const nameInput = document.getElementById("nameInput");
+  const nameNote = document.getElementById("nameNote");
+  const startName = document.getElementById("startName");
   const spPrint = document.getElementById("spPrint");
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1044,6 +1116,7 @@
     ovTitle.hidden = false;
     specimen.hidden = true;
     signup.hidden = true;
+    startName.hidden = true;
     copyBtn.hidden = true;
     overlay.hidden = true;
     cur = spawn(shiftQueue());
@@ -1081,6 +1154,7 @@
       ovBody.textContent = "Premi P o il pulsante per riprendere la composizione.";
       ovBody.hidden = false;
       specimen.hidden = true; copyBtn.hidden = true; signup.hidden = true;
+      startName.hidden = true;
       dailyBtn.textContent = "Riprendi"; dailyBtn.dataset.resume = "1";
       freeBtn.hidden = true;
       overlay.hidden = false;
@@ -1162,7 +1236,10 @@
     const k = e.key;
     if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar"].indexOf(k) !== -1) e.preventDefault();
     if (k === "Enter"){
-      if (phase === "start" || phase === "over") begin(mode);
+      if (phase === "start" || phase === "over"){
+        if (!startName.hidden && !chiediNome()) return;
+        begin(mode);
+      }
       else if (phase === "pause") togglePause();
       return;
     }
@@ -1222,11 +1299,43 @@
     } else if (dy > 40) hardDrop();
   }, {passive:true});
 
+  // senza nome non si comincia: serve per la classifica
+  function chiediNome(){
+    const n = pulisci(nameInput.value);
+    if (n){
+      salvaNome(n);
+      nameInput.classList.remove("manca");
+      nameNote.classList.remove("manca");
+      nameNote.textContent = "Serve per entrare in classifica. Resta su questo dispositivo.";
+      return n;
+    }
+    nameInput.classList.add("manca");
+    nameNote.classList.add("manca");
+    nameNote.textContent = "Scrivi il tuo nome per iniziare";
+    nameInput.focus();
+    return null;
+  }
+  nameInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter"){ e.preventDefault(); if (chiediNome()) begin("daily"); }
+    e.stopPropagation();
+  });
+  nameInput.addEventListener("input", function(){
+    if (pulisci(nameInput.value)){
+      nameInput.classList.remove("manca");
+      nameNote.classList.remove("manca");
+      nameNote.textContent = "Serve per entrare in classifica. Resta su questo dispositivo.";
+    }
+  });
+
   dailyBtn.addEventListener("click", function(){
     if (dailyBtn.dataset.resume) return togglePause();
+    if (!chiediNome()) return;
     begin("daily");
   });
-  freeBtn.addEventListener("click", function(){ begin("free"); });
+  freeBtn.addEventListener("click", function(){
+    if (!chiediNome()) return;
+    begin("free");
+  });
 
   /* ============ risultato condivisibile ============ */
   // il blocchetto condivisibile riproduce le ultime righe mandate in stampa,
@@ -1286,6 +1395,7 @@
     shareBox.hidden = true;
     prepareSignup();
     specimen.hidden = false;
+    startName.hidden = true;
     ovBody.hidden = true;
     ovTitle.hidden = true;
     ovKicker.textContent = quads > 0
@@ -1340,10 +1450,27 @@
   const dayPrev = document.getElementById("dayPrev");
   const dayNext = document.getElementById("dayNext");
 
+  const signupEdit = document.getElementById("signupEdit");
+  const changeName = document.getElementById("changeName");
+  const boardModal = document.getElementById("boardModal");
+  const mBoardList = document.getElementById("mBoardList");
+  const mBoardNote = document.getElementById("mBoardNote");
+  const mBoardMeta = document.getElementById("mBoardMeta");
+  const mDayLabel = document.getElementById("mDayLabel");
+  const mDayPrev = document.getElementById("mDayPrev");
+  const mDayNext = document.getElementById("mDayNext");
+
   let boardDays = [];          // giorni con almeno una partita, dal più recente
   let boardIndex = 0;          // posizione nella lista
   let myEntry = null;          // { day, name } appena iscritto, per evidenziarlo
   let submitted = false;
+  let lastRows = [], lastDay = null;
+
+  function nomeSalvato(){
+    try { return (localStorage.getItem("baseline.nome") || "").trim(); } catch(e){ return ""; }
+  }
+  function salvaNome(n){ try { localStorage.setItem("baseline.nome", n); } catch(e){} }
+  function pulisci(n){ return (n || "").trim().replace(/\s+/g, " ").slice(0, 20); }
 
   function dayToLabel(d){
     const s = String(d);
@@ -1395,64 +1522,105 @@
     return rows;
   }
 
+  function rigaClassifica(r, i, day){
+    const li = document.createElement("li");
+    if (myEntry && myEntry.day === day &&
+        myEntry.name.trim().toLowerCase() === (r.name || "").trim().toLowerCase()){
+      li.className = "me";
+    }
+    const pos = document.createElement("span");
+    pos.className = "board-pos";
+    pos.textContent = (i + 1) + "º";
+    const nm = document.createElement("span");
+    nm.className = "board-name";
+    nm.textContent = r.name;
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = plur(r.lines, "riga", "righe") +
+                      (r.quads ? " · " + plur(r.quads, "quadricromia", "quadricromie") : "") +
+                      " · corpo " + (6 + r.level * 2) + " pt";
+    nm.appendChild(tag);
+    const sc = document.createElement("span");
+    sc.className = "board-score";
+    sc.textContent = fmt(r.score);
+    li.appendChild(pos); li.appendChild(nm); li.appendChild(sc);
+    return li;
+  }
+
   function renderBoard(rows, day){
+    lastRows = rows; lastDay = day;
+    const list = bestPerName(rows);
+    const oggi = (day === dateKey());
+
+    // anteprima sotto al campo: i primi dieci
     boardList.innerHTML = "";
     dayLabel.textContent = dayToLabel(day);
     dayPrev.disabled = boardIndex >= boardDays.length - 1;
     dayNext.disabled = boardIndex <= 0;
+    list.slice(0, 10).forEach(function(r, i){ boardList.appendChild(rigaClassifica(r, i, day)); });
 
-    const list = bestPerName(rows).slice(0, 10);
+    // schermata completa: tutti i partecipanti
+    mBoardList.innerHTML = "";
+    mDayLabel.textContent = dayToLabel(day);
+    mDayPrev.disabled = dayPrev.disabled;
+    mDayNext.disabled = dayNext.disabled;
+    list.forEach(function(r, i){ mBoardList.appendChild(rigaClassifica(r, i, day)); });
+
     if (!list.length){
-      boardNote.textContent = day === dateKey()
+      const vuoto = oggi
         ? "Nessuno ha ancora stampato niente oggi. Sii il primo."
         : "Nessuno ha giocato la composizione del " + dayToLong(day) + ".";
+      boardNote.textContent = vuoto;
+      mBoardNote.textContent = vuoto;
       boardMeta.textContent = "Composizione del " + dayToLabel(day);
+      mBoardMeta.textContent = boardMeta.textContent;
       return;
     }
-    list.forEach(function(r, i){
-      const li = document.createElement("li");
-      if (myEntry && myEntry.day === day &&
-          myEntry.name.trim().toLowerCase() === (r.name || "").trim().toLowerCase()){
-        li.className = "me";
-      }
-      const pos = document.createElement("span");
-      pos.className = "board-pos";
-      pos.textContent = (i + 1) + "º";
-      const nm = document.createElement("span");
-      nm.className = "board-name";
-      nm.textContent = r.name;
-      const tag = document.createElement("span");
-      tag.className = "tag";
-      tag.textContent = plur(r.lines, "riga", "righe") +
-                        (r.quads ? " · " + plur(r.quads, "quadricromia", "quadricromie") : "") +
-                        " · corpo " + (6 + r.level * 2) + " pt";
-      nm.appendChild(tag);
-      const sc = document.createElement("span");
-      sc.className = "board-score";
-      sc.textContent = fmt(r.score);
-      li.appendChild(pos); li.appendChild(nm); li.appendChild(sc);
-      boardList.appendChild(li);
-    });
-    const tot = bestPerName(rows).length;
-    boardMeta.textContent = "Composizione del " + dayToLabel(day) + " · " +
-                            plur(tot, "giocatore", "giocatori");
-    boardNote.textContent = day === dateKey()
+
+    const meta = "Composizione del " + dayToLabel(day) + " · " +
+                 plur(list.length, "giocatore", "giocatori");
+    boardMeta.textContent = meta;
+    mBoardMeta.textContent = meta + " · record " + fmt(list[0].score);
+    boardNote.textContent = oggi
+      ? (list.length > 10 ? "Primi dieci. Tocca «Classifica» per l'elenco completo." :
+         "Oggi tutti compongono la stessa sequenza di pezzi. Domani si ricomincia.")
+      : "Composizione del " + dayToLong(day) + ", chiusa.";
+    mBoardNote.textContent = oggi
       ? "Oggi tutti compongono la stessa sequenza di pezzi. Domani si ricomincia."
       : "Composizione del " + dayToLong(day) + ", chiusa.";
   }
 
   async function showBoard(day){
     boardNote.textContent = "Carico la classifica…";
+    mBoardNote.textContent = "Carico la classifica…";
     try {
       const rows = await db("scores?day=eq." + day +
-        "&select=name,score,lines,quads,level&order=score.desc&limit=200") || [];
+        "&select=name,score,lines,quads,level&order=score.desc&limit=500") || [];
       renderBoard(rows, day);
     } catch(e){
-      boardList.innerHTML = "";
+      boardList.innerHTML = ""; mBoardList.innerHTML = "";
       dayLabel.textContent = dayToLabel(day);
-      boardNote.textContent = "Classifica non raggiungibile in questo momento. Il gioco funziona lo stesso.";
+      mDayLabel.textContent = dayToLabel(day);
+      const msg = "Classifica non raggiungibile in questo momento. Il gioco funziona lo stesso.";
+      boardNote.textContent = msg; mBoardNote.textContent = msg;
     }
   }
+
+  function apriClassifica(){
+    boardModal.hidden = false;
+    if (phase === "play") togglePause();
+    document.getElementById("boardClose").focus();
+  }
+  function chiudiClassifica(){ boardModal.hidden = true; }
+  document.getElementById("boardOpen").addEventListener("click", apriClassifica);
+  document.getElementById("boardClose").addEventListener("click", chiudiClassifica);
+  boardModal.addEventListener("click", function(e){ if (e.target === boardModal) chiudiClassifica(); });
+  mDayPrev.addEventListener("click", function(){
+    if (boardIndex < boardDays.length - 1){ boardIndex++; showBoard(boardDays[boardIndex]); }
+  });
+  mDayNext.addEventListener("click", function(){
+    if (boardIndex > 0){ boardIndex--; showBoard(boardDays[boardIndex]); }
+  });
 
   async function initBoard(){
     await loadDays();
@@ -1466,20 +1634,19 @@
     if (boardIndex > 0){ boardIndex--; showBoard(boardDays[boardIndex]); }
   });
 
-  async function doSubmit(){
-    const nome = (playerName.value || "").trim().replace(/\s+/g, " ");
+  async function doSubmit(nomePassato){
+    const nome = pulisci(nomePassato !== undefined ? nomePassato : playerName.value);
     if (nome.length < 1){
       signupMsg.className = "signup-msg ko";
       signupMsg.textContent = "Scrivi un nome";
+      signupEdit.hidden = false;
       playerName.focus();
       return;
     }
     submitBtn.disabled = true;
     signupMsg.className = "signup-msg";
     signupMsg.textContent = "Invio…";
-    try {
-      localStorage.setItem("baseline.nome", nome);
-    } catch(e){}
+    salvaNome(nome);
     const day = dateKey();
     try {
       await db("scores", {
@@ -1497,8 +1664,12 @@
       });
       pos = pos === -1 ? list.length : pos + 1;
       signupMsg.className = "signup-msg ok";
-      signupMsg.textContent = pos + "º su " + plur(list.length, "giocatore", "giocatori") + " oggi";
-      submitBtn.textContent = "In classifica";
+      signupMsg.textContent = pos + "º su " + plur(list.length, "giocatore", "giocatori") +
+                              " oggi, come " + nome;
+      submitBtn.textContent = "Invia";
+      submitBtn.disabled = false;
+      signupEdit.hidden = true;
+      changeName.hidden = false;
       boardIndex = 0;
       if (boardDays.indexOf(day) === -1) boardDays.unshift(day);
       renderBoard(rows, day);
@@ -1506,33 +1677,43 @@
       submitBtn.disabled = false;
       signupMsg.className = "signup-msg ko";
       signupMsg.textContent = "Non sono riuscito a inviare. Riprova.";
+      signupEdit.hidden = false;
     }
   }
-  submitBtn.addEventListener("click", doSubmit);
+  submitBtn.addEventListener("click", function(){ doSubmit(); });
   playerName.addEventListener("keydown", function(e){
     if (e.key === "Enter"){ e.preventDefault(); doSubmit(); }
     e.stopPropagation();
   });
+  changeName.addEventListener("click", function(){
+    signupEdit.hidden = false;
+    playerName.value = nomeSalvato();
+    playerName.focus();
+    playerName.select();
+  });
 
+  // a fine partita il punteggio parte da solo: il nome è già stato messo all'inizio
   function prepareSignup(){
     submitted = false;
     signupMsg.textContent = "";
     signupMsg.className = "signup-msg";
     submitBtn.disabled = false;
-    submitBtn.textContent = "In classifica";
-    if (mode !== "daily"){
-      signup.hidden = true;
-      return;
-    }
-    if (score <= 0){
+    submitBtn.textContent = "Invia";
+    signupEdit.hidden = true;
+    changeName.hidden = true;
+    if (mode !== "daily" || score <= 0){
       signup.hidden = true;
       return;
     }
     signup.hidden = false;
-    try {
-      const n = localStorage.getItem("baseline.nome");
-      if (n && !playerName.value) playerName.value = n;
-    } catch(e){}
+    const nome = nomeSalvato();
+    if (nome){
+      doSubmit(nome);
+    } else {
+      signupMsg.className = "signup-msg";
+      signupMsg.textContent = "Metti il tuo nome per entrare in classifica";
+      signupEdit.hidden = false;
+    }
   }
 
   /* ============ audio ============ */
@@ -1692,7 +1873,9 @@
   document.getElementById("rulesClose").addEventListener("click", closeRules);
   rules.addEventListener("click", function(e){ if (e.target === rules) closeRules(); });
   window.addEventListener("keydown", function(e){
-    if (e.key === "Escape" && !rules.hidden) closeRules();
+    if (e.key !== "Escape") return;
+    if (!rules.hidden) closeRules();
+    if (!boardModal.hidden) chiudiClassifica();
   });
   function beep(freq, dur, vol){
     if (!soundOn) return;
@@ -2128,6 +2311,7 @@
 
   buildLegend();
   paintHud();
+  nameInput.value = nomeSalvato();
   // da telefono si gioca a gesti: il campo resta più largo
   if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches){
     ovBody.innerHTML = 'Cadono le parti della lettera: aste, occhielli, grazie, ascendenti. ' +
