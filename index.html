@@ -1028,6 +1028,8 @@
   let toast = null, shake = 0, quadFlash = 0, particles = [], piecesSpawned = 0;
   let pendingSwatchKey = null;   // campione gia' preparato, scende al prossimo pezzo
   let sheetIn = 0;        // il foglio entra in macchina
+  let trail = null;       // scia della battuta secca
+  let dryT = 0;           // l'inchiostro si asciuga a fine partita
   let landed = null;      // assestamento del pezzo appena posato
   let mixFx = null;       // gli inchiostri che si mescolano nel campione
   let punteggioMostrato = 0;
@@ -1144,7 +1146,17 @@
     let d = 0;
     while (!collide(cur.shape, cur.x, cur.y + 1)){ cur.y++; d++; }
     score += d * 2;
-    if (!reduceMotion) shake = Math.min(5, 1.4 + d * .18);
+    if (!reduceMotion){
+      shake = Math.min(5, 1.4 + d * .18);
+      if (d > 1){
+        const colonne = [];
+        for (let y = 0; y < cur.shape.length; y++)
+          for (let x = 0; x < cur.shape.length; x++)
+            if (cur.shape[y][x] && colonne.indexOf(cur.x + x) === -1) colonne.push(cur.x + x);
+        trail = { colonne: colonne, da: cur.y - d, a: cur.y + cur.shape.length,
+                  ink: PIECES[cur.key].ink, t: 0 };
+      }
+    }
     beep(90, .06, .05);
     lock();
   }
@@ -1327,7 +1339,7 @@
     clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
     toast = null; particles = []; shake = 0; quadFlash = 0;
     stamp = 0; misreg = 0; regMarks = null; pendingSwatchKey = null; swatchNext = 0;
-    landed = null; mixFx = null; punteggioMostrato = 0;
+    landed = null; mixFx = null; punteggioMostrato = 0; trail = null; dryT = 0;
     sheetIn = reduceMotion ? 0 : 1;
     best = loadBest();
     phase = "play";
@@ -1432,6 +1444,8 @@
     if (stamp > 0) stamp = Math.max(0, stamp - dt / 1150);
     if (sheetIn > 0) sheetIn = Math.max(0, sheetIn - dt / 480);
     if (landed){ landed.t += dt; if (landed.t > 190) landed = null; }
+    if (trail){ trail.t += dt; if (trail.t > 260) trail = null; }
+    if (phase === "over" && dryT < 1) dryT = Math.min(1, dryT + dt / 900);
     if (mixFx){ mixFx.t += dt; if (mixFx.t > 900) mixFx = null; }
     // il punteggio si mette in pari, non salta
     if (punteggioMostrato !== score){
@@ -2211,17 +2225,13 @@
       c.strokeRect(px + 1.5, py + 1.5, size - 3, size - 3);
       c.setLineDash([]);
     }
-    // sigla della lastra nell'angolo: C, M, Y, K secondo l'inchiostro
-    if (p.tag && size > 17){
-      c.font = '600 ' + Math.max(7, Math.round(size * .26)) + 'px "IBM Plex Mono", monospace';
-      c.textAlign = "left"; c.textBaseline = "top";
-      c.globalAlpha = .55;
-      c.fillStyle = sopraInchiostro(p.ink);
-      c.fillText(p.tag, px + size * .13, py + size * .1);
-      c.globalAlpha = 1;
-    }
+    /* Dentro il mattone c'e' la lettera della lastra — C, M, Y, K, e le due
+       lettere delle sovrastampe — composta nel carattere del corpo a cui si
+       sta giocando. Nell'angolo resta il glifo anatomico del pezzo. */
     if (size > 14){
-      const px6 = Math.floor(size * .62);
+      const grande = p.tag || p.glyph;
+      const due = grande.length > 1;
+      const px6 = Math.floor(size * (due ? .42 : .62));
       c.fillStyle = cursed ? "rgba(198,47,22,.85)" : sopraInchiostro(p.ink);
       c.font = cursed
         ? '700 ' + px6 + 'px "Comic Neue", "Comic Sans MS", cursive'
@@ -2233,10 +2243,18 @@
         c.save();
         c.translate(px + size / 2, py + size / 2 + wob);
         c.rotate(rot);
-        c.fillText(p.glyph, 0, size * .03);
+        c.fillText(grande, 0, size * .03);
         c.restore();
       } else {
-        c.fillText(p.glyph, px + size / 2, py + size / 2 + size * .03 + wob);
+        c.fillText(grande, px + size / 2, py + size / 2 + size * .03 + wob);
+      }
+      // il glifo anatomico si ritira nell'angolo
+      if (p.tag && p.glyph && size > 19){
+        c.font = '400 ' + Math.max(8, Math.round(size * .28)) + 'px "Bodoni Moda", Didot, Georgia, serif';
+        c.textAlign = "left"; c.textBaseline = "top";
+        c.globalAlpha = .5;
+        c.fillText(p.glyph, px + size * .12, py + size * .06);
+        c.globalAlpha = 1;
       }
     }
   }
@@ -2323,6 +2341,24 @@
       ctx.translate(W / 2 - (MARK_BOX[0] * s) / 2, H * .30);
       ctx.scale(s, s);
       for (const p of markPath) ctx.fill(p);
+      ctx.restore();
+    }
+
+    // la scia della battuta secca
+    if (trail){
+      const t = Math.min(1, trail.t / 260);
+      ctx.save();
+      ctx.globalAlpha = (1 - t) * .3;
+      ctx.fillStyle = trail.ink;
+      for (const x of trail.colonne){
+        const y0 = Math.max(0, trail.da) * cell;
+        const y1 = Math.min(ROWS, trail.a) * cell;
+        const gr = ctx.createLinearGradient(0, y0, 0, y1);
+        gr.addColorStop(0, "rgba(0,0,0,0)");
+        gr.addColorStop(1, trail.ink);
+        ctx.fillStyle = gr;
+        ctx.fillRect(x * cell + 2, y0, cell - 4, y1 - y0);
+      }
       ctx.restore();
     }
 
@@ -2469,6 +2505,16 @@
     }
 
     if (sheetIn > 0) ctx.restore();   // chiude la mascheratura del foglio in entrata
+
+    // fine partita: l'inchiostro si asciuga e il foglio va in archivio
+    if (dryT > 0){
+      ctx.save();
+      try { ctx.globalCompositeOperation = "saturation"; } catch(e){}
+      ctx.globalAlpha = dryT * .62;
+      ctx.fillStyle = "#808080";
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    }
 
     // fuori registro: le lastre si scollano per un istante
     if (misreg > 0){
