@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Baseline — tetris tipografico</title>
-<meta name="theme-color" content="#080B0F">
+<meta name="theme-color" content="#DAD5C9">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Baseline">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://francesco-agf.github.io/baseline/">
 <meta property="og:title" content="Baseline — tetris tipografico">
 <meta property="og:description" content="Incastra aste, occhielli e grazie sulla linea di base. Ogni giorno la stessa composizione per tutti. Un arcade di Arti Grafiche Fimognari.">
-<link rel="icon" href="data:image/svg+xml,<svg width='130' height='168' role='img' aria-label='Fimognari' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 168'> <path fill='%23EDEAE3' d='M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 '/> <path fill='%23EDEAE3' d='M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 '/> </svg>">
-<style>*{box-sizing:border-box}html{color-scheme:dark;-webkit-text-size-adjust:100%}body{margin:0;background:#080B0F}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="icon" href="data:image/svg+xml,<svg width='130' height='168' role='img' aria-label='Fimognari' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 168'> <path fill='%2317191D' d='M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 '/> <path fill='%2317191D' d='M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 '/> </svg>">
+<style>*{box-sizing:border-box}html{color-scheme:light;-webkit-text-size-adjust:100%}body{margin:0;background:#DAD5C9}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Comic+Neue:wght@700&display=swap">
@@ -23,19 +23,22 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@700&family=Libre+Baskerville:wght@700&family=Anton&text=IOTbpSz&display=swap">
 <style>
   :root{
-    --ground:#080B0F;
-    --surface:#0F141B;
-    --surface-2:#141B24;
-    --rule:#1F2A36;
-    --rule-soft:#161E27;
-    --paper:#EDEAE3;
-    --muted:#6E8091;
-    --muted-2:#42525F;
-    --ink-c:#1EA7E1;
-    --ink-m:#E5007D;
-    --ink-y:#FFD400;
-    --danger:#FF4A3D;
-    --accent:#1EA7E1;
+    /* Fondo carta: il banco di lavoro e', sopra, il foglio in macchina.
+       I nomi dei colori restano quelli di prima, i valori sono ribaltati:
+       --paper e' il massimo contrasto sul fondo, cioe' il nero di stampa. */
+    --ground:#DAD5C9;
+    --surface:#FBFAF7;
+    --surface-2:#F0ECE3;
+    --rule:#C3BCAC;
+    --rule-soft:#E0DACD;
+    --paper:#17191D;
+    --muted:#6E7079;
+    --muted-2:#9E988B;
+    --ink-c:#00A0DF;
+    --ink-m:#E20C7A;
+    --ink-y:#F5C400;
+    --danger:#C62F16;
+    --accent:#0A6FB8;
     --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     --ui:"Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --display:"Bodoni Moda", "Didot", Georgia, "Times New Roman", serif;
@@ -84,7 +87,7 @@
   .avatar{
     width:46px;height:46px;border-radius:50%;background:var(--paper);color:var(--ground);
     display:flex;align-items:center;justify-content:center;flex:none;
-    box-shadow:0 0 0 1px rgba(237,234,227,.18), 0 0 0 4px rgba(237,234,227,.06);
+    box-shadow:0 0 0 1px rgba(23,25,29,.14), 0 0 0 5px rgba(23,25,29,.05);
   }
   .avatar .logo-f{width:17px}
 
@@ -111,7 +114,7 @@
 
   .grade{
     font-family:var(--display);font-weight:700;font-size:19px;line-height:1;
-    letter-spacing:-.01em;color:var(--ink-y);
+    letter-spacing:-.01em;color:var(--ink-m);
   }
   .curse-row{display:none;align-items:baseline;justify-content:space-between;gap:8px;
     margin-top:9px;padding-top:8px;border-top:1px solid var(--rule-soft)}
@@ -132,7 +135,7 @@
     color:var(--muted-2);white-space:nowrap;
   }
   .hs-grade{
-    font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink-y);
+    font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink-m);
     line-height:1;margin-left:auto;white-space:nowrap;
   }
   .hs-curse{font-family:"Comic Neue","Comic Sans MS",cursive;font-size:11px;color:var(--danger)}
@@ -148,7 +151,7 @@
   /* ---------- playfield ---------- */
   .chase-wrap{display:flex;flex-direction:column;align-items:center;width:100%}
   .board{position:relative;padding:14px}
-  .chase{position:relative;border:1px solid #2B3948;background:var(--surface);line-height:0}
+  .chase{position:relative;border:1px solid var(--rule);background:var(--surface);line-height:0}
   #field{display:block;touch-action:none}
 
   .reg{position:absolute;width:13px;height:13px;pointer-events:none;opacity:.5}
@@ -164,7 +167,7 @@
   .overlay{
     position:absolute;inset:14px;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:12px;text-align:center;padding:20px 16px;
-    background:rgba(8,11,15,.94);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+    background:rgba(251,250,247,.95);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
     line-height:normal;overflow-y:auto;
   }
   .overlay[hidden]{display:none}
@@ -198,7 +201,7 @@
     font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
     padding:11px 18px;transition:transform .12s ease,background .12s ease;
   }
-  .btn:hover{background:#fff;transform:translateY(-1px)}
+  .btn:hover{background:#000;transform:translateY(-1px)}
   .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--rule)}
   .btn.ghost:hover{color:var(--paper);border-color:var(--muted-2);background:transparent}
   .btn-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -270,7 +273,7 @@
     font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
     color:var(--muted);margin:0;text-align:center;
   }
-  .signup-msg.ok{color:var(--ink-y)}
+  .signup-msg.ok{color:var(--ink-m)}
   .signup-msg.ko{color:var(--danger)}
 
   /* ---------- classifica ---------- */
@@ -302,11 +305,11 @@
     padding:8px 0;border-top:1px solid var(--rule-soft);
   }
   .board-list li:first-child{border-top:none}
-  .board-list li.me{background:rgba(30,167,225,.07)}
+  .board-list li.me{background:rgba(10,111,184,.09)}
   .board-pos{
     font-family:var(--mono);font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums;
   }
-  .board-list li:nth-child(1) .board-pos{color:var(--ink-y)}
+  .board-list li:nth-child(1) .board-pos{color:var(--ink-m)}
   .board-name{font-size:13.5px;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .board-name .tag{
     font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
@@ -322,7 +325,7 @@
 
   /* ---------- regole ---------- */
   .modal{
-    position:fixed;inset:0;z-index:50;background:rgba(8,11,15,.96);
+    position:fixed;inset:0;z-index:50;background:rgba(248,246,241,.97);
     -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
     overflow-y:auto;padding:26px 18px 40px;
   }
@@ -348,7 +351,7 @@
   .rules-table tr:first-child td{border-top:none}
   .rules-table td:first-child{color:var(--paper);width:42%;padding-right:14px}
   .rules-table td.num{
-    font-family:var(--mono);text-align:right;color:var(--ink-y);font-variant-numeric:tabular-nums;
+    font-family:var(--mono);text-align:right;color:var(--ink-m);font-variant-numeric:tabular-nums;
     white-space:nowrap;
   }
   .rules-swatch{
@@ -679,13 +682,26 @@
         <tr><td>Una riga</td><td>Riga</td><td class="num">100</td></tr>
         <tr><td>Due righe</td><td>Capoverso</td><td class="num">300</td></tr>
         <tr><td>Tre righe</td><td>Colonna</td><td class="num">500</td></tr>
-        <tr><td>Quattro righe</td><td>Quadricromia</td><td class="num">800</td></tr>
+        <tr><td>Quattro righe</td><td>C+M+Y+K</td><td class="num">800</td></tr>
         <tr><td>Riga chiusa su una guida</td><td>Allineamento</td><td class="num">+150</td></tr>
         <tr><td>Scarichi consecutivi</td><td>Combo</td><td class="num">+50 ×n</td></tr>
       </table>
-      <p>Tutti i punteggi si moltiplicano per il corpo a cui stai giocando. La
-      <b>quadricromia</b> — quattro righe in un colpo solo — fa lampeggiare le quattro lastre
-      e fa scendere il timbro del capo reparto.</p>
+      <p>Tutti i punteggi si moltiplicano per il corpo a cui stai giocando.</p>
+
+      <h3>La quadricromia e il campione</h3>
+      <p>Quattro dei sette pezzi sono gli inchiostri di macchina: <b>ciano, magenta, giallo e
+      nero</b>. Gli altri tre sono sovrastampe, cioè due lastre l'una sull'altra.</p>
+      <p>Chiudere quattro righe in una volta significa mandare in macchina tutte e quattro le
+      lastre insieme: compare la scritta <b>C+M+Y+K</b>, lampeggiano le quattro bande, i crocini
+      di registro rientrano e scende il timbro del capo reparto.</p>
+      <p>Poi succede la cosa interessante. Il gioco legge <b>quante celle di ciascun inchiostro</b>
+      c'erano in quelle quattro righe, ne calcola la percentuale e mescola: nasce un colore nuovo,
+      che non esiste fra i sette pezzi. Quel colore scende come <b>campione</b>, un mattoncino
+      singolo, con la sua sigla — per esempio <em>C 45 M 23 Y 23 K 10</em>. Tappa un buco dove
+      vuoi, ma non si può mettere da parte: il colore in macchina va usato subito.</p>
+      <p>Il campione dipende da cosa hai stampato: quattro righe cariche di magenta danno un
+      rosa acceso, un misto di tutto dà un grigio di quadricromia. Due partite non producono
+      mai gli stessi campioni.</p>
 
       <h3>Il Comic Sans maledetto</h3>
       <p>Ogni tanto arriva un pezzo composto in Comic Sans: traballa, ha il contorno rosso
@@ -706,8 +722,9 @@
 
       <h3>Gli inchiostri</h3>
       <table class="rules-table" id="rulesInks"></table>
-      <p>I sette colori sono le sette combinazioni della quadricromia. I riferimenti Pantone
-      sono approssimazioni a video: la resa in stampa va verificata su campione.</p>
+      <p>I colori a schermo nascono da un modello sottrattivo con i quattro inchiostri di
+      macchina: le sovrastampe vengono come sul foglio, non come su un monitor. I riferimenti
+      Pantone delle sovrastampe sono approssimazioni: la resa in stampa va verificata su campione.</p>
 
       <h3>Composizione del giorno e classifica</h3>
       <p>Ogni giorno la sequenza dei pezzi è <b>identica per tutti</b> fino a mezzanotte: i punteggi
@@ -757,15 +774,54 @@
      un'approssimazione a video — la resa in stampa va sempre verificata su
      campione. Sostituibili con i codici di reparto. */
   const PIECES = {
-    I: { name:"Asta",        glyph:"I", ink:"#EDEAE3", mix:"K 0",        pantone:"Warm Gray 1 C", cells:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
-    O: { name:"Occhiello",   glyph:"O", ink:"#1EA7E1", mix:"C 100",      pantone:"2995 C",        cells:[[1,1],[1,1]] },
-    T: { name:"Traversa",    glyph:"T", ink:"#E5007D", mix:"M 100",      pantone:"Rubine Red C",  cells:[[0,1,0],[1,1,1],[0,0,0]] },
-    L: { name:"Ascendente",  glyph:"b", ink:"#FFD400", mix:"Y 100",      pantone:"116 C",         cells:[[0,0,1],[1,1,1],[0,0,0]] },
-    J: { name:"Discendente", glyph:"p", ink:"#F04A2A", mix:"M 100 Y 90", pantone:"1655 C",        cells:[[1,0,0],[1,1,1],[0,0,0]] },
-    S: { name:"Grazia",      glyph:"S", ink:"#00B36B", mix:"C 100 Y 70", pantone:"340 C",         cells:[[0,1,1],[1,1,0],[0,0,0]] },
-    Z: { name:"Terminale",   glyph:"z", ink:"#6C4FE0", mix:"C 70 M 80",  pantone:"2725 C",        cells:[[1,1,0],[0,1,1],[0,0,0]] }
+    // I quattro inchiostri di macchina, puri. cmyk in percentuale.
+    O: { name:"Occhiello",   glyph:"O", cmyk:[100,  0,  0,  0], pantone:"lastra ciano",  cells:[[1,1],[1,1]] },
+    T: { name:"Traversa",    glyph:"T", cmyk:[  0,100,  0,  0], pantone:"lastra magenta", cells:[[0,1,0],[1,1,1],[0,0,0]] },
+    L: { name:"Ascendente",  glyph:"b", cmyk:[  0,  0,100,  0], pantone:"lastra gialla", cells:[[0,0,1],[1,1,1],[0,0,0]] },
+    I: { name:"Asta",        glyph:"I", cmyk:[  0,  0,  0,100], pantone:"lastra nera",   cells:[[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]] },
+    // Le tre sovrastampe: due lastre l'una sull'altra.
+    J: { name:"Discendente", glyph:"p", cmyk:[  0,100, 90,  0], pantone:"sovrastampa \u2248 1655 C", cells:[[1,0,0],[1,1,1],[0,0,0]] },
+    S: { name:"Grazia",      glyph:"S", cmyk:[100,  0, 70,  0], pantone:"sovrastampa \u2248 340 C",  cells:[[0,1,1],[1,1,0],[0,0,0]] },
+    Z: { name:"Terminale",   glyph:"z", cmyk:[ 70, 80,  0,  0], pantone:"sovrastampa \u2248 2725 C", cells:[[1,1,0],[0,1,1],[0,0,0]] }
   };
   const KEYS = ["I","O","T","L","J","S","Z"];
+
+  /* Dalla quadricromia al colore a schermo. Non e' una conversione
+     colorimetrica: e' un modello sottrattivo con gli inchiostri di macchina
+     veri, cosi' le sovrastampe vengono come sul foglio e non come su un
+     monitor RGB. */
+  const CARTA = [252, 251, 248];
+  const INCHIOSTRI = {
+    c: [ 10, 160, 223],
+    m: [229,  12, 125],
+    y: [248, 196,  10],
+    k: [ 23,  25,  29]
+  };
+  function cmykToHex(c, m, y, k){
+    const cop = [c, m, y, k].map(function(v){ return Math.max(0, Math.min(100, v)) / 100; });
+    const inks = [INCHIOSTRI.c, INCHIOSTRI.m, INCHIOSTRI.y, INCHIOSTRI.k];
+    let out = "#";
+    for (let ch = 0; ch < 3; ch++){
+      let v = CARTA[ch];
+      for (let i = 0; i < 4; i++){
+        v *= 1 - cop[i] * (1 - inks[i][ch] / 255);
+      }
+      out += ("0" + Math.max(0, Math.min(255, Math.round(v))).toString(16)).slice(-2);
+    }
+    return out;
+  }
+  function siglaCmyk(v, sep){
+    const nomi = ["C", "M", "Y", "K"];
+    const parti = [];
+    for (let i = 0; i < 4; i++) if (v[i] > 0) parti.push(nomi[i] + " " + Math.round(v[i]));
+    return parti.length ? parti.join(sep || "  ") : "carta";
+  }
+  // ogni pezzo porta con se' il suo colore a schermo e la sua sigla
+  for (const k of KEYS){
+    const p = PIECES[k];
+    p.ink = cmykToHex(p.cmyk[0], p.cmyk[1], p.cmyk[2], p.cmyk[3]);
+    p.mix = siglaCmyk(p.cmyk);
+  }
 
   const GUIDES = [
     { y:3,  label:"ASCENDENTE" },
@@ -776,7 +832,43 @@
   const GUIDE_ROWS = GUIDES.map(g => g.y);
 
   // nomi delle giocate
-  const PLAY_NAMES = ["", "RIGA", "CAPOVERSO", "COLONNA", "QUADRICROMIA"];
+  const PLAY_NAMES = ["", "RIGA", "CAPOVERSO", "COLONNA", "C+M+Y+K"];
+
+  /* Il campione. Chiudendo quattro righe in una volta si mandano in macchina
+     tutte e quattro le lastre: dalla percentuale di ciascun inchiostro nelle
+     righe stampate nasce un colore, e quel colore scende come mattoncino
+     singolo. Sei caselle a rotazione, cosi' due campioni diversi non si
+     scambiano il colore mentre sono tutti e due sul campo. */
+  const SWATCH_KEYS = ["1", "2", "3", "4", "5", "6"];
+  let swatchNext = 0;
+
+  function mediaInchiostri(rows){
+    const somma = [0, 0, 0, 0];
+    let n = 0;
+    for (const y of rows){
+      for (let x = 0; x < COLS; x++){
+        const k = keyOf(grid[y][x]);
+        const p = k && PIECES[k];
+        if (!p) continue;
+        for (let i = 0; i < 4; i++) somma[i] += p.cmyk[i];
+        n++;
+      }
+    }
+    if (!n) return null;
+    return somma.map(function(v){ return Math.round(v / n); });
+  }
+
+  function creaCampione(cmyk){
+    const key = SWATCH_KEYS[swatchNext % SWATCH_KEYS.length];
+    swatchNext++;
+    PIECES[key] = {
+      name: "Campione", glyph: "", cmyk: cmyk,
+      ink: cmykToHex(cmyk[0], cmyk[1], cmyk[2], cmyk[3]),
+      mix: siglaCmyk(cmyk), pantone: "fuori scala",
+      cells: [[1]], campione: true
+    };
+    return key;
+  }
 
   // il monogramma dello studio, in filigrana sul campo
   const MARK_PATHS = ["M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 ", "M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 "];
@@ -875,6 +967,7 @@
   let phase = "start";
   let cell = 30, last = 0, raf = null;
   let toast = null, shake = 0, quadFlash = 0, particles = [], piecesSpawned = 0;
+  let pendingSwatchKey = null;   // campione gia' preparato, scende al prossimo pezzo
   let stamp = 0;          // timbro VISTO SI STAMPI
   let misreg = 0;         // fuori registro: le lastre si scollano per un istante
   let regMarks = null;    // crocini di registro che rientrano sulle righe stampate
@@ -959,6 +1052,7 @@
   }
   function doHold(){
     if (busy() || !canHold) return;
+    if (PIECES[cur.key].campione) return;   // il campione va usato subito
     const prev = holdKey;
     holdKey = cur.key;
     cur = prev ? spawn(prev, 1) : spawn(shiftQueue(), 1);
@@ -1016,6 +1110,9 @@
       if (n === 4){
         quadFlash = 1;
         if (!reduceMotion){ shake = 7; stamp = 1; misreg = 1; }
+        // quattro lastre in macchina: dalla riga nasce il colore mescolato
+        const media = mediaInchiostri(full);
+        if (media) pendingSwatchKey = creaCampione(media);
       } else if (aligned){
         word = word + " ALLINEATA";
       }
@@ -1062,7 +1159,15 @@
   }
 
   function nextPiece(){
-    cur = spawn(shiftQueue());
+    if (pendingSwatchKey){
+      const key = pendingSwatchKey;
+      pendingSwatchKey = null;
+      cur = spawn(key, 1);
+      showToast("CAMPIONE " + PIECES[key].mix, false);
+      beep(760, .12, .04);
+    } else {
+      cur = spawn(shiftQueue());
+    }
     canHold = true;
     dropTimer = 0; lockTimer = 0; lockResets = 0;
     paintSide();
@@ -1105,7 +1210,7 @@
     printed = []; events = []; piecesSpawned = 0;
     clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
     toast = null; particles = []; shake = 0; quadFlash = 0;
-    stamp = 0; misreg = 0; regMarks = null;
+    stamp = 0; misreg = 0; regMarks = null; pendingSwatchKey = null; swatchNext = 0;
     best = loadBest();
     phase = "play";
     setCurseUi(0);
@@ -1340,14 +1445,16 @@
   /* ============ risultato condivisibile ============ */
   // il blocchetto condivisibile riproduce le ultime righe mandate in stampa,
   // un quadretto per glifo, con i colori degli inchiostri
-  const EMOJI = { I:"⬜", O:"🟦", T:"🟥", L:"🟨", J:"🟧", S:"🟩", Z:"🟪" };
+  const EMOJI = { I:"⬛", O:"🟦", T:"🟥", L:"🟨", J:"🟧", S:"🟩", Z:"🟪" };
+  // i campioni mescolati non hanno un quadretto proprio: vanno in bianco
+  const EMOJI_CAMPIONE = "⬜";
 
   function shareText(){
     const g = gradeFor(score).name.toUpperCase();
     const head = "BASELINE" + (mode === "daily" ? " · composizione del " + dateLabel() : " · partita libera");
     const line2 = g + " — " + fmt(score) + " punti";
     const rows = printed.slice(-6).map(function(r){
-      return r.map(function(c){ return EMOJI[keyOf(c)] || "⬛"; }).join("");
+      return r.map(function(c){ return EMOJI[keyOf(c)] || EMOJI_CAMPIONE; }).join("");
     });
     let out = head + "\n" + line2 + "\n" + (rows.length ? rows.join("\n") + "\n" : "") + tally();
     if (SHARE_URL) out += "\n" + SHARE_URL;
@@ -1375,8 +1482,8 @@
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.clearRect(0, 0, w, h);
     if (!rows.length){
-      c.fillStyle = "#141B24"; c.fillRect(0, 0, w, cs);
-      c.fillStyle = "#42525F";
+      c.fillStyle = "#F0ECE3"; c.fillRect(0, 0, w, cs);
+      c.fillStyle = "#9E988B";
       c.font = '500 8px "IBM Plex Mono", monospace';
       c.textAlign = "center"; c.textBaseline = "middle";
       c.fillText("nessuna riga stampata", w / 2, cs / 2);
@@ -1856,7 +1963,7 @@
       gl.className = "rules-glyph"; gl.textContent = p.glyph;
       c1.appendChild(gl);
       const c2 = document.createElement("td"); c2.textContent = p.mix;
-      const c3 = document.createElement("td"); c3.className = "num"; c3.textContent = "≈ " + p.pantone;
+      const c3 = document.createElement("td"); c3.className = "num"; c3.textContent = p.pantone;
       tr.appendChild(c1); tr.appendChild(c2); tr.appendChild(c3);
       t.appendChild(tr);
     }
@@ -1963,9 +2070,12 @@
 
   function paintSide(){
     miniDraw(document.getElementById("hold"), holdKey);
-    for (let i = 0; i < 3; i++) miniDraw(document.getElementById("n" + i), queue[i]);
-    miniDraw(document.getElementById("msN0"), queue[0]);
-    miniDraw(document.getElementById("msN1"), queue[1]);
+    // un campione in arrivo si prende il primo posto in anteprima
+    let anteprima = queue.slice(0, 3);
+    if (pendingSwatchKey) anteprima = [pendingSwatchKey, queue[0], queue[1]];
+    for (let i = 0; i < 3; i++) miniDraw(document.getElementById("n" + i), anteprima[i]);
+    miniDraw(document.getElementById("msN0"), anteprima[0]);
+    miniDraw(document.getElementById("msN1"), anteprima[1]);
   }
 
   function buildLegend(){
@@ -1978,7 +2088,7 @@
       const nm = document.createElement("span"); nm.className = "nm";
       nm.textContent = p.name;
       const ink = document.createElement("span"); ink.className = "ink";
-      ink.textContent = p.mix + "  ·  ≈ " + p.pantone;
+      ink.textContent = p.mix + "  ·  " + p.pantone;
       nm.appendChild(ink);
       const gl = document.createElement("span"); gl.className = "gl"; gl.textContent = p.glyph;
       li.appendChild(sw); li.appendChild(nm); li.appendChild(gl);
@@ -1987,13 +2097,23 @@
   }
 
   /* ============ render ============ */
+  // chiaro o scuro sopra l'inchiostro, secondo quanto e' carico
+  function sopraInchiostro(hex){
+    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? "rgba(23,25,29,.42)" : "rgba(252,251,248,.55)";
+  }
+
   function blockAt(c, px, py, size, p, cursed, t){
     c.fillStyle = p.ink;
     c.fillRect(px + 1, py + 1, size - 2, size - 2);
-    c.fillStyle = "rgba(255,255,255,.16)";
-    c.fillRect(px + 1, py + 1, size - 2, 1);
+    // filo di contatto: sul foglio un blocco chiaro senza bordo sparirebbe
+    c.strokeStyle = "rgba(23,25,29,.16)";
+    c.lineWidth = 1;
+    c.strokeRect(px + 1.5, py + 1.5, size - 3, size - 3);
+    c.fillStyle = "rgba(255,255,255,.14)";
+    c.fillRect(px + 2, py + 2, size - 4, 1);
     if (cursed){
-      c.strokeStyle = "rgba(255,74,61,.9)";
+      c.strokeStyle = "rgba(198,47,22,.95)";
       c.lineWidth = 1;
       c.setLineDash([3, 2]);
       c.strokeRect(px + 1.5, py + 1.5, size - 3, size - 3);
@@ -2001,7 +2121,7 @@
     }
     if (size > 14){
       const px6 = Math.floor(size * .62);
-      c.fillStyle = cursed ? "rgba(8,11,15,.62)" : "rgba(8,11,15,.34)";
+      c.fillStyle = cursed ? "rgba(198,47,22,.85)" : sopraInchiostro(p.ink);
       c.font = cursed
         ? '700 ' + px6 + 'px "Comic Neue", "Comic Sans MS", cursive'
         : styleFor(level).font.replace("$PX", px6);
@@ -2062,11 +2182,11 @@
     }
 
     ctx.clearRect(-10, -10, W + 20, H + 20);
-    ctx.fillStyle = "#0F141B";
+    ctx.fillStyle = "#FBFAF7";
     ctx.fillRect(-10, -10, W + 20, H + 20);
 
     // reticolo
-    ctx.strokeStyle = "rgba(31,42,54,.55)";
+    ctx.strokeStyle = "rgba(23,25,29,.11)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let x = 1; x < COLS; x++){ ctx.moveTo(x * cell + .5, 0); ctx.lineTo(x * cell + .5, H); }
@@ -2078,7 +2198,7 @@
       const y = g.y * cell + .5;
       const isBase = g.label === "LINEA DI BASE";
       ctx.setLineDash(isBase ? [] : [3, 4]);
-      ctx.strokeStyle = isBase ? "rgba(30,167,225,.8)" : "rgba(110,128,145,.45)";
+      ctx.strokeStyle = isBase ? "rgba(10,111,184,.85)" : "rgba(23,25,29,.24)";
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
     }
     ctx.setLineDash([]);
@@ -2087,7 +2207,7 @@
     if (markPath){
       ctx.save();
       ctx.globalAlpha = .05;
-      ctx.fillStyle = "#EDEAE3";
+      ctx.fillStyle = "#17191D";
       const s = (H * .34) / MARK_BOX[1];
       ctx.translate(W / 2 - (MARK_BOX[0] * s) / 2, H * .30);
       ctx.scale(s, s);
@@ -2109,7 +2229,7 @@
     if (clearing){
       const t = Math.min(1, clearing.t / (reduceMotion ? 60 : 190));
       for (const y of clearing.rows){
-        ctx.fillStyle = "rgba(237,234,227," + (1 - t * .55).toFixed(3) + ")";
+        ctx.fillStyle = "rgba(23,25,29," + (1 - t * .5).toFixed(3) + ")";
         const inset = t * (cell / 2);
         ctx.fillRect(0, y * cell + inset, W, cell - inset * 2);
       }
@@ -2125,7 +2245,7 @@
             if (cur.x + x > maxX) maxX = cur.x + x;
           }
       ctx.save();
-      ctx.strokeStyle = "rgba(237,234,227,.11)";
+      ctx.strokeStyle = "rgba(23,25,29,.13)";
       ctx.setLineDash([2, 5]);
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -2134,7 +2254,7 @@
       ctx.stroke();
       ctx.setLineDash([]);
       // crocini di taglio ai due margini
-      ctx.strokeStyle = "rgba(30,167,225,.5)";
+      ctx.strokeStyle = "rgba(10,111,184,.65)";
       ctx.beginPath();
       for (const x of [minX * cell, (maxX + 1) * cell]){
         ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, 7);
@@ -2145,7 +2265,7 @@
 
       let gy = cur.y;
       while (!collide(cur.shape, cur.x, gy + 1)) gy++;
-      ctx.strokeStyle = "rgba(237,234,227,.28)";
+      ctx.strokeStyle = "rgba(23,25,29,.26)";
       ctx.lineWidth = 1;
       for (let y = 0; y < cur.shape.length; y++)
         for (let x = 0; x < cur.shape.length; x++)
@@ -2182,7 +2302,7 @@
           const to = side ? W - cell * .8 : cell * .8;
           const cx = from + (to - from) * ease;
           ctx.globalAlpha = (1 - t) * .95;
-          ctx.strokeStyle = side ? "#E5007D" : "#1EA7E1";
+          ctx.strokeStyle = side ? "#e20c7a" : "#0a9dd9";
           ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
           ctx.beginPath();
           ctx.moveTo(cx - r * 1.7, cy); ctx.lineTo(cx + r * 1.7, cy);
@@ -2195,14 +2315,17 @@
 
     // lampo di quadricromia
     if (quadFlash > 0){
-      const bands = ["#1EA7E1", "#E5007D", "#FFD400", "#EDEAE3"];
+      const bands = ["#0a9dd9", "#e20c7a", "#f5c10a", "#17191c"];
       const k = 1 - quadFlash;
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
       for (let i = 0; i < 4; i++){
-        ctx.globalAlpha = quadFlash * .32;
+        ctx.globalAlpha = quadFlash * .48;
         ctx.fillStyle = bands[i];
         const bh = H / 4;
         ctx.fillRect(0, i * bh + k * bh * .5, W, bh * quadFlash);
       }
+      ctx.restore();
       ctx.globalAlpha = 1;
     }
 
@@ -2210,11 +2333,11 @@
     if (misreg > 0){
       const d = misreg * 4.5;
       ctx.save();
-      ctx.globalCompositeOperation = "screen";
-      ctx.globalAlpha = misreg * .2;
-      ctx.fillStyle = "#1EA7E1";
+      ctx.globalCompositeOperation = "multiply";
+      ctx.globalAlpha = misreg * .3;
+      ctx.fillStyle = "#0a9dd9";
       ctx.fillRect(-d, -d * .5, W, H);
-      ctx.fillStyle = "#E5007D";
+      ctx.fillStyle = "#e20c7a";
       ctx.fillRect(d, d * .5, W, H);
       ctx.restore();
     }
@@ -2235,7 +2358,7 @@
       const label = "VISTO SI STAMPI";
       const tw = ctx.measureText(label).width;
       const bw = tw + fs * 1.5, bh = fs * 2.5;
-      ctx.strokeStyle = "#E5007D"; ctx.fillStyle = "#E5007D";
+      ctx.strokeStyle = "#d1006f"; ctx.fillStyle = "#d1006f";
       ctx.lineWidth = Math.max(2, fs * .16);
       ctx.strokeRect(-bw / 2, -bh / 2, bw, bh);
       ctx.lineWidth = Math.max(1, fs * .06);
@@ -2254,9 +2377,9 @@
       const y = g.y * cell + .5;
       const isBase = g.label === "LINEA DI BASE";
       const tw = ctx.measureText(g.label).width;
-      ctx.fillStyle = "rgba(8,11,15,.72)";
+      ctx.fillStyle = "rgba(252,251,248,.88)";
       ctx.fillRect(W - tw - 8, y - 11, tw + 7, 10);
-      ctx.fillStyle = isBase ? "rgba(30,167,225,.95)" : "rgba(130,148,164,.8)";
+      ctx.fillStyle = isBase ? "rgba(10,111,184,1)" : "rgba(23,25,29,.52)";
       ctx.fillText(g.label, W - 4, y - 2);
     }
 
@@ -2278,10 +2401,10 @@
         ctx.font = '900 ' + Math.round(size) + 'px ' + face;
       }
       const yy = (toast.big ? H * .30 : H * .38) - t * 18;
-      ctx.fillStyle = "rgba(8,11,15,.85)";
+      ctx.fillStyle = "rgba(23,25,29,.94)";
       const tw = ctx.measureText(toast.text).width;
       ctx.fillRect(W / 2 - tw / 2 - 10, yy - size * .62, tw + 20, size * 1.24);
-      ctx.fillStyle = toast.big ? "#FFD400" : "#EDEAE3";
+      ctx.fillStyle = toast.big ? "#f5c10a" : "#FBFAF7";
       ctx.fillText(toast.text, W / 2, yy);
       ctx.restore();
     }
@@ -2291,12 +2414,12 @@
       ctx.save();
       ctx.font = '600 10px "IBM Plex Mono", monospace';
       ctx.textAlign = "left"; ctx.textBaseline = "top";
-      ctx.fillStyle = "rgba(255,212,0,.92)";
+      ctx.fillStyle = "rgba(226,12,122,.95)";
       ctx.fillText("COMBO ×" + combo, 5, 5);
       ctx.restore();
     }
 
-    ctx.strokeStyle = "rgba(43,57,72,.9)";
+    ctx.strokeStyle = "rgba(195,188,172,.95)";
     ctx.strokeRect(.5, .5, W - 1, H - 1);
   }
 
