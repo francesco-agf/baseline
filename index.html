@@ -474,8 +474,6 @@
   }
 </style>
 
-</head>
-<body>
 <div class="sheet">
   <header class="masthead">
     <h1 class="logotype">Baseline<span class="dot">.</span></h1>
@@ -772,7 +770,10 @@
   const DB_URL = "https://piaxtjwgmjuajuuqpftj.supabase.co/rest/v1/";
   const DB_KEY = "sb_publishable_UrQBn4-s-RECuQPv-Nm_Ww_iFYmoGSC";
 
-  const COLS = 10, ROWS = 20;
+  /* Il campo non e' piu' 10x20: e' 12x17, cioe' 1:1,417 — la proporzione di
+     un A4. Cosi' su un telefono il foglio arriva quasi ai bordi invece di
+     restare una striscia stretta in mezzo allo schermo. */
+  const COLS = 12, ROWS = 17;
 
   /* Ogni pezzo è un inchiostro: `mix` è la separazione in quadricromia, esatta
      per costruzione; `pantone` è il riferimento più vicino nella scala Pantone,
@@ -830,11 +831,12 @@
     p.tag = ["C", "M", "Y", "K"].filter(function(_, i){ return p.cmyk[i] > 0; }).join("");
   }
 
+  // le guide restano alle stesse proporzioni di prima, riportate su 17 righe
   const GUIDES = [
-    { y:3,  label:"ASCENDENTE" },
-    { y:6,  label:"ALTEZZA MAIUSCOLA" },
-    { y:12, label:"ALTEZZA X" },
-    { y:18, label:"LINEA DI BASE" }
+    { y:2,  label:"ASCENDENTE" },
+    { y:5,  label:"ALTEZZA MAIUSCOLA" },
+    { y:10, label:"ALTEZZA X" },
+    { y:15, label:"LINEA DI BASE" }
   ];
   const GUIDE_ROWS = GUIDES.map(g => g.y);
 
@@ -1301,7 +1303,9 @@
     if (collide(cur.shape, cur.x, cur.y)) gameOver();
   }
 
-  function dropInterval(){ return Math.max(90, 820 - (level - 1) * 68); }
+  // il foglio A4 e' piu' basso (17 righe invece di 20): i tempi sono riscalati di 20/17
+  // cosi' il tempo che un pezzo impiega ad arrivare in fondo resta quello di prima
+  function dropInterval(){ return Math.max(106, 965 - (level - 1) * 80); }
 
   /* ============ effetti ============ */
   function showToast(text, big){
@@ -2276,7 +2280,7 @@
       // anche su schermo grande il campo si prende l'altezza disponibile:
       // testata misurata, più un margine per non incollarsi al fondo
       const h = function(el){ return el ? el.offsetHeight : 0; };
-      availW = Math.min(520, window.innerWidth - 470);   // due colonne laterali da 200 + spazi
+      availW = Math.min(600, window.innerWidth - 470);   // due colonne laterali da 200 + spazi
       maxH = Math.max(320, window.innerHeight - h(document.querySelector(".masthead")) - 96);
     }
     cell = Math.max(13, Math.min(narrow ? 40 : 48, Math.floor(Math.min(availW / COLS, maxH / ROWS))));
@@ -2681,6 +2685,7 @@
   };
 })();
 </script>
+
 
 </body>
 </html>
