@@ -45,6 +45,21 @@
   }
 
   *{box-sizing:border-box}
+
+  /* Niente selezione del testo sull'interfaccia di gioco. Da telefono un tocco
+     un po' lungo sul campo faceva partire la selezione — schermata azzurra,
+     maniglie, menù «copia» — proprio mentre si sta giocando. Restano
+     selezionabili le cose che si vogliono davvero copiare: i campi di testo,
+     il blocchetto del risultato e il testo delle finestre. */
+  body{
+    -webkit-user-select:none;-moz-user-select:none;user-select:none;
+    -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  }
+  input,textarea,select,.share-box,.modal-sheet{
+    -webkit-user-select:text;-moz-user-select:text;user-select:text;
+    -webkit-touch-callout:default;
+  }
+  canvas{-webkit-user-drag:none;user-drag:none}
   [hidden]{display:none!important}
 
   body{
