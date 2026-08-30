@@ -68,6 +68,13 @@
     font-size:clamp(38px,7vw,68px);line-height:.86;letter-spacing:-.035em;margin:0;
   }
   .logotype .dot{color:var(--accent)}
+  /* la riga che spiega cos'è, accanto al logotipo: si legge prima del gioco */
+  .sottotitolo{
+    font-family:var(--display);font-style:italic;font-weight:400;
+    font-size:clamp(15px,2.2vw,22px);line-height:1;color:var(--muted);
+    margin:0 0 6px;align-self:flex-end;letter-spacing:.005em;
+  }
+  .masthead > .signature{margin-left:auto}
   .tagline{
     font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--muted);text-align:right;line-height:1.7;padding-bottom:6px;
@@ -482,8 +489,9 @@
 <div class="sheet">
   <header class="masthead">
     <h1 class="logotype">Baseline<span class="dot">.</span></h1>
+    <p class="sottotitolo">il Tetris tipografico</p>
     <div class="signature">
-      <span class="kicker">Tetris tipografico<b>Fimognari</b></span>
+      <span class="kicker">Arti Grafiche<b>Fimognari</b></span>
       <span class="avatar"><svg class="logo-f" role="img" aria-label="Fimognari" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 168"> <path fill="currentColor" d="M 105 22 C 106 24 107 26 107 28 C 107 29 106 31 106 32 L 105 34 C 104 36 101 38 98 38 C 96 38 95 37 94 37 C 93 37 92 36 92 35 C 91 35 91 34 90 33 C 90 33 90 32 90 32 L 90 31 C 90 29 90 27 92 25 C 93 23 94 21 94 19 C 94 15 92 13 90 12 C 87 11 85 11 82 11 C 76 11 71 13 67 18 C 63 23 61 31 61 41 L 61 52 C 61 54 61 57 60 59 C 60 61 59 62 59 63 C 59 64 58 65 57 66 C 55 67 55 68 54 68 C 54 68 53 68 51 69 C 51 69 51 69 51 69 L 85 69 L 85 70 L 61 70 L 61 151 L 61 145 C 61 146 61 146 61 146 C 61 146 61 147 62 147 C 62 148 62 148 63 149 C 63 149 64 150 65 150 C 66 150 67 151 69 151 C 75 151 78 151 79 151 L 79 152 L 31 152 L 31 151 L 38 151 C 40 151 41 150 42 150 C 43 150 44 149 44 149 C 45 149 45 148 45 148 C 46 147 46 147 46 146 C 46 146 46 146 46 146 L 46 70 L 31 70 L 31 69 C 34 69 36 69 38 68 C 40 67 41 66 42 65 C 43 64 44 63 45 61 C 45 60 46 59 46 58 C 46 57 46 56 46 54 C 46 53 46 52 46 52 L 46 52 L 46 52 C 46 50 47 48 47 46 C 47 43 48 40 49 37 C 49 35 50 32 51 31 C 52 29 53 27 55 26 C 58 21 62 18 67 14 C 72 11 78 10 83 10 C 87 10 91 10 94 12 C 97 13 99 14 101 16 C 103 18 104 20 105 22 "/> <path fill="currentColor" d="M 101 135 C 103 137 104 139 104 142 C 104 145 103 147 101 149 C 100 150 97 151 95 151 C 92 151 90 150 88 149 C 86 147 85 145 85 142 C 85 139 86 137 88 135 C 90 133 92 132 95 132 C 97 132 100 133 101 135 "/> </svg></span>
     </div>
   </header>
@@ -827,6 +835,14 @@
      -------------------------------------------------------------------- */
   const DB_URL = "https://piaxtjwgmjuajuuqpftj.supabase.co/rest/v1/";
   const DB_KEY = "sb_publishable_UrQBn4-s-RECuQPv-Nm_Ww_iFYmoGSC";
+
+  /* La classifica è quella della sala giochi: la stessa tabella tiene i
+     punteggi di tutti i giochi di Arti Grafiche Fimognari e ogni riga sa da
+     quale arriva. Qui si legge e si scrive solo la parte di Baseline. */
+  const GIOCO = "baseline";
+  const CAMPI = "name,score,lines,quads,level,day";
+  const QUERY_CLASSIFICA = "scores?select=" + CAMPI + "&gioco=eq." + GIOCO +
+                           "&order=score.desc&limit=500";
 
   /* Il campo non e' piu' 10x20: e' 12x17, cioe' 1:1,417 — la proporzione di
      un A4. Cosi' su un telefono il foglio arriva quasi ai bordi invece di
@@ -2283,6 +2299,14 @@
       btn.textContent = msg;
       setTimeout(function(){ btn.textContent = base; }, 2600);
     };
+    // dentro l'anteprima di claude.ai il salvataggio passa di qui
+    if (salvaClaude){
+      salvaClaude.save({ filename: nome, data: blob }).then(
+        function(){ fine("Salvato"); },
+        function(err){ fine(err && err.code === "declined" ? base : "Non riuscito"); }
+      );
+      return;
+    }
     try {
       if (window.File && navigator.canShare){
         const file = new File([blob], nome, { type: blob.type });
@@ -2313,10 +2337,25 @@
   if (incorniciato){
     const nota = document.getElementById("scaricaNota");
     nota.hidden = false;
-    nota.innerHTML = 'Da qui dentro il download è bloccato: apri il gioco su ' +
+    nota.innerHTML = 'Da qui dentro il download può essere bloccato: apri il gioco su ' +
       '<a href="' + SHARE_URL + '" target="_blank" rel="noopener">' +
       SHARE_URL.replace(/^https?:\/\//, "").replace(/\/$/, "") + '</a> per portarti via il foglio.';
   }
+
+  /* Su claude.ai la pagina gira dentro una cornice che non lascia scaricare
+     niente da sola: se l'ospite offre il salvataggio, si passa di lì. Fuori
+     (su GitHub Pages) window.claude non esiste e vale la strada normale. */
+  let salvaClaude = null;
+  try {
+    if (window.claude && typeof window.claude.use === "function"){
+      window.claude.use("downloads").then(function(ns){
+        if (!ns || typeof ns.save !== "function") return;
+        salvaClaude = ns;
+        const nota = document.getElementById("scaricaNota");
+        if (nota) nota.hidden = true;
+      }, function(){});
+    }
+  } catch(e){}
 
   dlJpg.addEventListener("click", function(){
     const base = dlJpg.dataset.base || dlJpg.textContent;
@@ -2391,14 +2430,21 @@
   let submitted = false;
   let lastRows = [];
 
+  /* Il nome è della sala giochi, non del singolo gioco: chi lo mette qui se
+     lo ritrova su Refusi e viceversa. La vecchia chiave resta letta come
+     ripiego per chi aveva già giocato prima che la sala esistesse. */
+  const CHIAVE_NOME = "agf.giocatore";
   let nomeGiocatore = "";
   function nomeSalvato(){
     if (nomeGiocatore) return nomeGiocatore;
-    try { return (localStorage.getItem("baseline.nome") || "").trim(); } catch(e){ return ""; }
+    try {
+      return (localStorage.getItem(CHIAVE_NOME) ||
+              localStorage.getItem("baseline.nome") || "").trim();
+    } catch(e){ return ""; }
   }
   function salvaNome(n){
     nomeGiocatore = n;
-    try { localStorage.setItem("baseline.nome", n); } catch(e){}
+    try { localStorage.setItem(CHIAVE_NOME, n); } catch(e){}
   }
   function pulisci(n){ return (n || "").trim().replace(/\s+/g, " ").slice(0, 20); }
 
@@ -2501,8 +2547,7 @@
     boardNote.textContent = "Carico la classifica…";
     mBoardNote.textContent = "Carico la classifica…";
     try {
-      const rows = await db("scores?select=name,score,lines,quads,level,day" +
-        "&order=score.desc&limit=500") || [];
+      const rows = await db(QUERY_CLASSIFICA) || [];
       renderBoard(rows);
     } catch(e){
       boardList.innerHTML = ""; mBoardList.innerHTML = "";
@@ -2540,12 +2585,12 @@
       await db("scores", {
         method: "POST",
         headers: { "Prefer": "return=minimal" },
-        body: { day: day, name: nome, score: score, lines: lines, quads: quads, level: level }
+        body: { gioco: GIOCO, day: day, name: nome, score: score,
+                lines: lines, quads: quads, level: level }
       });
       submitted = true;
       myEntry = { day: day, name: nome };
-      const rows = await db("scores?select=name,score,lines,quads,level,day" +
-        "&order=score.desc&limit=500") || [];
+      const rows = await db(QUERY_CLASSIFICA) || [];
       const list = bestPerName(rows);
       const mio = list.find(function(r){
         return (r.name || "").trim().toLowerCase() === nome.toLowerCase();
