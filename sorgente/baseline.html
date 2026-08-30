@@ -87,11 +87,14 @@
     color:var(--muted);text-align:right;line-height:1.6;white-space:nowrap;
   }
   .signature .kicker b{display:block;color:var(--paper);font-weight:500;letter-spacing:.16em}
-  .logo-agf{width:150px;height:auto;color:var(--muted);display:block}
+  /* Il marchio non e' testo: e' il marchio. Va in bianco pieno sul fondo scuro e in
+     nero sul bianco — non nel grigio dell'interfaccia, che lo faceva sembrare
+     azzurrino. */
+  .logo-agf{width:150px;height:auto;color:#fff;display:block}
   .logo-f{width:100%;height:auto;color:inherit;display:block}
   /* il marchio come una foto profilo: monogramma dentro il tondo */
   .avatar{
-    width:46px;height:46px;border-radius:50%;background:var(--paper);color:var(--ground);
+    width:46px;height:46px;border-radius:50%;background:#fff;color:var(--ground);
     display:flex;align-items:center;justify-content:center;flex:none;
     box-shadow:0 0 0 1px rgba(237,234,227,.2), 0 0 0 5px rgba(237,234,227,.06);
   }
@@ -223,7 +226,7 @@
 
   button{font-family:inherit;cursor:pointer}
   .btn{
-    background:var(--paper);color:var(--ground);border:none;font-family:var(--mono);
+    background:#fff;color:var(--ground);border:none;font-family:var(--mono);
     font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
     padding:11px 18px;transition:transform .12s ease,background .12s ease;
   }
