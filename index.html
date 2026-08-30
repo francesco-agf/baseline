@@ -592,6 +592,7 @@
           <button class="btn ghost" id="freeBtn">Partita libera</button>
           <button class="btn ghost" id="rulesBtn2">Regole</button>
           <button class="btn ghost" id="inviteBtn2">Invita gli amici</button>
+          <button class="btn ghost" id="giveUpBtn" hidden>Abbandona la partita</button>
           <button class="btn ghost" id="copyBtn" hidden>Copia risultato</button>
         </div>
       </div>
@@ -1103,6 +1104,7 @@
   const curseVal = document.getElementById("curseVal");
   const soundBtn = document.getElementById("soundBtn");
   const pauseBtn = document.getElementById("pauseBtn");
+  const giveUpBtn = document.getElementById("giveUpBtn");
   const nameInput = document.getElementById("nameInput");
   const nameNote = document.getElementById("nameNote");
   const startName = document.getElementById("startName");
@@ -1582,12 +1584,14 @@
       document.getElementById("scarica").hidden = true;
       dailyBtn.textContent = "Riprendi"; dailyBtn.dataset.resume = "1";
       freeBtn.hidden = true;
+      giveUpBtn.hidden = false;
       overlay.hidden = false;
     } else if (phase === "pause"){
       phase = "play";
       delete dailyBtn.dataset.resume;
       dailyBtn.textContent = "Composizione del giorno";
       freeBtn.hidden = false;
+      giveUpBtn.hidden = true;
       overlay.hidden = true;
       last = performance.now();
     }
@@ -1859,6 +1863,7 @@
       : "Fine tiratura";
     copyBtn.hidden = false;
     copyBtn.textContent = "Copia risultato";
+    giveUpBtn.hidden = true;
     dailyBtn.textContent = mode === "daily" ? "Rigioca la composizione" : "Composizione del giorno";
     freeBtn.hidden = false;
     freeBtn.textContent = "Partita libera";
@@ -1905,6 +1910,17 @@
     const b = document.getElementById(id);
     if (b) b.addEventListener("click", function(){ invita(b); });
   }
+
+  /* Abbandonare è una fine partita come le altre: il foglio si chiude, il
+     punteggio entra in classifica e resta la prova di stampa da scaricare.
+     Non è un'uscita di servizio che butta via quello che hai composto. */
+  giveUpBtn.addEventListener("click", function(){
+    if (phase !== "pause") return;
+    giveUpBtn.hidden = true;
+    delete dailyBtn.dataset.resume;
+    phase = "play";          // gameOver() si aspetta una partita in corso
+    gameOver();
+  });
 
   copyBtn.addEventListener("click", function(){
     const txt = shareText();
