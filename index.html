@@ -146,8 +146,13 @@
     line-height:1;margin-left:auto;white-space:nowrap;
   }
   .hs-curse{font-family:"Comic Neue","Comic Sans MS",cursive;font-size:11px;color:var(--danger)}
-  .hs-pieces{display:flex;align-items:center;gap:3px}
-  .hs-mini{display:block;width:40px;height:24px}
+  .hs-pieces{display:flex;align-items:flex-start;gap:5px}
+  .hs-slot{display:flex;flex-direction:column;align-items:center;gap:2px}
+  .hs-slot b{
+    font-family:var(--mono);font-size:7.5px;font-weight:500;letter-spacing:.09em;
+    color:var(--muted);line-height:1;white-space:nowrap;
+  }
+  .hs-mini{display:block;width:56px;height:34px}
   .hs-keys{
     background:none;border:1px solid var(--rule);color:var(--muted-2);
     font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
@@ -240,7 +245,11 @@
   .mini{display:block;width:100%}
   .hold-panel .mini,.hs-mini{background:var(--foglio)}
   .queue{display:flex;flex-direction:column;gap:6px}
-  .queue .slot{background:var(--foglio);padding:5px 6px;line-height:0;min-width:0}
+  .queue .slot{background:var(--foglio);padding:5px 6px 4px;line-height:0;min-width:0}
+  .slot-tag{
+    display:block;font-family:var(--mono);font-size:8px;font-weight:500;letter-spacing:.12em;
+    color:rgba(23,25,29,.5);text-align:center;line-height:1.4;
+  }
 
   /* ---------- touch ---------- */
   .pad{display:none;gap:8px;padding-top:12px;width:100%;max-width:420px}
@@ -478,6 +487,8 @@
     .logotype{font-size:22px}
     .signature .kicker{display:none}
     .hs-v.big{font-size:19px}
+    .hs-mini{width:48px;height:28px}
+    .hs-slot b{font-size:7px}
     .hs-row + .hs-row{margin-top:3px}
     .hud-strip{padding-bottom:6px}
     .pad button{padding:10px 0}
@@ -532,8 +543,14 @@
          <div class="hs-curse" id="msCurse" hidden>Comic Sans!</div>
          <span class="hs-grade" id="msGrade">Garzone</span>
          <div class="hs-pieces">
-           <canvas id="msN0" class="hs-mini" width="46" height="24"></canvas>
-           <canvas id="msN1" class="hs-mini" width="46" height="24"></canvas>
+           <span class="hs-slot">
+             <canvas id="msN0" class="hs-mini" width="56" height="34"></canvas>
+             <b id="msT0"></b>
+           </span>
+           <span class="hs-slot">
+             <canvas id="msN1" class="hs-mini" width="56" height="34"></canvas>
+             <b id="msT1"></b>
+           </span>
          </div>
          <button class="hs-keys" id="pauseBtn" title="Metti in pausa" hidden>Pausa</button>
          <button class="hs-keys" id="padToggle" aria-pressed="false" title="Mostra o nasconde i tasti">Tasti</button>
@@ -625,9 +642,9 @@
       <div class="panel">
         <div class="panel-label"><span>Prossimi</span><span>3</span></div>
         <div class="queue">
-          <div class="slot"><canvas class="mini" id="n0" width="110" height="50"></canvas></div>
-          <div class="slot"><canvas class="mini" id="n1" width="110" height="50"></canvas></div>
-          <div class="slot"><canvas class="mini" id="n2" width="110" height="50"></canvas></div>
+          <div class="slot"><canvas class="mini" id="n0" width="110" height="50"></canvas><b class="slot-tag" id="t0"></b></div>
+          <div class="slot"><canvas class="mini" id="n1" width="110" height="50"></canvas><b class="slot-tag" id="t1"></b></div>
+          <div class="slot"><canvas class="mini" id="n2" width="110" height="50"></canvas><b class="slot-tag" id="t2"></b></div>
         </div>
       </div>
     </div>
@@ -3034,14 +3051,65 @@
       if (s[y][x]) blockAt(c, ox + (x - minX) * cs, oy + (y - minY) * cs, cs, p, false, 0);
   }
 
+  /* Quello che sta per arrivare non è semplicemente il primo del sacchetto:
+     prima di pescare, nextPiece() controlla se tocca a un campione, a un segno
+     speciale, alla barra colore o a un attrezzo. Quelle estrazioni dipendono
+     solo dal numero d'ordine del pezzo, quindi si possono rifare qui in
+     anticipo — e l'anteprima mostra davvero quello che scenderà. */
+  function chiaviFuture(quante){
+    const out = [];
+    let n = piecesSpawned;     // pezzi già entrati in campo
+    let q = 0;                 // quanti ne abbiamo già impegnati dal sacchetto
+    let campione = pendingSwatchKey;
+    while (out.length < quante){
+      const i = n + 1;         // numero d'ordine del pezzo che entrerà
+      let k;
+      if (campione){
+        k = campione; campione = null;
+      } else if (n >= 10 && eventoCaso(i, 4) < 0.06){
+        k = SEGNO_KEYS[Math.floor(eventoCaso(i, 5) * SEGNO_KEYS.length) % SEGNO_KEYS.length];
+      } else if (n >= 14 && eventoCaso(i, 6) < 0.05){
+        k = "B";
+      } else if (n >= 12 && eventoCaso(i, 2) < 0.07){
+        k = ATTREZZO_KEYS[Math.floor(eventoCaso(i, 3) * ATTREZZO_KEYS.length) % ATTREZZO_KEYS.length];
+      } else {
+        k = queue[q]; q++;
+      }
+      out.push(k);
+      n++;
+    }
+    return out;
+  }
+
+  /* L'etichetta sotto all'anteprima: alle dimensioni del telefono la sigla
+     dentro il mattoncino non si legge, e la forma da sola non basta a
+     distinguere un crocino da una rulla. */
+  const NOMI_ATTREZZO = { X: "CROCINO", Y: "CONTA-FILI", W: "RULLA" };
+  const NOMI_SEGNO = { capoverso: "CAPOVERSO", taglierina: "TAGLIERINA",
+                       legatura: "LEGATURA", nota: "NOTA" };
+  function siglaBreve(k){
+    const p = k && PIECES[k];
+    if (!p) return "";
+    if (p.campione) return "CAMPIONE";
+    if (p.iride) return "BARRA";
+    if (p.speciale) return NOMI_SEGNO[p.speciale] || "SEGNO";
+    if (p.attrezzo) return NOMI_ATTREZZO[k] || "ATTREZZO";
+    return p.tag || p.glyph || "";
+  }
+
   function paintSide(){
     miniDraw(document.getElementById("hold"), holdKey);
-    // un campione in arrivo si prende il primo posto in anteprima
-    let anteprima = queue.slice(0, 3);
-    if (pendingSwatchKey) anteprima = [pendingSwatchKey, queue[0], queue[1]];
-    for (let i = 0; i < 3; i++) miniDraw(document.getElementById("n" + i), anteprima[i]);
-    miniDraw(document.getElementById("msN0"), anteprima[0]);
-    miniDraw(document.getElementById("msN1"), anteprima[1]);
+    const anteprima = chiaviFuture(3);
+    for (let i = 0; i < 3; i++){
+      miniDraw(document.getElementById("n" + i), anteprima[i]);
+      const t = document.getElementById("t" + i);
+      if (t) t.textContent = siglaBreve(anteprima[i]);
+    }
+    for (let i = 0; i < 2; i++){
+      miniDraw(document.getElementById("msN" + i), anteprima[i]);
+      const et = document.getElementById("msT" + i);
+      if (et) et.textContent = siglaBreve(anteprima[i]);
+    }
   }
 
   function buildLegend(){
@@ -3590,6 +3658,7 @@
       for (let i = 0; i < 14; i++){ if (b.length < 8) fill(); out.push(b.shift()); }
       return out.join("");
     },
+    anteprima: function(){ return chiaviFuture(3); },
     PIECES: PIECES, GUIDE_ROWS: GUIDE_ROWS, GRADES: GRADES
   };
 })();
