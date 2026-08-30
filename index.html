@@ -986,7 +986,8 @@
       lo stesso giorno si confronta alla pari, senza scuse sui pezzi fortunati.</p>
       <p>La <b>classifica è generale</b>: di ogni giocatore resta la partita migliore di sempre, con
       la data in cui l'ha fatta. Il nome si mette prima di cominciare e il punteggio entra da solo a
-      fine partita. La <b>partita libera</b> ha una sequenza casuale e non entra in classifica.</p>
+      fine partita. La <b>partita libera</b> ha una sequenza casuale, ma <b>entra in classifica
+      anche lei</b>: contano tutte le partite.</p>
 
       <h3>Comandi</h3>
       <table class="rules-table">
@@ -3061,10 +3062,9 @@
     submitBtn.textContent = "Invia";
     signupEdit.hidden = true;
     changeName.hidden = true;
-    if (mode !== "daily" || score <= 0){
-      signup.hidden = true;
-      return;
-    }
+    /* Ogni partita entra in classifica, libera o del giorno che sia: come negli
+       altri tre giochi della sala. Prima passava solo la composizione del giorno,
+       e chi giocava libero pensava a un guasto. */
     signup.hidden = false;
     const nome = nomeSalvato();
     if (nome){
