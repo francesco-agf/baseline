@@ -167,7 +167,7 @@
     font-family:var(--mono);font-size:7.5px;font-weight:500;letter-spacing:.09em;
     color:var(--muted);line-height:1;white-space:nowrap;
   }
-  .hs-mini{display:block;width:56px;height:34px}
+  .hs-mini{display:block;width:76px;height:38px}
   .hs-keys{
     background:none;border:1px solid var(--rule);color:var(--muted-2);
     font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
@@ -502,7 +502,7 @@
     .logotype{font-size:22px}
     .signature .kicker{display:none}
     .hs-v.big{font-size:19px}
-    .hs-mini{width:48px;height:28px}
+    .hs-mini{width:64px;height:32px}
     .hs-slot b{font-size:7px}
     .hs-row + .hs-row{margin-top:3px}
     .hud-strip{padding-bottom:6px}
@@ -559,12 +559,8 @@
          <span class="hs-grade" id="msGrade">Garzone</span>
          <div class="hs-pieces">
            <span class="hs-slot">
-             <canvas id="msN0" class="hs-mini" width="56" height="34"></canvas>
+             <canvas id="msN0" class="hs-mini" width="76" height="38"></canvas>
              <b id="msT0"></b>
-           </span>
-           <span class="hs-slot">
-             <canvas id="msN1" class="hs-mini" width="56" height="34"></canvas>
-             <b id="msT1"></b>
            </span>
          </div>
          <button class="hs-keys" id="pauseBtn" title="Metti in pausa" hidden>Pausa</button>
@@ -738,9 +734,11 @@
         <tr><td>Tre righe</td><td>Colonna</td><td class="num">500</td></tr>
         <tr><td>Quattro righe</td><td>C+M+Y+K</td><td class="num">800</td></tr>
         <tr><td>Riga chiusa su una guida</td><td>Allineamento</td><td class="num">+150</td></tr>
-        <tr><td>Scarichi consecutivi</td><td>Combo</td><td class="num">+50 ×n</td></tr>
+        <tr><td>Scarichi consecutivi</td><td>Combo</td><td class="num">+50 per ogni scarico oltre il primo</td></tr>
       </table>
-      <p>Tutti i punteggi si moltiplicano per il corpo a cui stai giocando.</p>
+      <p>Tutti i punteggi si moltiplicano per il corpo a cui stai giocando: ×1 al primo corpo,
+      ×2 al secondo, e così via. Una quadricromia a corpo 8 vale 800 punti, la stessa
+      quadricromia a corpo 26 ne vale 8.000.</p>
 
       <h3>La quadricromia e il campione</h3>
       <p>Quattro dei sette pezzi sono gli inchiostri di macchina: <b>ciano, magenta, giallo e
@@ -759,10 +757,10 @@
 
       <h3>Gli attrezzi</h3>
       <p>Ogni tanto sul foglio non cade tipografia: cade un <b>crocino di registro</b>, un
-      <b>conta-fili</b> o una <b>rulla d'inchiostro</b>. Sono pezzi da cinque celle e nessuno dei
-      tre si incastra pulito — lasciano buchi per come sono fatti, e non c'è modo di girarli
-      per rimediare. Si stampano come tutto il resto, ma non sono inchiostro: quando finiscono
-      in una quadricromia non entrano nel calcolo del campione.</p>
+      <b>conta-fili</b> o una <b>rulla d'inchiostro</b>. Sono pezzi da <b>cinque celle</b> e
+      nessuno dei tre si incastra pulito: girarli cambia il verso, non il fatto che lascino
+      buchi. Si stampano come tutto il resto, ma non sono inchiostro: quando finiscono in una
+      quadricromia non entrano nel calcolo del campione.</p>
       <p>Non si possono mettere da parte in tenuta: quello che cade sul foglio va tolto subito.</p>
 
       <h3>I segni speciali</h3>
@@ -794,6 +792,12 @@
       tratteggiato e finché resta sul campo <b>ti mangia due punti al secondo per ogni cella</b>.
       L'unico modo di liberartene è mandarlo in stampa: la riga che lo contiene vale un bonus
       di esorcismo.</p>
+
+      <h3>L'anteprima</h3>
+      <p>Il riquadro dei <b>prossimi</b> mostra davvero quello che sta per scendere, campioni,
+      segni speciali, barra colore e attrezzi compresi — non solo i sette inchiostri. Sotto a
+      ogni riquadro c'è la sigla della lastra o il nome del pezzo, perché alle dimensioni del
+      telefono la sigla dentro al mattoncino non si leggerebbe.</p>
 
       <h3>Il corpo e la scala dei caratteri</h3>
       <p>Ogni dieci righe sali di <b>corpo</b>, da 8 pt in su: i pezzi cadono più in fretta e i
@@ -843,6 +847,7 @@
         <tr><td>P</td><td>Pausa</td><td></td></tr>
         <tr><td>Da telefono</td><td>I tasti sotto al campo, oppure scorri per spostare, tocca per ruotare, scorri in basso per la battuta secca</td><td></td></tr>
         <tr><td>Pausa da telefono</td><td>Il pulsante <b>Pausa</b> nella striscia sopra al foglio</td><td></td></tr>
+        <tr><td>Abbandonare</td><td>In pausa, <b>Abbandona la partita</b>: chiude il turno come una fine normale, quindi il punteggio entra in classifica e resta la prova di stampa da scaricare</td><td></td></tr>
       </table>
     </div>
   </div>
@@ -3120,11 +3125,10 @@
       const t = document.getElementById("t" + i);
       if (t) t.textContent = siglaBreve(anteprima[i]);
     }
-    for (let i = 0; i < 2; i++){
-      miniDraw(document.getElementById("msN" + i), anteprima[i]);
-      const et = document.getElementById("msT" + i);
-      if (et) et.textContent = siglaBreve(anteprima[i]);
-    }
+    // sul telefono si mostra un pezzo solo, ma grande abbastanza da leggerlo
+    miniDraw(document.getElementById("msN0"), anteprima[0]);
+    const et = document.getElementById("msT0");
+    if (et) et.textContent = siglaBreve(anteprima[0]);
   }
 
   function buildLegend(){
