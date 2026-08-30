@@ -433,6 +433,27 @@
 
   /* nome all'ingresso */
   .startname{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%;max-width:300px}
+  /* Si gioca al primo tocco: il nome si firma alla fine. Chi ce l'ha gia' lo
+     vede qui in una riga e puo' cambiarlo, senza che gli si chieda niente. */
+  .firma{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+         color:var(--muted-2);margin:2px 0 0;text-align:center}
+  .firma b{color:var(--paper);font-weight:600;letter-spacing:.02em}
+  .firma .lnk{padding:0;font-size:11px}
+  /* Due classifiche, non due pagine: la stessa lista, filtrata sul giorno.
+     È il senso della composizione del giorno — chi gioca oggi si confronta
+     alla pari. */
+  .quando{display:flex;gap:0;border:1px solid var(--rule);border-radius:2px;overflow:hidden}
+  .quando-b{background:none;border:0;color:var(--muted-2);cursor:pointer;
+            font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+            text-transform:uppercase;padding:7px 11px}
+  .quando-b + .quando-b{border-left:1px solid var(--rule)}
+  .quando-b[aria-pressed="true"]{background:var(--surface-2);color:var(--paper)}
+  .quando-b:hover{color:var(--paper)}
+  .modo{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+        color:var(--muted-2);margin:2px 0 0;text-align:center}
+  .modo .lnk{padding:0;font-size:11px;color:var(--paper)}
+  .modo .lnk:hover{color:var(--accent)}
+  body.campo-stretto .modo{font-size:10px}
   .startname label{
     font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
   }
@@ -627,12 +648,44 @@
     .pad .sub{display:none}
     .sheet{padding:6px 10px 22px}
   }
+
+  /* Quarto grado: il campo è così basso che la scheda non ci sta nemmeno
+     stretta. Resta il minimo indispensabile per rigiocare — e i pulsanti non si
+     rimpiccioliscono, perché è da telefono che servono grandi. */
+  body.campo-raso .overlay{gap:3px;padding:8px}
+  body.campo-raso .rivelazione{display:none}
+  body.campo-raso .ov-meta{display:none}
+  body.campo-raso .ov-title{font-size:17px}
+  body.campo-raso .ov-score{font-size:23px}
+  body.campo-raso .signup-msg{font-size:10px}
+  body.campo-raso .btn-row{gap:5px;margin-top:0}
+
+  /* ---------- bersagli da dito ----------
+     Su un telefono un bersaglio sotto i 44 px si sbaglia. Non si cambia la
+     tipografia: si dà altezza minima e si allineano al centro, così il testo
+     resta identico e cambia solo quanto è grande la zona che risponde. */
+  @media (pointer: coarse){
+    .btn,.tool,.lnk,.sala-link,.invito,.quando-b,.oggi-nome,.sound-toggle,#boardOpen,#rulesBtn,#inviteBtn,#soundBtn,
+    #padToggle,#musicSel,.audio-bar select{
+      min-height:44px;
+    }
+    .tool,.lnk,.sala-link,.quando-b,.oggi-nome,.sound-toggle,#boardOpen,#padToggle{
+      display:inline-flex;align-items:center;justify-content:center;
+    }
+    #padToggle{min-width:44px}
+    /* I collegamenti dentro una frase («cambia nome», «una partita libera»)
+       restano alti quanto la riga: sono bersagli in linea nel testo, e dargli
+       44 px gonfierebbe la scheda di ottantotto pixel per due parole. */
+    .firma .lnk,.modo .lnk{min-height:0;display:inline}
+    .colofoot{row-gap:0}
+    .piede-destra a{display:inline-flex;align-items:center;min-height:44px}
+  }
 </style>
 
 <div class="sheet">
   <header class="masthead">
     <h1 class="logotype">Baseline<span class="dot">.</span></h1>
-    <p class="sottotitolo">il Tetris tipografico</p>
+    <p class="sottotitolo">il tetris tipografico</p>
     <a class="sala-link" href="https://francesco-agf.github.io/">◂ Sala giochi</a>
     <div class="signature">
       <span class="kicker">Arti Grafiche<b>Fimognari</b></span>
@@ -734,7 +787,8 @@
           <a class="altro" id="altroGioco" hidden></a>
         </div>
 
-        <div class="startname" id="startName">
+        <p class="firma" id="firmaRiga" hidden>Giochi come <b id="firmaNome"></b> &middot; <button class="lnk" id="cambiaFirma">cambia nome</button></p>
+        <div class="startname" id="startName" hidden>
           <label for="nameInput">Come ti chiami?</label>
           <input id="nameInput" type="text" maxlength="20" autocomplete="nickname"
                  spellcheck="false" placeholder="Il tuo nome" aria-label="Il tuo nome">
@@ -743,12 +797,14 @@
 
         <div class="btn-row" id="ovButtons">
           <button class="btn" id="dailyBtn">Composizione del giorno</button>
-          <button class="btn ghost" id="freeBtn">Partita libera</button>
           <button class="btn ghost" id="rulesBtn2">Regole</button>
-          <button class="btn ghost" id="inviteBtn2">Invita gli amici</button>
-          <button class="btn rosso" id="giveUpBtn" hidden>Abbandona la partita</button>
           <button class="btn ghost" id="copyBtn" hidden>Copia risultato</button>
+          <button class="btn rosso" id="giveUpBtn" hidden>Abbandona la partita</button>
         </div>
+        <!-- La partita libera e' una seconda strada, non una scelta alla pari:
+             sta in una riga sotto i pulsanti, come gli altri tre giochi che di
+             pulsanti ne hanno due all'inizio e tre alla fine. -->
+        <p class="modo" id="modoRiga">oppure <button class="lnk" id="freeBtn">una partita libera</button></p>
       </div>
      </div>
 
@@ -791,7 +847,10 @@
   <section class="board" id="board">
     <div class="board-head">
       <h2 class="board-title"><button id="boardOpen">Classifica<span class="board-open-hint">generale · vedi tutti</span></button></h2>
-      <span class="board-day" id="dayLabel">di sempre</span>
+      <div class="quando" role="group" aria-label="Quale classifica">
+        <button class="quando-b" id="qSempre" aria-pressed="true">di sempre</button>
+        <button class="quando-b" id="qOggi" aria-pressed="false">di oggi</button>
+      </div>
       <span class="board-meta" id="boardMeta">—</span>
     </div>
     <ol class="board-list" id="boardList"></ol>
@@ -1379,6 +1438,7 @@
   const specimen = document.getElementById("specimen");
   const dailyBtn = document.getElementById("dailyBtn");
   const freeBtn = document.getElementById("freeBtn");
+  const modoRiga = document.getElementById("modoRiga");
   const copyBtn = document.getElementById("copyBtn");
   const shareBox = document.getElementById("shareBox");
   const elScore = document.getElementById("score");
@@ -1558,9 +1618,90 @@
   /* ============ azioni ============ */
   function busy(){ return phase !== "play" || !cur || clearing; }
 
+
+  /* ---------- i comandi che si insegnano da soli ----------
+     Nessuno legge le regole. Alla prima partita i comandi stanno **in campo**,
+     come segni sbiaditi, e ognuno se ne va da solo appena lo usi: chi sa gia'
+     giocare non li vede quasi, chi non sa impara senza che gli venga spiegato
+     niente. Alla seconda partita non compaiono piu'.
+
+     L'opacita' si calcola dall'orologio vero e non da `dt`: e' presentazione,
+     non gioco, e cosi' non va plumbata dentro ogni ciclo. */
+  const CHIAVE_GUIDA = "agf.guida.baseline";
+  const GUIDA_DURATA = 11000;   // quanto restano se non li usi
+  const GUIDA_TASTI = [
+    { k: "muovi", segno: "\u2190 \u2192", testo: "SPOSTA" },
+    { k: "ruota", segno: "\u2191", testo: "RUOTA" },
+    { k: "cala", segno: "SPAZIO", testo: "BATTUTA SECCA" }
+  ];
+  const GUIDA_TOCCO = [
+    { k: "muovi", segno: "SCORRI", testo: "SPOSTA" },
+    { k: "ruota", segno: "TOCCA", testo: "RUOTA" },
+    { k: "cala", segno: "SCORRI GI\u00d9", testo: "BATTUTA SECCA" }
+  ];
+  let guida = null;
+
+  function guidaGiaVista(){
+    try { return localStorage.getItem(CHIAVE_GUIDA) === "1"; } catch(e){ return true; }
+  }
+  function chiudiGuida(){
+    guida = null;
+    try { localStorage.setItem(CHIAVE_GUIDA, "1"); } catch(e){}
+  }
+  function accendiGuida(){
+    if (guidaGiaVista()){ guida = null; return; }
+    const tocco = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+    guida = { da: performance.now(),
+              voci: (tocco ? GUIDA_TOCCO : GUIDA_TASTI).map(function(v){
+                return { k: v.k, segno: v.segno, testo: v.testo, usata: 0 };
+              }) };
+  }
+  function guidaFatta(k){
+    if (!guida) return;
+    for (const v of guida.voci) if (v.k === k && !v.usata) v.usata = performance.now();
+  }
+  function alfaGuida(v, ora){
+    if (v.usata) return Math.max(0, 1 - (ora - v.usata) / 420);
+    const vita = ora - guida.da;
+    if (vita < 300) return vita / 300;
+    if (vita > GUIDA_DURATA) return Math.max(0, 1 - (vita - GUIDA_DURATA) / 900);
+    return 1;
+  }
+  function disegnaGuida(c, cx, cy){
+    if (!guida) return;
+    const ora = performance.now();
+    let vive = 0;
+    c.save();
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    const px = Math.max(9, Math.round(cell * .40));
+    c.font = '600 ' + px + 'px "IBM Plex Mono", ui-monospace, monospace';
+    /* impaginati come la tabellina dei comandi: il tasto a destra della gola,
+       il nome dell'azione a sinistra. Centrati, si leggerebbero a bandiera. */
+    const gola = Math.round(px * .9);
+    for (let i = 0; i < guida.voci.length; i++){
+      const v = guida.voci[i];
+      const a = alfaGuida(v, ora);
+      if (a <= 0.02) continue;
+      vive++;
+      const y = cy + i * (px * 2.1);
+      c.globalAlpha = a * .42;
+      c.fillStyle = "#17191D";
+      c.textAlign = "right";
+      c.fillText(v.segno, cx - gola, y);
+      c.globalAlpha = a * .62;
+      c.textAlign = "left";
+      c.fillText(v.testo, cx + gola, y);
+    }
+    c.restore();
+    /* Non si chiude nel primo istante: appena accesa l'opacita' parte da zero,
+       e senza questa guardia la guida si spegneva da sola al primo fotogramma. */
+    if (!vive && ora - guida.da > 400) chiudiGuida();
+  }
+
   function move(dx){
     if (busy()) return;
-    if (!collide(cur.shape, cur.x + dx, cur.y)){ cur.x += dx; resetLock(); }
+    if (!collide(cur.shape, cur.x + dx, cur.y)){ cur.x += dx; resetLock(); guidaFatta("muovi"); }
   }
   function rotate(){
     if (busy()) return;
@@ -1573,7 +1714,7 @@
     const r = rotateCW(cur.shape);
     for (const k of [0, -1, 1, -2, 2]){
       if (!collide(r, cur.x + k, cur.y)){
-        cur.shape = r; cur.x += k; resetLock(); beep(420, .02, .014); return;
+        cur.shape = r; cur.x += k; resetLock(); guidaFatta("ruota"); beep(420, .02, .014); return;
       }
     }
     if (!collide(r, cur.x, cur.y - 1)){ cur.shape = r; cur.y -= 1; resetLock(); }
@@ -1584,6 +1725,7 @@
   }
   function hardDrop(){
     if (busy()) return;
+    guidaFatta("cala");
     let d = 0;
     while (!collide(cur.shape, cur.x, cur.y + 1)){ cur.y++; d++; }
     score += d * 2;
@@ -1851,6 +1993,7 @@
     queue = [nextKey(), nextKey(), nextKey()];
     holdKey = null; canHold = true;
     score = 0; lines = 0; level = 1; combo = 0; quads = 0;
+    accendiGuida();
     printed = []; events = []; piecesSpawned = 0;
     clearing = null; lockTimer = 0; lockResets = 0; dropTimer = 0; curseTick = 0;
     toast = null; particles = []; shake = 0; quadFlash = 0;
@@ -1864,7 +2007,7 @@
     setCurseUi(0);
     delete dailyBtn.dataset.resume;
     dailyBtn.textContent = "Composizione del giorno";
-    freeBtn.hidden = false;
+    modoRiga.hidden = false;
     ovBody.hidden = false;
     ovTitle.hidden = false;
     specimen.hidden = true;
@@ -1911,14 +2054,14 @@
       document.getElementById("scarica").hidden = true;
       document.getElementById("altroGioco").hidden = true;
       dailyBtn.textContent = "Riprendi"; dailyBtn.dataset.resume = "1";
-      freeBtn.hidden = true;
+      modoRiga.hidden = true;
       giveUpBtn.hidden = false;
       overlay.hidden = false;
     } else if (phase === "pause"){
       phase = "play";
       delete dailyBtn.dataset.resume;
       dailyBtn.textContent = "Composizione del giorno";
-      freeBtn.hidden = false;
+      modoRiga.hidden = false;
       giveUpBtn.hidden = true;
       overlay.hidden = true;
       last = performance.now();
@@ -2017,7 +2160,7 @@
     if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar"].indexOf(k) !== -1) e.preventDefault();
     if (k === "Enter"){
       if (phase === "start" || phase === "over"){
-        if (!startName.hidden && !chiediNome()) return;
+        chiediNome();
         begin(mode);
       }
       else if (phase === "pause") togglePause();
@@ -2082,24 +2225,47 @@
     } else if (dy > 40) hardDrop();
   }, {passive:true});
 
-  // senza nome non si comincia: serve per la classifica
-  function chiediNome(){
-    const n = pulisci(nameInput.value);
-    if (n){
-      salvaNome(n);
-      nameInput.classList.remove("manca");
-      nameNote.classList.remove("manca");
-      nameNote.textContent = "Serve per entrare in classifica. Resta su questo dispositivo.";
-      return n;
+  /* ---------- il nome ----------
+     Si gioca al primo tocco. Chiedere il nome **prima** era il punto in cui si
+     perdeva chi arriva da un link: dieci secondi di curiosita', e la prima cosa
+     che gli chiedi e' di scrivere qualcosa. Adesso il nome si firma alla fine,
+     sulla scheda del punteggio, quando c'e' un motivo per metterlo.
+
+     Chi ce l'ha gia' lo vede in una riga sola e puo' cambiarlo: e' un
+     riconoscimento, non una richiesta. */
+  const firmaRiga = document.getElementById("firmaRiga");
+  const firmaNome = document.getElementById("firmaNome");
+  const cambiaFirma = document.getElementById("cambiaFirma");
+
+  function preparaNome(){
+    const gia = nomeSalvato();
+    startName.hidden = true;
+    if (firmaRiga){
+      if (gia){ firmaNome.textContent = gia; firmaRiga.hidden = false; }
+      else firmaRiga.hidden = true;
     }
-    nameInput.classList.add("manca");
-    nameNote.classList.add("manca");
-    nameNote.textContent = "Scrivi il tuo nome per iniziare";
+    nameInput.value = gia;
+    nameInput.classList.remove("manca");
+    nameNote.classList.remove("manca");
+    nameNote.textContent = "\u00c8 lo stesso nome della sala giochi.";
+  }
+  function apriFirma(){
+    if (firmaRiga) firmaRiga.hidden = true;
+    startName.hidden = false;
+    nameInput.value = nomeSalvato();
     nameInput.focus();
-    return null;
+    nameInput.select();
+  }
+  if (cambiaFirma) cambiaFirma.addEventListener("click", apriFirma);
+
+  // non sbarra piu' la strada: prende quello che c'e', se c'e'
+  function chiediNome(){
+    const n = pulisci(nameInput.value) || nomeSalvato();
+    if (n) salvaNome(n);
+    return n || "";
   }
   nameInput.addEventListener("keydown", function(e){
-    if (e.key === "Enter"){ e.preventDefault(); if (chiediNome()) begin("daily"); }
+    if (e.key === "Enter"){ e.preventDefault(); chiediNome(); begin("daily"); }
     e.stopPropagation();
   });
   nameInput.addEventListener("input", function(){
@@ -2112,12 +2278,13 @@
 
   dailyBtn.addEventListener("click", function(){
     if (dailyBtn.dataset.resume) return togglePause();
-    if (!chiediNome()) return;
+    chiediNome();
     begin("daily");
   });
   freeBtn.addEventListener("click", function(){
-    if (!chiediNome()) return;
-    begin("free");
+    chiediNome();
+    // la riga offre sempre l'altra strada rispetto a quella appena giocata
+    begin(phase === "over" && mode === "free" ? "daily" : "free");
   });
 
   /* ============ risultato condivisibile ============ */
@@ -2209,8 +2376,8 @@
     copyBtn.textContent = "Copia risultato";
     giveUpBtn.hidden = true;
     dailyBtn.textContent = mode === "daily" ? "Rigioca la composizione" : "Composizione del giorno";
-    freeBtn.hidden = false;
-    freeBtn.textContent = "Partita libera";
+    modoRiga.hidden = false;
+    freeBtn.textContent = mode === "daily" ? "una partita libera" : "la composizione del giorno";
   }
 
   /* Invita gli amici: sul telefono apre il foglio di condivisione del sistema
@@ -2250,7 +2417,7 @@
     } catch(e){}
     aMano();
   }
-  for (const id of ["inviteBtn", "inviteBtn2"]){
+  for (const id of ["inviteBtn"]){
     const b = document.getElementById(id);
     if (b) b.addEventListener("click", function(){ invita(b); });
   }
@@ -2828,7 +2995,6 @@
   const boardList = document.getElementById("boardList");
   const boardNote = document.getElementById("boardNote");
   const boardMeta = document.getElementById("boardMeta");
-  const dayLabel = document.getElementById("dayLabel");
 
   const signupEdit = document.getElementById("signupEdit");
   const changeName = document.getElementById("changeName");
@@ -2940,9 +3106,27 @@
     return li;
   }
 
+
+  /* di sempre, oppure di oggi: le righe portano gia' la data */
+  let vistaOggi = false;
+  const qSempre = document.getElementById("qSempre");
+  const qOggi = document.getElementById("qOggi");
+  function cambiaVista(oggi){
+    vistaOggi = oggi;
+    if (qSempre) qSempre.setAttribute("aria-pressed", String(!oggi));
+    if (qOggi) qOggi.setAttribute("aria-pressed", String(oggi));
+    renderBoard(lastRows || []);
+  }
+  if (qSempre) qSempre.addEventListener("click", function(){ cambiaVista(false); });
+  if (qOggi) qOggi.addEventListener("click", function(){ cambiaVista(true); });
+
   function renderBoard(rows){
     lastRows = rows;
-    const list = bestPerName(rows);
+    const oggi = dateKey();
+    const base = vistaOggi
+      ? (rows || []).filter(function(r){ return Number(r.day) === oggi; })
+      : rows;
+    const list = bestPerName(base);
 
     // anteprima sotto al campo: i primi dieci
     boardList.innerHTML = "";
@@ -2953,7 +3137,9 @@
     list.forEach(function(r, i){ mBoardList.appendChild(rigaClassifica(r, i, r.day)); });
 
     if (!list.length){
-      const vuoto = "Nessuno ha ancora stampato niente. Sii il primo.";
+      const vuoto = vistaOggi
+        ? "Oggi non ha ancora stampato nessuno. Sii il primo."
+        : "Nessuno ha ancora stampato niente. Sii il primo.";
       boardNote.textContent = vuoto;
       mBoardNote.textContent = vuoto;
       boardMeta.textContent = "Classifica generale";
@@ -3074,7 +3260,7 @@
       doSubmit(nome);
     } else {
       signupMsg.className = "signup-msg";
-      signupMsg.textContent = "Metti il tuo nome per entrare in classifica";
+      signupMsg.textContent = "Firma il punteggio ed entri in classifica";
       signupEdit.hidden = false;
     }
   }
@@ -4016,6 +4202,8 @@
       ctx.restore();
     }
 
+    disegnaGuida(ctx, W * .5, H * .30);
+
     ctx.strokeStyle = "rgba(195,188,172,.95)";
     ctx.strokeRect(.5, .5, W - 1, H - 1);
   }
@@ -4031,7 +4219,7 @@
 
   buildLegend();
   paintHud();
-  nameInput.value = nomeSalvato();
+  preparaNome();
   // da telefono si gioca a gesti: il campo resta più largo
   if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches){
     ovBody.innerHTML = 'Cadono le parti della lettera: aste, occhielli, grazie, ascendenti. ' +
@@ -4056,14 +4244,18 @@
   function adattaScheda(){
     if (!overlay || overlay.hidden) return;
     const c = document.body.classList;
-    c.remove("campo-basso"); c.remove("campo-stretto"); c.remove("campo-minimo");
+    c.remove("campo-basso"); c.remove("campo-stretto");
+    c.remove("campo-minimo"); c.remove("campo-raso");
     const stretto = function(){ return overlay.scrollHeight > overlay.clientHeight + 1; };
     if (stretto()){
       c.add("campo-basso");
       if (stretto()){
         c.add("campo-stretto");
-        // ultimo grado: resta solo quello che serve a giocare ancora
-        if (stretto()) c.add("campo-minimo");
+        if (stretto()){
+          c.add("campo-minimo");
+          // ultimo grado: resta solo quello che serve a giocare ancora
+          if (stretto()) c.add("campo-raso");
+        }
       }
     }
   }
@@ -4101,6 +4293,9 @@
   initBoard();
 
   window.__baseline = {
+    // il collaudo della guida: c'e'? e si spegne?
+    guida: function(){ return guida; },
+    spegniGuida: chiudiGuida,
     state: function(){ return { phase:phase, score:score, lines:lines, level:level, combo:combo,
                                 quads:quads, mode:mode, grid:grid, cur:cur, queue:queue,
                                 hold:holdKey, printed:printed, events:events }; },
