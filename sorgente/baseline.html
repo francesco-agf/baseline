@@ -16,7 +16,7 @@
     --rule-soft:#161E27;
     --paper:#EDEAE3;
     --muted:#6E8091;
-    --muted-2:#42525F;
+    --muted-2:#7C8C99;
     --foglio:#FBFAF7;
     --ink-c:#00A0DF;
     --ink-m:#E20C7A;
@@ -228,6 +228,8 @@
   .btn.sm{font-size:11px;padding:8px 13px;letter-spacing:.06em}
   .btn[disabled]{opacity:.55;cursor:default}
   .btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+  .btn.rosso{background:transparent;color:var(--danger);border:1px solid rgba(255,90,70,.45)}
+  .btn.rosso:hover{border-color:var(--danger)}
   .btn.ghost:hover{color:var(--paper);border-color:var(--muted-2);background:transparent}
   .btn-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -432,10 +434,14 @@
 
 
   /* ---------- il ponte fra i giochi della sala ---------- */
+  /* È l'unico ponte fra un gioco e l'altro: deve vedersi e deve prendersi
+     col dito. Il padding porta l'area toccabile a 44 px senza spostare di un
+     capello il punto in cui la scritta si posa. */
   .sala-link{
     font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--muted-2);text-decoration:none;border-bottom:1px solid transparent;
-    padding-bottom:2px;align-self:flex-end;margin:0 0 7px 4px;white-space:nowrap;
+    align-self:flex-end;white-space:nowrap;
+    padding:15px 6px 13px;margin:0 -6px -6px -2px;
   }
   .sala-link:hover{color:var(--paper);border-bottom-color:var(--muted-2)}
   .altro{
@@ -456,11 +462,14 @@
   }
 
   /* ---------- musica ---------- */
-  .audio-bar{display:flex;align-items:center;gap:6px}
+  /* Senza il ritorno a capo questa barra è larga 652 px e non ci sta in un
+     telefono: la pagina intera scorreva di lato di 268 px mentre si gioca. */
+  .audio-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+             justify-content:flex-end;max-width:100%}
   .audio-bar select{
     background:var(--surface);border:1px solid var(--rule);color:var(--muted);
     font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
-    padding:4px 6px;
+    padding:4px 6px;max-width:100%;
   }
   .audio-bar select:focus{color:var(--paper)}
 
@@ -687,7 +696,7 @@
           <button class="btn ghost" id="freeBtn">Partita libera</button>
           <button class="btn ghost" id="rulesBtn2">Regole</button>
           <button class="btn ghost" id="inviteBtn2">Invita gli amici</button>
-          <button class="btn ghost" id="giveUpBtn" hidden>Abbandona la partita</button>
+          <button class="btn rosso" id="giveUpBtn" hidden>Abbandona la partita</button>
           <button class="btn ghost" id="copyBtn" hidden>Copia risultato</button>
         </div>
       </div>
@@ -791,7 +800,7 @@
 
       <p class="lead">Cadono le parti anatomiche di una lettera. Le incastri finché una riga
       non è piena: quella riga <b>va in stampa</b> e sparisce. Quando la pila arriva in cima,
-      la forma si chiude e la tiratura finisce.</p>
+      la forma si chiude e la stampa finisce.</p>
 
       <h3>Le righe guida</h3>
       <p>Quattro filetti attraversano il campo — <b>ascendente</b>, <b>altezza maiuscola</b>,
@@ -1968,9 +1977,11 @@
     startName.hidden = true;
     ovBody.hidden = true;
     ovTitle.hidden = true;
+    /* «Fine tiratura» adesso è il nome del quarto gioco della sala: qui la
+       forma si chiude, ed è così che si dice in tipografia. */
     ovKicker.textContent = quads > 0
-      ? "Fine tiratura · " + plur(quads, "quadricromia", "quadricromie")
-      : "Fine tiratura";
+      ? "Forma chiusa · " + plur(quads, "quadricromia", "quadricromie")
+      : "Forma chiusa";
     copyBtn.hidden = false;
     copyBtn.textContent = "Copia risultato";
     giveUpBtn.hidden = true;
@@ -3133,7 +3144,7 @@
   }
 
   /* ============ hud ============ */
-  function fmt(n){ return Math.round(n).toLocaleString("it-IT"); }
+  function fmt(n){ return Math.round(n).toLocaleString("it-IT", { useGrouping: "always" }); }
   function corpoLabel(){ return (6 + level * 2) + " pt"; }
   function plur(n, uno, molti){ return n + " " + (n === 1 ? uno : molti); }
   function tally(){
