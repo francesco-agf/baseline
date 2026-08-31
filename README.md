@@ -1,6 +1,6 @@
 # Baseline
 
-Il **Tetris tipografico** di Arti Grafiche Fimognari, dal 1950. I pezzi non sono tetramini
+Il **puzzle tipografico** di Arti Grafiche Fimognari, dal 1950. I pezzi non sono tetramini
 astratti ma parti anatomiche della lettera — aste, occhielli, traverse, grazie — da incastrare
 sulla linea di base. Riga piena = riga mandata in stampa.
 
